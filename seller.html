@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <title>দোকানদার সেলার হাব • Nisha Creations Platform</title>
+  <title>দোকানদার পার্টনার পোর্টাল • নিশা ক্রিয়েশনস প্ল্যাটফর্ম</title>
 
   <!-- Google Fonts & FontAwesome -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -28,873 +28,347 @@
       --rose: #e11d48;
       
       --shadow-sm: 0 1px 3px rgba(15, 23, 42, 0.05);
-      --shadow-md: 0 4px 12px rgba(15, 23, 42, 0.06);
+      --shadow-md: 0 4px 14px rgba(15, 23, 42, 0.08);
     }
 
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      -webkit-tap-highlight-color: transparent;
-    }
+    * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+    body { font-family:'Hind Siliguri','Plus Jakarta Sans',sans-serif; background:var(--bg); color:var(--text-main); min-height:100vh; padding-bottom:50px; }
 
-    body {
-      font-family: 'Hind Siliguri', 'Plus Jakarta Sans', sans-serif;
-      background: var(--bg);
-      color: var(--text-main);
-      min-height: 100vh;
-      padding-bottom: 70px;
-    }
+    .onboard-header { background:#ffffff; border-bottom:1px solid var(--border); padding:14px 20px; position:sticky; top:0; z-index:100; box-shadow:var(--shadow-sm); }
+    .header-inner { max-width:720px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; }
+    .brand-title { font-size:1.15rem; font-weight:800; color:var(--brand); display:flex; align-items:center; gap:8px; }
+    .badge-seller { font-size:0.75rem; background:var(--brand-light); color:var(--brand); padding:4px 10px; border-radius:6px; font-weight:800; }
 
-    /* Soft, Eye-Friendly Header */
-    .seller-header {
-      background: #ffffff;
-      border-bottom: 1px solid var(--border);
-      padding: 12px 18px;
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      box-shadow: var(--shadow-sm);
-    }
+    .container { max-width:720px; margin:0 auto; padding:20px 16px; }
 
-    .header-inner {
-      max-width: 900px;
-      margin: 0 auto;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-    }
+    .hero-box { background:#ffffff; border:1px solid var(--border); border-radius:16px; padding:22px 20px; margin-bottom:18px; box-shadow:var(--shadow-sm); text-align:center; }
+    .hero-icon { width:56px; height:56px; background:#eef2ff; color:var(--brand); border-radius:16px; display:flex; align-items:center; justify-content:center; font-size:1.6rem; margin:0 auto 10px; }
+    .hero-title { font-size:1.3rem; font-weight:800; color:var(--text-main); margin-bottom:4px; }
+    .hero-sub { font-size:0.85rem; color:var(--text-sub); line-height:1.4; max-width:520px; margin:0 auto; }
 
-    .brand-group {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
+    /* Action Choice Row */
+    .action-choice-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:20px; }
+    .choice-card { background:#ffffff; border:1.5px solid var(--border); border-radius:14px; padding:16px; text-align:center; cursor:pointer; transition:all 0.2s; box-shadow:var(--shadow-sm); }
+    .choice-card.active, .choice-card:hover { border-color:var(--brand); background:#f8fafc; transform:translateY(-1px); }
+    .choice-icon { font-size:1.5rem; color:var(--brand); margin-bottom:6px; }
+    .choice-title { font-size:0.92rem; font-weight:800; color:var(--text-main); }
+    .choice-sub { font-size:0.72rem; color:var(--text-muted); margin-top:2px; }
 
-    .brand-icon {
-      width: 40px;
-      height: 40px;
-      background: var(--brand-light);
-      color: var(--brand);
-      border-radius: 10px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.25rem;
-    }
+    /* Documents Checklist Box */
+    .docs-checklist-box { background:#f0fdf4; border:1.5px solid #bbf7d0; border-radius:14px; padding:16px 18px; margin-bottom:20px; }
+    .docs-title { font-size:0.95rem; font-weight:800; color:#166534; display:flex; align-items:center; gap:8px; margin-bottom:10px; }
+    .docs-list { display:flex; flex-direction:column; gap:8px; }
+    .doc-item { display:flex; align-items:flex-start; gap:8px; font-size:0.82rem; color:#14532d; line-height:1.4; }
+    .doc-item i { color:var(--emerald); margin-top:3px; }
 
-    .shop-title-text {
-      font-size: 1.05rem;
-      font-weight: 800;
-      color: var(--text-main);
-      line-height: 1.2;
-    }
+    /* Form Container */
+    .form-card { background:#ffffff; border:1px solid var(--border); border-radius:16px; padding:22px 20px; box-shadow:var(--shadow-sm); }
+    .form-sec-title { font-size:0.92rem; font-weight:800; color:var(--text-main); display:flex; align-items:center; gap:8px; padding-bottom:8px; border-bottom:1px solid var(--border); margin-bottom:14px; margin-top:8px; }
 
-    .shop-sub-text {
-      font-size: 0.72rem;
-      color: var(--text-muted);
-    }
+    .form-group { margin-bottom:14px; }
+    .form-group label { display:block; font-size:0.82rem; font-weight:700; color:var(--text-main); margin-bottom:5px; }
+    .form-group label span { color:var(--rose); }
 
-    .header-right {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
+    .form-input, .form-select, .form-textarea { width:100%; background:#ffffff; border:1.5px solid var(--border); border-radius:10px; padding:10px 12px; font-size:0.88rem; color:var(--text-main); font-family:inherit; outline:none; transition:all 0.2s; }
+    .form-input:focus, .form-select:focus, .form-textarea:focus { border-color:var(--brand); box-shadow:0 0 0 3px rgba(67,56,202,0.12); }
+    .form-help { font-size:0.72rem; color:var(--text-muted); margin-top:4px; }
 
-    .btn-hdr-action {
-      background: var(--surface-light);
-      border: 1px solid var(--border);
-      color: var(--text-sub);
-      padding: 7px 12px;
-      border-radius: 8px;
-      font-size: 0.78rem;
-      font-weight: 700;
-      cursor: pointer;
-      text-decoration: none;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      transition: all 0.15s;
-    }
-
-    .btn-hdr-action:hover {
-      background: #e2e8f0;
-      color: var(--text-main);
-    }
-
-    .container {
-      max-width: 900px;
-      margin: 0 auto;
-      padding: 16px;
-    }
-
-    /* Soft Segmented Navigation Tabs */
-    .seller-tabs {
-      display: flex;
-      gap: 6px;
-      background: #f1f5f9;
-      padding: 6px;
-      border-radius: 12px;
-      border: 1px solid var(--border);
-      margin-bottom: 16px;
-      overflow-x: auto;
-      -webkit-overflow-scrolling: touch;
-    }
-
-    .seller-tab-btn {
-      flex: 1;
-      min-width: fit-content;
-      white-space: nowrap;
-      background: transparent;
-      border: none;
-      padding: 10px 14px;
-      border-radius: 8px;
-      font-size: 0.82rem;
-      font-weight: 700;
-      color: var(--text-sub);
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 6px;
-      transition: all 0.2s;
-    }
-
-    .seller-tab-btn.active {
-      background: #ffffff;
-      color: var(--brand);
-      font-weight: 800;
-      box-shadow: 0 1px 4px rgba(15, 23, 42, 0.08);
-    }
-
-    /* Tab Panes */
-    .tab-content {
-      display: none;
-    }
-    .tab-content.active {
-      display: block;
-    }
-
-    /* Cards */
-    .seller-card {
-      background: #ffffff;
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      padding: 16px;
-      margin-bottom: 16px;
-      box-shadow: var(--shadow-sm);
-    }
-
-    .card-title-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 12px;
-      padding-bottom: 8px;
-      border-bottom: 1px solid var(--border);
-    }
-
-    .card-title {
-      font-size: 0.95rem;
-      font-weight: 800;
-      color: var(--text-main);
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    /* KPI Quick Stats */
-    .kpi-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 10px;
-      margin-bottom: 16px;
-    }
-
-    .kpi-box {
-      background: #ffffff;
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 12px;
-      box-shadow: var(--shadow-sm);
-      text-align: center;
-    }
-
-    .kpi-label {
-      font-size: 0.72rem;
-      color: var(--text-muted);
-      font-weight: 700;
-    }
-
-    .kpi-val {
-      font-size: 1.25rem;
-      font-weight: 800;
-      color: var(--text-main);
-      margin-top: 2px;
-    }
-
-    /* Order Card with Packaging & Central Delivery Hand-off */
-    .seller-order-card {
-      background: #ffffff;
-      border: 1.5px solid var(--border);
-      border-radius: 14px;
-      padding: 14px;
-      margin-bottom: 12px;
-      box-shadow: var(--shadow-sm);
-    }
-
-    .seller-order-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 8px;
-      padding-bottom: 6px;
-      border-bottom: 1px solid var(--border);
-    }
-
-    .btn-pack-done {
-      background: #4f46e5;
-      color: #fff;
-      border: none;
-      padding: 8px 12px;
-      border-radius: 8px;
-      font-size: 0.78rem;
-      font-weight: 800;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .btn-call-delivery {
-      background: #059669;
-      color: #fff;
-      border: none;
-      padding: 8px 14px;
-      border-radius: 8px;
-      font-size: 0.78rem;
-      font-weight: 800;
-      cursor: pointer;
-      text-decoration: none;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .form-group {
-      margin-bottom: 12px;
-    }
-    .form-group label {
-      display: block;
-      font-size: 0.8rem;
-      font-weight: 700;
-      color: var(--text-main);
-      margin-bottom: 4px;
-    }
-    .form-input, .form-select, .form-textarea {
-      width: 100%;
-      background: #ffffff;
-      border: 1.5px solid var(--border);
-      border-radius: 8px;
-      padding: 9px 12px;
-      font-size: 0.85rem;
-      color: var(--text-main);
-      font-family: inherit;
-      outline: none;
-    }
-    .form-input:focus, .form-select:focus, .form-textarea:focus {
-      border-color: var(--brand);
-    }
-
-    @media (max-width: 650px) {
-      .kpi-grid {
-        grid-template-columns: repeat(2, 1fr);
-      }
-    }
+    .btn-submit { width:100%; background:var(--brand); color:#ffffff; border:none; padding:14px; border-radius:12px; font-size:1rem; font-weight:800; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:8px; box-shadow:0 4px 12px rgba(67,56,202,0.25); margin-top:18px; }
+    .btn-submit:hover { background:#3730a3; }
   </style>
 </head>
 <body>
 
   <!-- Top Header -->
-  <header class="seller-header">
+  <header class="onboard-header">
     <div class="header-inner">
-      <div class="brand-group">
-        <div class="brand-icon"><i class="fa-solid fa-store"></i></div>
-        <div>
-          <div class="shop-title-text" id="topShopName">নিশা ক্রিয়েশনস বুটিক শপ</div>
-          <div class="shop-sub-text" id="topShopMeta">আমতা স্টেশন রোড • সেলার আইডি: #SHOP-AMTA-101</div>
-        </div>
+      <div class="brand-title">
+        <i class="fa-solid fa-store"></i> নিশা ক্রিয়েশনস প্ল্যাটফর্ম
       </div>
-
-      <div class="header-right">
-        <!-- Switch / Change Shop Dropdown -->
-        <select id="sellerShopSelector" onchange="changeActiveSellerShop(this.value)" style="background:#f1f5f9; border:1px solid var(--border); border-radius:8px; padding:6px 10px; font-size:0.75rem; font-weight:800; color:var(--text-main);">
-          <option value="SHOP-AMTA-101">🏪 নিশা ক্রিয়েশনস বুটিক</option>
-        </select>
-        <a href="index.html" target="_blank" class="btn-hdr-action" title="কাস্টমার শপ দেখুন">
-          <i class="fa-solid fa-bag-shopping"></i> শপ ভিউ
-        </a>
-      </div>
+      <span class="badge-seller">🏪 দোকানদার পোর্টাল</span>
     </div>
   </header>
 
   <div class="container">
 
-    <!-- KPI Summary Row -->
-    <div class="kpi-grid">
-      <div class="kpi-box">
-        <div class="kpi-label">আজকের অর্ডার</div>
-        <div class="kpi-val" id="statTodayOrders" style="color:var(--brand);">০</div>
+    <!-- Welcome Hero -->
+    <div class="hero-box">
+      <div class="hero-icon"><i class="fa-solid fa-handshake"></i></div>
+      <h1 class="hero-title">আপনার দোকানের মাল সরাসরি অনলাইনে বিক্রি করুন!</h1>
+      <p class="hero-sub">আমতা ও পার্শ্ববর্তী এলাকার ক্রেতাদের কাছে পৌঁছান। আপনি শুধু দোকানে বসে কাপড় ও পার্সেল রেডি করবেন, ডেলিভারি দেবে আমাদের সেন্ট্রাল টিম।</p>
+    </div>
+
+    <!-- Choice: Login vs Register -->
+    <div class="action-choice-grid">
+      <div class="choice-card active" id="btnChoiceLogin" onclick="selectPortalMode('login')">
+        <div class="choice-icon"><i class="fa-solid fa-right-to-bracket"></i></div>
+        <div class="choice-title">দোকানদার লগইন</div>
+        <div class="choice-sub">আগে থেকেই দোকান খোলা থাকলে পিন দিয়ে ঢুকুন</div>
       </div>
-      <div class="kpi-box">
-        <div class="kpi-label">প্যাকিং বাকি</div>
-        <div class="kpi-val" id="statPendingPack" style="color:var(--amber);">০</div>
-      </div>
-      <div class="kpi-box">
-        <div class="kpi-label">মোট কালেকশন</div>
-        <div class="kpi-val" id="statTotalSales" style="color:var(--emerald);">₹০</div>
-      </div>
-      <div class="kpi-box">
-        <div class="kpi-label">স্টকে প্রোডাক্ট</div>
-        <div class="kpi-val" id="statTotalProducts">০ টি</div>
+      <div class="choice-card" id="btnChoiceRegister" onclick="selectPortalMode('register')">
+        <div class="choice-icon"><i class="fa-solid fa-plus-circle"></i></div>
+        <div class="choice-title">➕ নতুন দোকান খুলুন</div>
+        <div class="choice-sub">নতুন দোকানদার হলে ১ মিনিটে রেজিস্টার করুন</div>
       </div>
     </div>
 
-    <!-- Navigation Tabs (Only Seller Focused) -->
-    <div class="seller-tabs">
-      <button type="button" class="seller-tab-btn active" id="tabBtnOrders" onclick="switchSellerTab('orders')">
-        <i class="fa-solid fa-box-open"></i> অর্ডার ও প্যাকিং (<span id="badgeTabOrders">0</span>)
-      </button>
-      <button type="button" class="seller-tab-btn" id="tabBtnUpload" onclick="switchSellerTab('upload')">
-        <i class="fa-solid fa-plus-circle"></i> প্রোডাক্ট আপলোড
-      </button>
-      <button type="button" class="seller-tab-btn" id="tabBtnInventory" onclick="switchSellerTab('inventory')">
-        <i class="fa-solid fa-layer-group"></i> আমার স্টক
-      </button>
-      <button type="button" class="seller-tab-btn" id="tabBtnOnboard" onclick="switchSellerTab('onboard')">
-        <i class="fa-solid fa-shop"></i> নতুন দোকান অনবোর্ডিং
-      </button>
-      <button type="button" class="seller-tab-btn" id="tabBtnProfile" onclick="switchSellerTab('profile')">
-        <i class="fa-solid fa-id-card"></i> দোকানের প্রোফাইল
-      </button>
+    <!-- MODE 1: LOGIN BOX -->
+    <div class="form-card" id="boxLogin" style="display:block; max-width:440px; margin:0 auto; text-align:center;">
+      <div style="margin-bottom:16px;">
+        <i class="fa-solid fa-shield-halved" style="font-size:2rem; color:var(--brand); margin-bottom:8px; display:block;"></i>
+        <h3 style="font-size:1.15rem; font-weight:800; color:var(--text-main);">দোকানের পাসওয়ার্ড দিয়ে প্রবেশ করুন</h3>
+        <p style="font-size:0.78rem; color:var(--text-sub); margin-top:2px;">আপনার তৈরি করা গোপন পাসওয়ার্ড পিন ছাড়া অন্য কেউ আপনার দোকানে ঢুকতে পারবে না।</p>
+      </div>
+
+      <form id="quickLoginForm" onsubmit="handleQuickLogin(event)" style="text-align:left;">
+        <div class="form-group">
+          <label>দোকানের নাম / শপ আইডি <span>*</span></label>
+          <select id="loginShopSelect" class="form-select" required>
+            <option value="SHOP-AMTA-101">🏪 নিশা ক্রিয়েশনস বুটিক শপ (আমতা স্টেশন রোড)</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>গোপন পাসওয়ার্ড পিন (Secret PIN) <span>*</span></label>
+          <input type="password" id="loginSecretPin" class="form-input" placeholder="আপনার ৪-৬ সংখ্যার পাসওয়ার্ড দিন" required style="letter-spacing:4px; font-size:1.1rem; text-align:center;">
+          <div class="form-help">হেডকোয়ার্টার ডিফল্ট পিন: 1234</div>
+        </div>
+
+        <button type="submit" class="btn-submit">
+          <i class="fa-solid fa-gauge-high"></i> সম্পূর্ণ শপকিপার পোর্টালে প্রবেশ করুন →
+        </button>
+      </form>
     </div>
 
-    <!-- ================= TAB 1: ORDERS & PACKAGING ================= -->
-    <div id="paneOrders" class="tab-content active">
-      <div class="seller-card">
-        <div class="card-title-row">
-          <div class="card-title">
-            <i class="fa-solid fa-boxes-packing" style="color:var(--brand);"></i> লাইভ অর্ডার ও সেন্ট্রাল ডেলিভারি পিকআপ
+    <!-- MODE 2: REGISTER BOX -->
+    <div id="boxRegister" style="display:none;">
+      
+      <!-- Documents Checklist Guide -->
+      <div class="docs-checklist-box">
+        <div class="docs-title">
+          <i class="fa-solid fa-file-circle-check"></i> দোকান খোলার জন্য কী কী তথ্য ও ডকুমেন্টস লাগবে?
+        </div>
+        <div class="docs-list">
+          <div class="doc-item">
+            <i class="fa-solid fa-circle-check"></i>
+            <div><strong>১. দোকানের নাম ও ঠিকানা:</strong> কোন বাজার/রোডে দোকান এবং ল্যান্ডমার্ক (যাতে ডেলিভারি বয় পার্সেল তুলতে পারে)।</div>
           </div>
-          <span style="font-size:0.75rem; color:var(--emerald); font-weight:800;">
-            <i class="fa-solid fa-circle-check"></i> সেন্ট্রাল ডেলিভারি টিম প্রস্তুত
-          </span>
-        </div>
-
-        <div style="background:#f0fdf4; border:1px solid #bbf7d0; border-radius:10px; padding:10px 14px; margin-bottom:14px; font-size:0.78rem; color:#166534; line-height:1.4;">
-          💡 <strong>দোকানদার নিয়ম:</strong> আপনার দোকানে অর্ডার আসলে কাপড়টি প্যাক করে <strong>"প্যাক সম্পন্ন"</strong> ও <strong>"বারকোড স্টিকার প্রিন্ট"</strong> করুন। এরপর <strong>"সেন্ট্রাল ডেলিভারি টিমকে পিকআপ পাঠান"</strong> বোতামে চাপুন। আমাদের ডেলিভারি বয় আপনার দোকান থেকে পার্সেল নিয়ে যাবে।
-        </div>
-
-        <div id="sellerOrdersListContainer">
-          <!-- Dynamically populated orders -->
-        </div>
-      </div>
-    </div>
-
-    <!-- ================= TAB 2: PRODUCT UPLOAD ================= -->
-    <div id="paneUpload" class="tab-content">
-      <div class="seller-card">
-        <div class="card-title-row">
-          <div class="card-title">
-            <i class="fa-solid fa-shirt" style="color:var(--brand);"></i> দোকানে নতুন শাড়ি / পোশাক আপলোড করুন
+          <div class="doc-item">
+            <i class="fa-solid fa-circle-check"></i>
+            <div><strong>২. মালিকের নাম ও হোয়াটসঅ্যাপ ফোন:</strong> যাতে অর্ডারের মেসেজ সরাসরি আপনার কাছে পৌঁছায়।</div>
+          </div>
+          <div class="doc-item">
+            <i class="fa-solid fa-circle-check"></i>
+            <div><strong>৩. ব্যবসার প্রমাণপত্র:</strong> ট্রেড লাইসেন্স নম্বর / উদ্যম আধার / সাইনবোর্ড ছবি / জিএসটি (ঐচ্ছিক)।</div>
+          </div>
+          <div class="doc-item">
+            <i class="fa-solid fa-circle-check"></i>
+            <div><strong>৪. টাকা পাওয়ার ব্যাংক বা ইউপিআই:</strong> PhonePe/GPay UPI আইডি বা ব্যাংক অ্যাকাউন্ট নম্বর (বিক্রির টাকা পাওয়ার জন্য)।</div>
+          </div>
+          <div class="doc-item">
+            <i class="fa-solid fa-circle-check"></i>
+            <div><strong>৫. নিজের পছন্দমতো পাসওয়ার্ড:</strong> ৪-৬ সংখ্যার গোপন পিন যাতে অন্য কেউ আপনার দোকানের চাবি না পায়।</div>
           </div>
         </div>
+      </div>
 
-        <form id="sellerUploadProductForm" onsubmit="handleSellerProductUpload(event)">
+      <!-- Registration Form -->
+      <div class="form-card">
+        <form id="fullRegisterForm" onsubmit="handleFullRegister(event)">
+          
+          <div class="form-sec-title">
+            <i class="fa-solid fa-shop" style="color:var(--brand);"></i> ১. দোকানের প্রোফাইল
+          </div>
+
           <div class="form-group">
-            <label>পোশাকের নাম / শিরোনাম <span>*</span></label>
-            <input type="text" class="form-input" id="upTitle" placeholder="যেমন: রয়্যাল সফট সিল্ক কাতান শাড়ি (ডিজাইনার বুটা)" required>
+            <label>দোকানের নাম (Shop Name) <span>*</span></label>
+            <input type="text" class="form-input" id="regShopName" placeholder="যেমন: মা তারা বস্ত্রালয় / সাহা বুটিক শপ" required>
           </div>
 
-          <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
             <div class="form-group">
-              <label>ক্যাটাগরি <span>*</span></label>
-              <select class="form-select" id="upCategory" required>
-                <option value="saree">শাড়ি কালেকশন (Saree)</option>
-                <option value="jamdani">ঢাকাই জামদানি (Jamdani)</option>
-                <option value="silk">সফট সিল্ক ও কাতান (Soft Silk)</option>
-                <option value="tant">সুতি তাঁত (Tant Cotton)</option>
-                <option value="kurti">কুর্তি ও গাউন (Kurti)</option>
-                <option value="girls">বাচ্চাদের ফ্রক (Girls Frock)</option>
-                <option value="jewel">জুয়েলারি ও গহনা (Jewellery)</option>
+              <label>মালিকের পুরো নাম <span>*</span></label>
+              <input type="text" class="form-input" id="regOwnerName" placeholder="আপনার নাম লিখুন" required>
+            </div>
+            <div class="form-group">
+              <label>হোয়াটসঅ্যাপ মোবাইল <span>*</span></label>
+              <input type="tel" class="form-input" id="regPhone" placeholder="১০ সংখ্যার মোবাইল" pattern="[0-9]{10}" required>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>ক্যাটাগরি <span>*</span></label>
+            <select class="form-select" id="regCategory" required>
+              <option value="saree">শাড়ি ও ট্র্যাডিশনাল বুটিক</option>
+              <option value="kurti">কুর্তি ও লেডিস ওয়্যার</option>
+              <option value="girls">বাচ্চাদের ফ্রক ও পোশাক</option>
+              <option value="jewel">জুয়েলারি ও গহনা</option>
+              <option value="ready_made">রেডিমেড গার্মেন্টস</option>
+            </select>
+          </div>
+
+          <div class="form-sec-title">
+            <i class="fa-solid fa-location-dot" style="color:#ef4444;"></i> ২. পার্সেল পিকআপ ঠিকানা (আমতা)
+          </div>
+
+          <div class="form-group">
+            <label>দোকানের সঠিক ঠিকানা ও রোড <span>*</span></label>
+            <textarea class="form-textarea" id="regAddress" rows="2" placeholder="দোকান নং, বাজারের নাম, আমতা - ৭১১৪০১" required></textarea>
+          </div>
+
+          <div class="form-group">
+            <label>কাছের ল্যান্ডমার্ক (Landmark) <span>*</span></label>
+            <input type="text" class="form-input" id="regLandmark" placeholder="যেমন: আমতা হাসপাতালের বিপরীতে / সিনেমা তলার পাশে" required>
+            <div class="form-help">আমাদের ডেলিভারি টিম এখান থেকে পার্সেল সংগ্রহ করবে।</div>
+          </div>
+
+          <div class="form-sec-title">
+            <i class="fa-solid fa-id-card" style="color:var(--emerald);"></i> ৩. ব্যবসার প্রমাণপত্র ও পেমেন্ট
+          </div>
+
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+            <div class="form-group">
+              <label>ডকুমেন্টের ধরন <span>*</span></label>
+              <select class="form-select" id="regDocType" required>
+                <option value="trade_license">ট্রেড লাইসেন্স</option>
+                <option value="udyam">উদ্যম আধার / MSME</option>
+                <option value="shop_board">দোকানের সাইনবোর্ড</option>
+                <option value="gstin">জিএসটি (ঐচ্ছিক)</option>
               </select>
             </div>
             <div class="form-group">
-              <label>স্টোরেজ তাক / র‍্যাক <span>*</span></label>
-              <input type="text" class="form-input" id="upRack" value="Rack A-01 (মেইন শো-কেস)" required>
-            </div>
-          </div>
-
-          <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px;">
-            <div class="form-group">
-              <label>বিক্রি মূল্য (₹) <span>*</span></label>
-              <input type="number" class="form-input" id="upPrice" placeholder="যেমন: 950" required>
-            </div>
-            <div class="form-group">
-              <label>আসল MRP (₹) <span>*</span></label>
-              <input type="number" class="form-input" id="upMrp" placeholder="যেমন: 1899" required>
-            </div>
-            <div class="form-group">
-              <label>মোট স্টক (পিস) <span>*</span></label>
-              <input type="number" class="form-input" id="upStock" value="10" required>
+              <label>লাইসেন্স / ডকুমেন্ট নং <span>*</span></label>
+              <input type="text" class="form-input" id="regDocNumber" placeholder="যেমন: TL-AMTA-2026/049" required>
             </div>
           </div>
 
           <div class="form-group">
-            <label>প্রোডাক্টের ছবি (Image URL বা ফাইল লিঙ্ক) <span>*</span></label>
-            <input type="text" class="form-input" id="upImg" placeholder="ছবির ওয়েব লিঙ্ক বা আপলোড URL (যেমন https://...)" value="https://images.unsplash.com/photo-1610030469983-98e550d6193c?w=500&auto=format&fit=crop&q=80" required>
+            <label>টাকা পাওয়ার UPI আইডি <span>*</span></label>
+            <input type="text" class="form-input" id="regUpi" placeholder="যেমন: 9876543210@ybl বা shop@sbi" required>
+            <div class="form-help">গ্রাহকের ক্যাশ ও অনলাইন বিক্রির টাকা এই অ্যাকাউন্টে জমা হবে।</div>
           </div>
 
-          <div class="form-group">
-            <label>কাপড়ের বিবরণ ও কোয়ালিটি</label>
-            <textarea class="form-textarea" id="upDesc" rows="2" placeholder="১০০% পিওর সফট ফ্যাব্রিক, জরি বর্ডার, ব্লাউজ পিস সহ।"></textarea>
+          <div class="form-sec-title">
+            <i class="fa-solid fa-lock" style="color:var(--amber);"></i> ৪. আপনার দোকানের গোপন পাসওয়ার্ড
           </div>
 
-          <button type="submit" style="width:100%; background:var(--brand); color:#fff; border:none; padding:12px; border-radius:10px; font-size:0.95rem; font-weight:800; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:8px;">
-            <i class="fa-solid fa-cloud-arrow-up"></i> প্রোডাক্ট আপলোড করুন ও লাইভ শপে দেখান
+          <div style="background:#fefce8; border:1.5px solid #fde047; border-radius:10px; padding:12px; margin-bottom:14px;">
+            <div class="form-group" style="margin-bottom:0;">
+              <label style="color:#854d0e;">🔒 ৪ সংখ্যার গোপন পাসওয়ার্ড পিন তৈরি করুন <span>*</span></label>
+              <input type="password" class="form-input" id="regPassword" placeholder="যেমন: 2580" minlength="4" maxlength="6" required style="letter-spacing:4px; font-size:1.1rem; width:200px; background:#fff;">
+              <div class="form-help" style="color:#a16207;">⚠️ এই পিনটি মনে রাখুন। এটিই আপনার দোকানের ডিজিটাল চাবি। আপনি ছাড়া অন্য কেউ ঢুকতে পারবে না।</div>
+            </div>
+          </div>
+
+          <button type="submit" class="btn-submit" style="background:#059669;">
+            <i class="fa-solid fa-check-circle"></i> দোকান রেজিস্টার করুন ও ড্যাশবোর্ডে প্রবেশ করুন
           </button>
         </form>
       </div>
+
     </div>
 
-    <!-- ================= TAB 3: INVENTORY ================= -->
-    <div id="paneInventory" class="tab-content">
-      <div class="seller-card">
-        <div class="card-title-row">
-          <div class="card-title">
-            <i class="fa-solid fa-boxes-stacked" style="color:var(--brand);"></i> আমার দোকানের বর্তমান স্টক
-          </div>
-          <button type="button" class="btn-hdr-action" onclick="renderSellerInventory()">
-            <i class="fa-solid fa-rotate"></i> রিফ্রেশ
-          </button>
-        </div>
-
-        <div id="sellerInventoryContainer" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(260px, 1fr)); gap:12px;">
-          <!-- Dynamically populated stock items -->
-        </div>
-      </div>
-    </div>
-
-    <!-- ================= TAB 4: NEW SHOP ONBOARDING BRIDGE ================= -->
-    <div id="paneOnboard" class="tab-content">
-      <div class="seller-card">
-        <div class="card-title-row">
-          <div class="card-title">
-            <i class="fa-solid fa-store" style="color:var(--brand);"></i> নতুন দোকানদার রেজিস্ট্রেশন ও পার্টনার্স
-          </div>
-          <a href="seller.html" target="_blank" class="btn-call-delivery" style="font-size:0.75rem;">
-            <i class="fa-solid fa-arrow-up-right-from-square"></i> রেজিস্ট্রেশন ফর্ম ওপেন
-          </a>
-        </div>
-
-        <!-- Required Documents Quick Callout -->
-        <div style="background:#f1f5f9; border:1px solid var(--border); border-radius:12px; padding:14px; margin-bottom:14px;">
-          <div style="font-size:0.85rem; font-weight:800; color:var(--text-main); margin-bottom:6px;">
-            📄 নতুন দোকান খোলার প্রয়োজনীয় ডকুমেন্টস চেকলিস্ট:
-          </div>
-          <div style="font-size:0.78rem; color:var(--text-sub); line-height:1.5;">
-            ১. দোকানের নাম, বাজার ঠিকানা ও পিকআপ ল্যান্ডমার্ক<br>
-            ২. মালিকের নাম ও হোয়াটসঅ্যাপ মোবাইল নম্বর<br>
-            ৩. ট্রেড লাইসেন্স / উদ্যম আধার / সাইনবোর্ড ছবি<br>
-            ৪. পেমেন্ট পাওয়ার ব্যাংক অ্যাকাউন্ট নং ও IFSC বা UPI আইডি
-          </div>
-        </div>
-
-        <div style="font-size:0.88rem; font-weight:800; color:var(--text-main); margin-bottom:10px;">
-          অনবোর্ডেড সমস্ত শপ পার্টনার্স তালিকা:
-        </div>
-        <div id="allPartnerShopsDisplayList">
-          <!-- Dynamically rendered partner shops -->
-        </div>
-      </div>
-    </div>
-
-    <!-- ================= TAB 5: PROFILE & SETTINGS ================= -->
-    <div id="paneProfile" class="tab-content">
-      <div class="seller-card">
-        <div class="card-title-row">
-          <div class="card-title">
-            <i class="fa-solid fa-id-card-clip" style="color:var(--brand);"></i> আমার দোকানের প্রোফাইল ও ডকুমেন্টস
-          </div>
-        </div>
-
-        <div style="font-size:0.82rem; color:var(--text-sub); line-height:1.6;" id="myShopProfileDetailsBox">
-          <!-- Populated from active shop -->
-        </div>
-      </div>
-    </div>
-
-  </div>
-
-  <!-- SINGLE BARCODE & WAYBILL MODAL INSIDE SELLER HUB -->
-  <div id="sellerBarcodeModal" style="display:none; position:fixed; inset:0; background:rgba(15,23,42,0.6); backdrop-filter:blur(4px); z-index:9999; align-items:center; justify-content:center; padding:16px;">
-    <div style="background:#fff; border-radius:16px; max-width:380px; width:100%; padding:20px; text-align:center; box-shadow:0 20px 25px -5px rgba(0,0,0,0.15); border:1px solid var(--border);">
-      <div style="border-bottom:1.5px solid #0f172a; padding-bottom:6px; margin-bottom:10px;">
-        <div style="font-weight:900; font-size:1.05rem;" id="barModalShopName">নিশা ক্রিয়েশনস বুটিক শপ</div>
-        <div style="font-size:0.7rem; font-weight:700; color:#475569;">PRODUCT BARCODE & DISPATCH STICKER</div>
-      </div>
-      <div style="font-size:0.95rem; font-weight:800; color:#0f172a;" id="barProdTitle">Pure Dhakai Jamdani Saree</div>
-      <div style="font-size:0.75rem; color:#64748b;" id="barProdId">#NC-101</div>
-      <div style="font-size:0.88rem; font-weight:800; color:var(--emerald); margin-top:2px;" id="barProdPrice">বিক্রি মূল্য: ₹799</div>
-
-      <!-- Real 1D Barcode Lines -->
-      <div style="margin:10px auto; display:flex; justify-content:center; align-items:flex-end; gap:2px; height:40px; background:#fff; padding:4px 10px; border-radius:4px; width:fit-content; border:1px solid #cbd5e1;">
-        <div style="width:3px; height:100%; background:#0f172a;"></div>
-        <div style="width:1px; height:100%; background:#0f172a;"></div>
-        <div style="width:4px; height:100%; background:#0f172a;"></div>
-        <div style="width:2px; height:100%; background:#0f172a;"></div>
-        <div style="width:5px; height:100%; background:#0f172a;"></div>
-        <div style="width:2px; height:100%; background:#0f172a;"></div>
-        <div style="width:4px; height:100%; background:#0f172a;"></div>
-        <div style="width:1px; height:100%; background:#0f172a;"></div>
-        <div style="width:3px; height:100%; background:#0f172a;"></div>
-        <div style="width:2px; height:100%; background:#0f172a;"></div>
-        <div style="width:4px; height:100%; background:#0f172a;"></div>
-        <div style="width:5px; height:100%; background:#0f172a;"></div>
-      </div>
-      <div style="font-family:'Courier New', monospace; font-size:1.1rem; letter-spacing:4px; font-weight:900; margin-bottom:8px;" id="barBarcodeText">* N C - 1 0 1 *</div>
-
-      <img id="barQrImg" src="" style="width:105px; height:105px; border:1px solid #cbd5e1; padding:2px; border-radius:8px; margin:4px auto; display:block;">
-
-      <div style="display:flex; gap:8px; margin-top:14px;">
-        <button type="button" style="flex:1; background:#0f172a; color:#fff; border:none; padding:10px; border-radius:8px; font-weight:800; cursor:pointer;" onclick="window.print()">
-          <i class="fa-solid fa-print"></i> প্রিন্ট স্টিকার
-        </button>
-        <button type="button" style="background:#e2e8f0; color:#0f172a; border:none; padding:10px 14px; border-radius:8px; font-weight:800; cursor:pointer;" onclick="document.getElementById('sellerBarcodeModal').style.display='none'">
-          বন্ধ করুন
-        </button>
-      </div>
-    </div>
   </div>
 
   <script>
-    // =========================================================================
-    // SELLER HUB CLIENT SCRIPT (নিশা ক্রিয়েশনস প্ল্যাটফর্ম)
-    // =========================================================================
-
-    let currentShop = {
-      shopId: 'SHOP-AMTA-101',
-      shopName: 'নিশা ক্রিয়েশনস বুটিক শপ',
-      ownerName: 'সাহেব ঘাঁটি / নিশা',
-      phone: '9239413517',
-      address: 'আমতা স্টেশন রোড, সিনেমা তলা মোড়, আমতা, হাওড়া - ৭১১৪০১',
-      category: 'saree',
-      upiId: '9239413517@ybl'
-    };
-
-    function initSellerHub() {
-      // Load shops
+    function loadSavedShops() {
       let shops = [];
-      try {
-        shops = JSON.parse(localStorage.getItem('nc_partner_shops') || '[]');
-      } catch(e) { shops = []; }
+      try { shops = JSON.parse(localStorage.getItem('nc_partner_shops') || '[]'); } catch(e){}
 
       if (shops.length === 0) {
-        shops.push(currentShop);
+        shops.push({
+          shopId: 'SHOP-AMTA-101',
+          shopName: 'নিশা ক্রিয়েশনস বুটিক শপ',
+          ownerName: 'সাহেব ঘাঁটি / নিশা',
+          phone: '9239413517',
+          address: 'আমতা স্টেশন রোড, সিনেমা তলা মোড়, আমতা - ৭১১৪০১',
+          pin: '1234',
+          category: 'saree'
+        });
         localStorage.setItem('nc_partner_shops', JSON.stringify(shops));
       }
 
-      // Check URL param or localStorage for active shop
-      const urlParams = new URLSearchParams(window.location.search);
-      const paramShopId = urlParams.get('shopId');
-      if (paramShopId) {
-        const found = shops.find(s => s.shopId === paramShopId);
-        if (found) currentShop = found;
-      }
-
-      // Populate dropdown
-      const sel = document.getElementById('sellerShopSelector');
+      const sel = document.getElementById('loginShopSelect');
       if (sel) {
         sel.innerHTML = shops.map(s => `
-          <option value="${s.shopId}" ${s.shopId === currentShop.shopId ? 'selected' : ''}>
-            🏪 ${s.shopName} (${s.shopId})
-          </option>
+          <option value="${s.shopId}">🏪 ${s.shopName} (${s.shopId})</option>
         `).join('');
       }
-
-      // Update UI Header
-      document.getElementById('topShopName').textContent = currentShop.shopName;
-      document.getElementById('topShopMeta').textContent = `${currentShop.address.split(',')[0]} • সেলার আইডি: #${currentShop.shopId}`;
-
-      renderSellerOrders();
-      renderSellerInventory();
-      renderPartnerShopsList();
-      renderSellerProfile();
     }
 
-    function changeActiveSellerShop(shopId) {
+    function selectPortalMode(mode) {
+      document.getElementById('btnChoiceLogin').classList.toggle('active', mode === 'login');
+      document.getElementById('btnChoiceRegister').classList.toggle('active', mode === 'register');
+      document.getElementById('boxLogin').style.display = (mode === 'login') ? 'block' : 'none';
+      document.getElementById('boxRegister').style.display = (mode === 'register') ? 'block' : 'none';
+    }
+
+    function handleQuickLogin(e) {
+      e.preventDefault();
+      const shopId = document.getElementById('loginShopSelect').value;
+      const pin = document.getElementById('loginSecretPin').value.trim();
+
       let shops = [];
       try { shops = JSON.parse(localStorage.getItem('nc_partner_shops') || '[]'); } catch(e){}
       const found = shops.find(s => s.shopId === shopId);
-      if (found) {
-        currentShop = found;
-        initSellerHub();
-      }
-    }
 
-    function switchSellerTab(tabKey) {
-      document.querySelectorAll('.tab-content').forEach(p => p.classList.remove('active'));
-      document.querySelectorAll('.seller-tab-btn').forEach(b => b.classList.remove('active'));
-
-      if (tabKey === 'orders') {
-        document.getElementById('paneOrders')?.classList.add('active');
-        document.getElementById('tabBtnOrders')?.classList.add('active');
-        renderSellerOrders();
-      } else if (tabKey === 'upload') {
-        document.getElementById('paneUpload')?.classList.add('active');
-        document.getElementById('tabBtnUpload')?.classList.add('active');
-      } else if (tabKey === 'inventory') {
-        document.getElementById('paneInventory')?.classList.add('active');
-        document.getElementById('tabBtnInventory')?.classList.add('active');
-        renderSellerInventory();
-      } else if (tabKey === 'onboard') {
-        document.getElementById('paneOnboard')?.classList.add('active');
-        document.getElementById('tabBtnOnboard')?.classList.add('active');
-        renderPartnerShopsList();
-      } else if (tabKey === 'profile') {
-        document.getElementById('paneProfile')?.classList.add('active');
-        document.getElementById('tabBtnProfile')?.classList.add('active');
-        renderSellerProfile();
-      }
-    }
-
-    // Render Orders for this seller
-    function renderSellerOrders() {
-      const container = document.getElementById('sellerOrdersListContainer');
-      if (!container) return;
-
-      let allOrders = [];
-      try { allOrders = JSON.parse(localStorage.getItem('nc_orders') || '[]'); } catch(e){}
-
-      // Update Top KPIs
-      document.getElementById('statTodayOrders').textContent = allOrders.length;
-      const pendingPack = allOrders.filter(o => o.status === 'Order Placed').length;
-      document.getElementById('statPendingPack').textContent = pendingPack;
-      const totalSales = allOrders.filter(o => o.status !== 'Cancelled').reduce((sum, o) => sum + (Number(o.total) || 0), 0);
-      document.getElementById('statTotalSales').textContent = `₹${totalSales.toLocaleString('en-IN')}`;
-      document.getElementById('badgeTabOrders').textContent = allOrders.length;
-
-      if (allOrders.length === 0) {
-        container.innerHTML = `
-          <div style="text-align:center; padding:35px 20px; color:#94a3b8;">
-            <i class="fa-solid fa-inbox" style="font-size:2.2rem; color:#cbd5e1; margin-bottom:8px;"></i>
-            <div style="font-size:0.95rem; font-weight:800; color:#475569;">কোনো নতুন অর্ডার নেই</div>
-            <div style="font-size:0.75rem; margin-top:2px;">গ্রাহক অনলাইনে অর্ডার দিলে এখানে ভেসে উঠবে।</div>
-          </div>
-        `;
+      if (!found) {
+        alert('❌ দোকান পাওয়া যায়নি!');
         return;
       }
 
-      container.innerHTML = allOrders.map(ord => {
-        const isPacked = (ord.status === 'Packed' || ord.status === 'Picked Up' || ord.status === 'Out for Delivery' || ord.status === 'Delivered');
-        const isDelivered = (ord.status === 'Delivered');
-
-        // Central Delivery Dispatch Message
-        const dispatchMsg = encodeURIComponent(
-          `*🛵 নতুন পার্সেল পিকআপ রিকোয়েস্ট - নিশা ক্রিয়েশনস প্ল্যাটফর্ম*\n` +
-          `━━━━━━━━━━━━━━━━━\n` +
-          `🏪 *দোকানের নাম:* ${currentShop.shopName}\n` +
-          `📍 *পিকআপ ঠিকানা:* ${currentShop.address}\n` +
-          `📞 *দোকানদার ফোন:* ${currentShop.phone}\n` +
-          `━━━━━━━━━━━━━━━━━\n` +
-          `🧾 *অর্ডার নং:* #${ord.id}\n` +
-          `👤 *কাস্টমার:* ${ord.name}\n` +
-          `📍 *ডেলিভারি ঠিকানা:* ${ord.address}\n` +
-          `💰 *সংগ্রহযোগ্য ক্যাশ:* ₹${ord.total} (${ord.paymentMode === 'COD' ? 'ক্যাশ অন ডেলিভারি' : 'অনলাইন পেইড'})\n\n` +
-          `📦 *রাইডার অ্যাপে টাস্ক খুলুন:*\n${window.location.origin}/delivery.html?orderId=${ord.id}`
-        );
-
-        return `
-          <div class="seller-order-card">
-            <div class="seller-order-header">
-              <div>
-                <strong style="color:var(--brand); font-size:0.92rem;">Order #${ord.id}</strong>
-                <span style="font-size:0.72rem; color:var(--text-muted); margin-left:6px;">${ord.date ? new Date(ord.date).toLocaleDateString('bn-IN') : 'আজ'}</span>
-              </div>
-              <span style="background:${isDelivered ? '#dcfce7' : (isPacked ? '#e0e7ff' : '#fef08a')}; color:${isDelivered ? '#15803d' : (isPacked ? '#4338ca' : '#854d0e')}; font-size:0.72rem; font-weight:800; padding:2px 8px; border-radius:6px;">
-                ${ord.status}
-              </span>
-            </div>
-
-            <div style="font-size:0.82rem; color:var(--text-sub); line-height:1.4; margin-bottom:8px;">
-              👤 <strong>গ্রাহক:</strong> ${ord.name} • 📞 <a href="tel:${ord.phone}" style="color:var(--brand); text-decoration:none; font-weight:700;">${ord.phone}</a><br>
-              📍 <strong>ডেলিভারি ঠিকানা:</strong> ${ord.address}
-            </div>
-
-            <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; padding:8px 10px; margin-bottom:10px; display:flex; justify-content:space-between; align-items:center;">
-              <div style="font-size:0.8rem; font-weight:700;">
-                ${(ord.items || []).map(i => `${i.title} (${i.selectedSize || 'Free Size'}) x ${i.qty || 1}`).join(', ')}
-              </div>
-              <div style="font-size:0.9rem; font-weight:800; color:var(--emerald);">₹${ord.total}</div>
-            </div>
-
-            <!-- Action Buttons for Seller -->
-            <div style="display:flex; gap:8px; flex-wrap:wrap;">
-              ${!isPacked ? `
-                <button type="button" class="btn-pack-done" onclick="markOrderPacked('${ord.id}')">
-                  <i class="fa-solid fa-check"></i> প্যাক সম্পন্ন মার্ক করুন
-                </button>
-              ` : `
-                <span style="background:#dcfce7; color:#15803d; font-size:0.75rem; font-weight:800; padding:6px 10px; border-radius:8px; display:inline-flex; align-items:center; gap:4px;">
-                  ✓ পার্সেল রেডি
-                </span>
-              `}
-
-              <button type="button" class="btn-hdr-action" onclick="openSellerBarcodeModal('${ord.id}')">
-                <i class="fa-solid fa-barcode"></i> স্টিকার প্রিন্ট
-              </button>
-
-              <a href="https://wa.me/?text=${dispatchMsg}" target="_blank" class="btn-call-delivery" title="সেন্ট্রাল ডেলিভারি বয়কে হোয়াটসঅ্যাপ পাঠান">
-                <i class="fa-solid fa-motorcycle"></i> সেন্ট্রাল ডেলিভারি বয়কে ডাকুন
-              </a>
-            </div>
-          </div>
-        `;
-      }).join('');
-    }
-
-    function markOrderPacked(orderId) {
-      let orders = [];
-      try { orders = JSON.parse(localStorage.getItem('nc_orders') || '[]'); } catch(e){}
-      const idx = orders.findIndex(o => o.id === orderId);
-      if (idx !== -1) {
-        orders[idx].status = 'Packed';
-        localStorage.setItem('nc_orders', JSON.stringify(orders));
-        renderSellerOrders();
-        alert(`✅ অর্ডার #${orderId} এর প্যাকিং সম্পন্ন হয়েছে! এবার সেন্ট্রাল ডেলিভারি বয়কে পিকআপের জন্য ডাকুন।`);
+      if (String(found.pin || '1234') !== String(pin)) {
+        alert('❌ ভুল পাসওয়ার্ড পিন! আপনার সঠিক গোপন পিন দিন।');
+        return;
       }
+
+      // Record active session and go to full admin
+      localStorage.setItem('nc_active_seller_shop', JSON.stringify(found));
+      window.location.href = `admin.html?shopId=${found.shopId}`;
     }
 
-    function openSellerBarcodeModal(orderId) {
-      let orders = [];
-      try { orders = JSON.parse(localStorage.getItem('nc_orders') || '[]'); } catch(e){}
-      const ord = orders.find(o => o.id === orderId);
-      const item = ord && ord.items && ord.items[0] ? ord.items[0] : { title: 'ডিজাইনার বুটিক শাড়ি', price: 950 };
-
-      document.getElementById('barModalShopName').textContent = currentShop.shopName;
-      document.getElementById('barProdTitle').textContent = item.title;
-      document.getElementById('barProdId').textContent = `Order #${orderId}`;
-      document.getElementById('barProdPrice').textContent = `সংগ্রহযোগ্য বিল: ₹${ord ? ord.total : item.price}`;
-      document.getElementById('barBarcodeText').textContent = `* NC - ${orderId.replace(/[^0-9]/g, '') || '101'} *`;
-
-      const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(orderId)}`;
-      document.getElementById('barQrImg').src = qrUrl;
-
-      document.getElementById('sellerBarcodeModal').style.display = 'flex';
-    }
-
-    // Product Upload
-    function handleSellerProductUpload(e) {
+    function handleFullRegister(e) {
       e.preventDefault();
-      const title = document.getElementById('upTitle').value.trim();
-      const cat = document.getElementById('upCategory').value;
-      const rack = document.getElementById('upRack').value.trim();
-      const price = Number(document.getElementById('upPrice').value);
-      const mrp = Number(document.getElementById('upMrp').value);
-      const stock = Number(document.getElementById('upStock').value);
-      const img = document.getElementById('upImg').value.trim();
-      const desc = document.getElementById('upDesc').value.trim();
+      const sName = document.getElementById('regShopName').value.trim();
+      const oName = document.getElementById('regOwnerName').value.trim();
+      const phone = document.getElementById('regPhone').value.trim();
+      const cat = document.getElementById('regCategory').value;
+      const addr = document.getElementById('regAddress').value.trim();
+      const landmark = document.getElementById('regLandmark').value.trim();
+      const docType = document.getElementById('regDocType').value;
+      const docNum = document.getElementById('regDocNumber').value.trim();
+      const upi = document.getElementById('regUpi').value.trim();
+      const pin = document.getElementById('regPassword').value.trim();
 
-      const newProd = {
-        id: 'NC-' + Math.floor(100 + Math.random() * 900),
-        title: title,
+      const newId = 'SHOP-AMTA-' + Math.floor(100 + Math.random() * 900);
+      const newShop = {
+        shopId: newId,
+        shopName: sName,
+        ownerName: oName,
+        phone: phone,
         category: cat,
-        price: price,
-        mrp: mrp,
-        stock: stock,
-        img: img,
-        desc: desc,
-        binLocation: rack,
-        shopId: currentShop.shopId,
-        shopName: currentShop.shopName,
-        inStock: true
+        address: `${addr} (ল্যান্ডমার্ক: ${landmark})`,
+        pickupAddress: addr,
+        landmark: landmark,
+        docType: docType,
+        docNumber: docNum,
+        upiId: upi,
+        pin: pin,
+        status: 'Active',
+        createdAt: new Date().toISOString()
       };
-
-      let prods = [];
-      try { prods = JSON.parse(localStorage.getItem('nc_products') || '[]'); } catch(e){}
-      prods.unshift(newProd);
-      localStorage.setItem('nc_products', JSON.stringify(prods));
-
-      alert(`🎉 অভিনন্দন! "${title}" সফলভাবে আপলোড হয়ে লাইভ শপে যুক্ত হয়েছে!`);
-      document.getElementById('sellerUploadProductForm').reset();
-      switchSellerTab('inventory');
-    }
-
-    // Inventory
-    function renderSellerInventory() {
-      const container = document.getElementById('sellerInventoryContainer');
-      if (!container) return;
-
-      let prods = [];
-      try { prods = JSON.parse(localStorage.getItem('nc_products') || '[]'); } catch(e){}
-      if (prods.length === 0 && typeof products !== 'undefined') prods = products;
-
-      document.getElementById('statTotalProducts').textContent = `${prods.length} টি`;
-
-      container.innerHTML = prods.map(p => `
-        <div style="background:#fff; border:1px solid var(--border); border-radius:12px; padding:10px; display:flex; gap:10px; align-items:center;">
-          <img src="${p.img || 'logo.png'}" onerror="this.onerror=null; this.src='logo.png';" style="width:58px; height:68px; object-fit:cover; border-radius:8px; border:1px solid #e2e8f0;">
-          <div style="flex:1;">
-            <div style="font-size:0.82rem; font-weight:800; color:var(--text-main); line-height:1.2;">${p.title}</div>
-            <div style="font-size:0.75rem; color:var(--brand); font-weight:800; margin-top:2px;">₹${p.price} <span style="font-size:0.68rem; color:#94a3b8; text-decoration:line-through;">₹${p.mrp}</span></div>
-            <div style="font-size:0.7rem; color:#64748b;">মজুদ: <strong>${p.stock || 10} পিস</strong> • তাক: ${p.binLocation || 'A-01'}</div>
-          </div>
-        </div>
-      `).join('');
-    }
-
-    // Partner Shops List
-    function renderPartnerShopsList() {
-      const container = document.getElementById('allPartnerShopsDisplayList');
-      if (!container) return;
 
       let shops = [];
       try { shops = JSON.parse(localStorage.getItem('nc_partner_shops') || '[]'); } catch(e){}
+      shops.push(newShop);
+      localStorage.setItem('nc_partner_shops', JSON.stringify(shops));
+      localStorage.setItem('nc_active_seller_shop', JSON.stringify(newShop));
 
-      container.innerHTML = shops.map(s => `
-        <div style="background:#f8fafc; border:1px solid var(--border); border-radius:10px; padding:12px; margin-bottom:8px; display:flex; justify-content:space-between; align-items:center;">
-          <div>
-            <div style="font-size:0.88rem; font-weight:800; color:var(--text-main);">${s.shopName} <span style="font-size:0.72rem; color:var(--brand);">#${s.shopId}</span></div>
-            <div style="font-size:0.75rem; color:var(--text-sub);">${s.ownerName} • 📞 ${s.phone}</div>
-            <div style="font-size:0.72rem; color:var(--text-muted);">${s.address}</div>
-          </div>
-          <button type="button" class="btn-hdr-action" onclick="changeActiveSellerShop('${s.shopId}')">
-            এই শপে ঢুকুন ➔
-          </button>
-        </div>
-      `).join('');
+      alert(`🎉 অভিনন্দন ${oName}! আপনার দোকান #${newId} সফলভাবে নিবন্ধিত হয়েছে। গোপন পিন সেট করা হয়েছে। এখন আপনি সরাসরি আপনার পূর্ণাঙ্গ ড্যাশবোর্ডে প্রবেশ করছেন।`);
+      window.location.href = `admin.html?shopId=${newId}`;
     }
 
-    // Profile
-    function renderSellerProfile() {
-      const box = document.getElementById('myShopProfileDetailsBox');
-      if (!box) return;
-
-      box.innerHTML = `
-        <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
-          <div><strong>দোকানের নাম:</strong> ${currentShop.shopName}</div>
-          <div><strong>শপ কোড:</strong> #${currentShop.shopId}</div>
-          <div><strong>মালিকের নাম:</strong> ${currentShop.ownerName}</div>
-          <div><strong>হোয়াটসঅ্যাপ ফোন:</strong> ${currentShop.phone}</div>
-          <div><strong>পিকআপ ঠিকানা:</strong> ${currentShop.address}</div>
-          <div><strong>পেমেন্ট সেটেলমেন্ট:</strong> ${currentShop.upiId || '9239413517@ybl'}</div>
-        </div>
-      `;
-    }
-
-    // Boot
-    window.addEventListener('DOMContentLoaded', initSellerHub);
+    window.addEventListener('DOMContentLoaded', loadSavedShops);
   </script>
 </body>
 </html>
