@@ -1491,9 +1491,14 @@
         </div>
 
         <!-- Active Shops List -->
-        <div style="font-size:0.95rem; font-weight:800; color:#0f172a; margin-bottom:12px; display:flex; justify-content:space-between; align-items:center;">
+        <div style="font-size:0.95rem; font-weight:800; color:#0f172a; margin-bottom:12px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
           <span>অনবোর্ডেড শপ পার্টনার্স তালিকা:</span>
-          <span style="font-size:0.78rem; color:#64748b;" id="partnerShopsTotalCount">মোট দোকান: ১ টি</span>
+          <div style="display:flex; align-items:center; gap:8px;">
+            <span style="font-size:0.78rem; color:#64748b;" id="partnerShopsTotalCount">মোট দোকান: ১ টি</span>
+            <button type="button" onclick="renderPartnerShopsList()" style="background:#f1f5f9; border:1px solid #cbd5e1; color:#334155; padding:4px 10px; border-radius:6px; font-size:0.75rem; font-weight:800; cursor:pointer; display:inline-flex; align-items:center; gap:4px;">
+              <i class="fa-solid fa-rotate"></i> রিফ্রেশ লিস্ট
+            </button>
+          </div>
         </div>
 
         <div id="partnerShopsGridContainer" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); gap:12px;">
@@ -1502,7 +1507,7 @@
       </div>
     </div>
 
-    id="pane-warehouse" class="tab-pane">
+    <div id="pane-warehouse" class="tab-pane">
       <!-- Warehouse Operations Header -->
       <div class="owner-card" style="margin-bottom:18px;">
         <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; margin-bottom:14px;">
@@ -4034,7 +4039,7 @@ function switchAdminView(tabKey) {
   }
 }
 
-// Render Partner Shops List
+// Render Partner Shops List with Delete & Stock Inspection
 function renderPartnerShopsList() {
   const container = document.getElementById('partnerShopsGridContainer');
   const countSpan = document.getElementById('partnerShopsTotalCount');
@@ -4068,16 +4073,20 @@ function renderPartnerShopsList() {
   if (countSpan) countSpan.textContent = `মোট দোকান: ${shops.length} টি`;
   if (navCount) navCount.textContent = shops.length;
 
-  container.innerHTML = shops.map((s, idx) => `
-    <div style="background:#ffffff; border:1.5px solid #e2e8f0; border-radius:14px; padding:16px; box-shadow:0 2px 6px rgba(15,23,42,0.04);">
+  container.innerHTML = shops.map((s, idx) => {
+    const isHq = (s.shopId === 'SHOP-AMTA-101' || s.phone === '9239413517');
+    return `
+    <div style="background:#ffffff; border:1.5px solid #e2e8f0; border-radius:14px; padding:16px; box-shadow:0 2px 6px rgba(15,23,42,0.04); position:relative;">
       <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:8px;">
         <div>
           <div style="font-size:1rem; font-weight:800; color:#0f172a;">${s.shopName}</div>
           <div style="font-size:0.75rem; color:var(--primary); font-weight:800;">#${s.shopId}</div>
         </div>
-        <span style="background:#dcfce7; color:#15803d; font-size:0.7rem; font-weight:800; padding:2px 8px; border-radius:6px;">
-          ✓ ${s.status || 'Active'}
-        </span>
+        <div style="display:flex; align-items:center; gap:6px;">
+          <span style="background:${isHq ? '#e0e7ff' : '#dcfce7'}; color:${isHq ? '#4338ca' : '#15803d'}; font-size:0.7rem; font-weight:800; padding:2px 8px; border-radius:6px;">
+            ${isHq ? '⭐ হেডকোয়ার্টার' : '✓ Active'}
+          </span>
+        </div>
       </div>
 
       <div style="font-size:0.8rem; color:#475569; line-height:1.4; margin-bottom:10px;">
@@ -4088,16 +4097,91 @@ function renderPartnerShopsList() {
         💳 <strong>সেটেলমেন্ট UPI:</strong> ${s.upiId || 'N/A'}
       </div>
 
-      <div style="display:flex; gap:8px; margin-top:8px;">
-        <a href="https://wa.me/91${s.phone.replace(/[^0-9]/g, '')}?text=${encodeURIComponent('নমস্কার ' + s.ownerName + ', নিশা ক্রিয়েশনস প্ল্যাটফর্মে আপনার দোকান সক্রিয় আছে। কোনো নতুন অর্ডার বা পার্সেল পিকআপ থাকলে জানান।')}" target="_blank" style="flex:1; background:#25d366; color:#fff; text-decoration:none; padding:8px; border-radius:8px; font-size:0.78rem; font-weight:800; display:flex; align-items:center; justify-content:center; gap:6px;">
+      <div style="display:flex; gap:6px; margin-top:10px; flex-wrap:wrap;">
+        <a href="https://wa.me/91${String(s.phone).replace(/[^0-9]/g, '')}?text=${encodeURIComponent('নমস্কার ' + s.ownerName + ', নিশা ক্রিয়েশনস প্ল্যাটফর্মে আপনার দোকান সক্রিয় আছে। কোনো নতুন অর্ডার বা পার্সেল পিকআপ থাকলে জানান।')}" target="_blank" style="flex:1; min-width:90px; background:#25d366; color:#fff; text-decoration:none; padding:8px 10px; border-radius:8px; font-size:0.75rem; font-weight:800; display:flex; align-items:center; justify-content:center; gap:4px;">
           <i class="fa-brands fa-whatsapp"></i> হোয়াটসঅ্যাপ
         </a>
-        <button type="button" onclick="alert('দোকান #${s.shopId} এর প্রোডাক্ট ও স্টক প্রস্তুত।')" style="background:#f1f5f9; color:#334155; border:1px solid #cbd5e1; padding:8px 12px; border-radius:8px; font-size:0.78rem; font-weight:800; cursor:pointer;">
+        <button type="button" onclick="viewShopSpecificStock('${s.shopId}', '${encodeURIComponent(s.shopName)}')" style="background:#f1f5f9; color:#334155; border:1px solid #cbd5e1; padding:8px 10px; border-radius:8px; font-size:0.75rem; font-weight:800; cursor:pointer; display:inline-flex; align-items:center; gap:4px;">
           <i class="fa-solid fa-boxes-stacked"></i> স্টক দেখুন
         </button>
+        ${!isHq ? `
+        <button type="button" onclick="deletePartnerShop('${s.shopId}', '${encodeURIComponent(s.shopName)}')" style="background:#fee2e2; color:#ef4444; border:1px solid #fca5a5; padding:8px 10px; border-radius:8px; font-size:0.75rem; font-weight:800; cursor:pointer; display:inline-flex; align-items:center; gap:4px;" title="দোকানটি চিরতরে মুছে ফেলুন">
+          <i class="fa-solid fa-trash-can"></i> ডিলিট
+        </button>
+        ` : ''}
       </div>
     </div>
-  `).join('');
+  `}).join('');
+}
+
+// Delete partner shop completely and clean its products
+function deletePartnerShop(shopId, encodedShopName) {
+  const shopName = decodeURIComponent(encodedShopName);
+  if (!confirm(`⚠️ সতর্কবার্তা!
+
+আপনি কি নিশ্চিতভাবে "${shopName}" (#${shopId}) দোকানটি ডিলিট করতে চান?
+
+এই দোকানটি প্ল্যাটফর্ম থেকে মুছে যাবে এবং এর সমস্ত আপলোড করা প্রোডাক্ট বাতিল করা হবে।`)) {
+    return;
+  }
+
+  // 1. Delete from nc_partner_shops
+  let shops = [];
+  try { shops = JSON.parse(localStorage.getItem('nc_partner_shops') || '[]'); } catch(e){}
+  shops = shops.filter(s => s.shopId !== shopId);
+  localStorage.setItem('nc_partner_shops', JSON.stringify(shops));
+
+  // 2. Delete any products of this shop from nc_products & nc_custom_products
+  let prods = [];
+  try { prods = JSON.parse(localStorage.getItem('nc_products') || '[]'); } catch(e){}
+  prods = prods.filter(p => p.shopId !== shopId);
+  localStorage.setItem('nc_products', JSON.stringify(prods));
+
+  let customOnly = [];
+  try { customOnly = JSON.parse(localStorage.getItem('nc_custom_products') || '[]'); } catch(e){}
+  customOnly = customOnly.filter(p => p.shopId !== shopId);
+  localStorage.setItem('nc_custom_products', JSON.stringify(customOnly));
+
+  // 3. Clear from logged in seller if they were logged in
+  try {
+    const curLoggedIn = JSON.parse(localStorage.getItem('nc_logged_in_seller') || '{}');
+    if (curLoggedIn && curLoggedIn.shopId === shopId) {
+      localStorage.removeItem('nc_logged_in_seller');
+    }
+  } catch(e){}
+
+  // 4. Trigger storage event for live shop and other tabs
+  window.dispatchEvent(new Event('storage'));
+
+  alert(`✅ দোকান "${shopName}" সফলভাবে ডিলিট করা হয়েছে!`);
+  renderPartnerShopsList();
+}
+
+// View products uploaded by a specific shop
+function viewShopSpecificStock(shopId, encodedShopName) {
+  const shopName = decodeURIComponent(encodedShopName);
+  let prods = [];
+  try { prods = JSON.parse(localStorage.getItem('nc_products') || '[]'); } catch(e){}
+  if (prods.length === 0 && typeof products !== 'undefined') prods = products;
+
+  const shopProds = prods.filter(p => p.shopId === shopId || (shopId === 'SHOP-AMTA-101' && !p.shopId));
+  if (shopProds.length === 0) {
+    alert(`দোকান: ${shopName} (#${shopId})
+
+এই দোকানে এখনো কোনো প্রোডাক্ট আপলোড করা নেই।`);
+    return;
+  }
+
+  let msg = `🏪 ${shopName} (#${shopId})
+মোট প্রোডাক্ট: ${shopProds.length} টি
+
+`;
+  shopProds.slice(0, 10).forEach((p, i) => {
+    msg += `${i+1}. ${p.title} - ₹${p.price} (স্টক: ${p.stock || 10})
+`;
+  });
+  if (shopProds.length > 10) msg += `... এবং আরো ${shopProds.length - 10} টি প্রোডাক্ট।`;
+  alert(msg);
 }
 
 function copySellerOnboardingLink() {
@@ -5640,6 +5724,16 @@ function closeAdminBarcodeStickerModal() {
     </div>
   </div>
 
+
+    // Listen for cross-tab updates to partner shops
+    window.addEventListener('storage', function(e) {
+      if (e.key === 'nc_partner_shops') {
+        if (typeof renderPartnerShopsList === 'function') {
+          renderPartnerShopsList();
+        }
+      }
+    });
+
 </body>
 </html>`;
 
@@ -6225,6 +6319,12 @@ function closeAdminBarcodeStickerModal() {
         loadBoutiqueUpiId();
       } catch(e) {}
 
+      try {
+        if (typeof renderPartnerShopsList === 'function') {
+          renderPartnerShopsList();
+        }
+      } catch(e) {}
+
       // Continuous Realtime Cloud Firestore Sync for Admin Portal
       let adminSyncRetries = 0;
       const startAdminCloudSync = setInterval(() => {
@@ -6615,6 +6715,16 @@ function closeAdminBarcodeStickerModal() {
               এটি একটি কম্পিউটার জেনারেটেড ডিজিটাল ইনভয়েস। নিশা ক্রিয়েশনস থেকে কেনাকাটার জন্য ধন্যবাদ!
             </div>
           </div>
+
+    // Listen for cross-tab updates to partner shops
+    window.addEventListener('storage', function(e) {
+      if (e.key === 'nc_partner_shops') {
+        if (typeof renderPartnerShopsList === 'function') {
+          renderPartnerShopsList();
+        }
+      }
+    });
+
 </body>
         </html>
       `);
@@ -7413,6 +7523,16 @@ function closeAdminBarcodeStickerModal() {
       </div>
     </div>
   </div>
+
+
+    // Listen for cross-tab updates to partner shops
+    window.addEventListener('storage', function(e) {
+      if (e.key === 'nc_partner_shops') {
+        if (typeof renderPartnerShopsList === 'function') {
+          renderPartnerShopsList();
+        }
+      }
+    });
 
 </body>
 </html>
