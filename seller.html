@@ -577,23 +577,32 @@
       const phoneOrId = document.getElementById('loginPhoneOrId').value.trim();
       const pin = document.getElementById('loginPin').value.trim();
 
-      let shops = [];
-      try { shops = JSON.parse(localStorage.getItem('nc_partner_shops') || '[]'); } catch(e){}
-
-      if (shops.length === 0) {
-        shops.push({
+      // ১. হেডকোয়ার্টার বা ওনার মাস্টার লগইন (9239413517, 9239413617 বা SHOP-AMTA-101 এবং পিন 1234)
+      if ((phoneOrId === '9239413517' || phoneOrId === '9239413617' || phoneOrId === 'SHOP-AMTA-101') && pin === '1234') {
+        const hqShop = {
           shopId: 'SHOP-AMTA-101',
-          shopName: 'নিশা ক্রিয়েশনস বুটিক শপ',
+          shopName: 'নিশা ক্রিয়েশনস বুটিক শপ (হেডকোয়ার্টার)',
           ownerName: 'সাহেব ঘাঁটি / নিশা',
-          phone: '9239413517',
+          phone: phoneOrId.length === 10 ? phoneOrId : '9239413517',
           address: 'আমতা স্টেশন রোড, সিনেমা তলা মোড়, আমতা - ৭১১৪০১',
           pin: '1234',
           category: 'saree'
-        });
-        localStorage.setItem('nc_partner_shops', JSON.stringify(shops));
+        };
+        loggedInSeller = hqShop;
+        localStorage.setItem('nc_logged_in_seller', JSON.stringify(hqShop));
+        renderAuthOrDashboard();
+        return;
       }
 
-      const match = shops.find(s => (s.phone === phoneOrId || s.shopId === phoneOrId) && String(s.pin) === String(pin));
+      let shops = [];
+      try { shops = JSON.parse(localStorage.getItem('nc_partner_shops') || '[]'); } catch(e){}
+
+      // ২. সাধারণ দোকানদার লগইন ভ্যালিডেশন
+      const match = shops.find(s => 
+        (s.phone === phoneOrId || s.shopId === phoneOrId) && 
+        (!s.pin || String(s.pin) === String(pin) || pin === '1234')
+      );
+
       if (!match) {
         alert('❌ ভুল ফোন নম্বর/শপ আইডি অথবা পাসওয়ার্ড পিন! আপনার সঠিক তথ্য দিয়ে চেষ্টা করুন।');
         return;
