@@ -724,14 +724,14 @@
               <span><i class="fa-solid fa-store" style="color:#c084fc;"></i> পিকআপ পয়েন্ট (দোকানদার):</span>
               <span style="background:#4338ca; color:#fff; padding:1px 6px; border-radius:4px; font-size:0.68rem;">আমতা হাব</span>
             </div>
-            <div style="font-size:0.85rem; font-weight:800; color:#fff; margin-top:2px;">নিশা ক্রিয়েশনস বুটিক শপ</div>
-            <div style="font-size:0.72rem; color:#cbd5e1;">আমতা স্টেশন রোড, সিনেমা তলা মোড়, আমতা - ৭১১৪০১</div>
+            <div style="font-size:0.88rem; font-weight:800; color:#fff; margin-top:2px;">${ord.shopName || 'নিশা ক্রিয়েশনস বুটিক শপ'}</div>
+            <div style="font-size:0.72rem; color:#cbd5e1;">${ord.shopAddress || 'আমতা স্টেশন রোড, সিনেমা তলা মোড়, আমতা - ৭১১৪০১'}</div>
             
             <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:8px;">
-              <a href="tel:9239413517" class="btn-contact-call" style="padding:7px; font-size:0.75rem; border-radius:8px; text-decoration:none; display:flex; align-items:center; justify-content:center; gap:6px;">
+              <a href="tel:${ord.shopPhone || '9239413517'}" class="btn-contact-call" style="padding:7px; font-size:0.75rem; border-radius:8px; text-decoration:none; display:flex; align-items:center; justify-content:center; gap:6px;">
                 <i class="fa-solid fa-phone"></i> দোকানদারকে কল
               </a>
-              <a href="https://wa.me/919239413517?text=${shopWaMsg}" target="_blank" class="btn-contact-wa" style="padding:7px; font-size:0.75rem; border-radius:8px; text-decoration:none; display:flex; align-items:center; justify-content:center; gap:6px;">
+              <a href="https://wa.me/91${(ord.shopPhone || '9239413517').replace(/[^0-9]/g, '')}?text=${shopWaMsg}" target="_blank" class="btn-contact-wa" style="padding:7px; font-size:0.75rem; border-radius:8px; text-decoration:none; display:flex; align-items:center; justify-content:center; gap:6px;">
                 <i class="fa-brands fa-whatsapp"></i> পিকআপ মেসেজ
               </a>
             </div>

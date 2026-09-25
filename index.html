@@ -1327,6 +1327,18 @@
 </div>
 <i class="fa-solid fa-download" style="color:var(--primary); font-size:0.8rem;"></i>
 </div>
+
+<!-- 8. SELLER HUB / দোকানদার পোর্টাল -->
+<div class="drawer-menu-item" onclick="window.location.href='seller.html';" style="display:flex; align-items:center; gap:12px; padding:10px 12px; background:#eff6ff; border:1px solid #bfdbfe; border-radius:12px; cursor:pointer; margin-top:8px;">
+<div style="width:36px; height:36px; border-radius:10px; background:#2563eb; color:#fff; display:flex; align-items:center; justify-content:center; font-size:1.1rem;">
+<i class="fa-solid fa-store"></i>
+</div>
+<div style="flex:1;">
+<div style="font-size:0.82rem; font-weight:800; color:#1e40af;">দোকানদার সেলার পোর্টাল</div>
+<div style="font-size:0.68rem; color:#3b82f6;">অনলাইনে আপনার দোকান খুলুন ও পরিচালনা করুন</div>
+</div>
+<i class="fa-solid fa-chevron-right" style="color:#2563eb; font-size:0.75rem;"></i>
+</div>
 <!-- 8. Drawer Login / Logout Action Menu Item -->
 
 <div style="flex:1;">
@@ -2113,11 +2125,11 @@
       <input type="password" id="secretOwnerPinInput" maxlength="6" placeholder="PIN কোড" style="width:100%; padding:10px; background:#0f172a; border:1.5px solid #334155; border-radius:10px; color:#fde047; font-size:1.2rem; font-weight:800; text-align:center; letter-spacing:4px; margin-bottom:14px;">
       
       <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:10px;">
-        <button type="button" onclick="verifySecretPinAndGo('admin.html')" style="background:#4338ca; color:#fff; border:none; padding:10px; border-radius:10px; font-weight:800; font-size:0.8rem; cursor:pointer;">
-          <i class="fa-solid fa-gauge-high"></i> অ্যাডমিন প্যানেল
+        <button type="button" onclick="verifySecretPinAndGo('seller.html')" style="background:#4338ca; color:#fff; border:none; padding:10px; border-radius:10px; font-weight:800; font-size:0.8rem; cursor:pointer;">
+          <i class="fa-solid fa-store"></i> দোকানদার সেলার হাব
         </button>
         <button type="button" onclick="verifySecretPinAndGo('delivery.html')" style="background:#0284c7; color:#fff; border:none; padding:10px; border-radius:10px; font-weight:800; font-size:0.8rem; cursor:pointer;">
-          <i class="fa-solid fa-motorcycle"></i> ডেলিভারি হাব
+          <i class="fa-solid fa-motorcycle"></i> সেন্ট্রাল ডেলিভারি হাব
         </button>
       </div>
       <button type="button" onclick="closeSecretOwnerModal()" style="background:transparent; border:none; color:#94a3b8; font-size:0.8rem; cursor:pointer; font-weight:700;">
