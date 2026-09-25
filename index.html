@@ -1,0 +1,2172 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <!-- Legacy Browser Polyfills (For 2014-2016 Android 4.4 - 6.0 devices) -->
+  <script>
+    if (!String.prototype.includes) {
+      String.prototype.includes = function(search, start) {
+        'use strict';
+        if (typeof start !== 'number') { start = 0; }
+        if (start + search.length > this.length) { return false; }
+        return this.indexOf(search, start) !== -1;
+      };
+    }
+    if (!Array.prototype.includes) {
+      Array.prototype.includes = function(searchElement, fromIndex) {
+        return this.indexOf(searchElement, fromIndex) !== -1;
+      };
+    }
+    if (!Object.assign) {
+      Object.assign = function(target) {
+        if (target == null) throw new TypeError('Cannot convert undefined or null to object');
+        var to = Object(target);
+        for (var index = 1; index < arguments.length; index++) {
+          var nextSource = arguments[index];
+          if (nextSource != null) {
+            for (var nextKey in nextSource) {
+              if (Object.prototype.hasOwnProperty.call(nextSource, nextKey)) {
+                to[nextKey] = nextSource[nextKey];
+              }
+            }
+          }
+        }
+        return to;
+      };
+    }
+    if (!String.prototype.startsWith) {
+      String.prototype.startsWith = function(search, pos) {
+        return this.substr(!pos || pos < 0 ? 0 : +pos, search.length) === search;
+      };
+    }
+    if (!String.prototype.endsWith) {
+      String.prototype.endsWith = function(search, this_len) {
+        if (this_len === undefined || this_len > this.length) { this_len = this.length; }
+        return this.substring(this_len - search.length, this_len) === search;
+      };
+    }
+  </script>
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>Nisha Creations (নিশা ক্রিয়েশনস) - Saree & Jewellery Boutique • Amta</title>
+
+  <!-- PWA & Mobile App Native Experience -->
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="NishaCreations">
+  <meta name="theme-color" content="#9c27b0">
+  <!-- Cache-Busting to prevent stale cached versions on mobile -->
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+
+  <!-- Google Fonts & FontAwesome -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <link rel="stylesheet" href="style.css?v=20260923_v16">
+  <!-- Web App Manifest & PWA App Icons (ফোনের হোমস্ক্রিন ও ব্রাউজার লোগো) -->
+  <link rel="manifest" href="manifest.json?v=2">
+  <link rel="icon" type="image/png" sizes="192x192" href="logo.png">
+  <link rel="icon" type="image/png" sizes="512x512" href="logo.png">
+  <link rel="icon" type="image/png" href="logo.png">
+  <link rel="apple-touch-icon" href="logo.png">
+  <link rel="apple-touch-icon" sizes="192x192" href="logo.png">
+  <link rel="apple-touch-icon" sizes="512x512" href="logo.png">
+
+  <!-- PWA Service Worker Registration (Safe & Stable, Zero-Loop) -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', function() {
+        navigator.serviceWorker.register('./sw.js', { scope: './' }).then(function(reg) {
+          console.log('Nisha Creations Service Worker active.');
+        }).catch(function(err) {
+          console.warn('SW registration:', err);
+        });
+      });
+    }
+  </script>
+</head>
+<body>
+
+  <!-- ================= 1. TOP APP HEADER ================= -->
+  <header class="app-header">
+    <div class="top-brand-bar">
+      <div class="brand-logo-wrap" onclick="showScreen('home'); triggerSecretOwnerAccess();">
+        <img id="mainBrandLogoImg" src="logo.png" alt="Logo" class="brand-logo-img" style="width:40px; height:40px; border-radius:50%; object-fit:cover; border:2px solid #f59e0b; display:none; background:#fff;">
+        <div class="brand-logo-icon" id="mainBrandLogoIcon">NC</div>
+        <div>
+          <div class="brand-title">Nisha Creations</div>
+          <div class="brand-sub" id="t-brandSub">এক্সক্লুসিভ বুটিক</div>
+        </div>
+      </div>
+            <div class="header-icons" style="display:flex; align-items:center; gap:8px;">
+        <!-- User Login / Profile Button -->
+        
+        <!-- Language selector removed from header as per user instruction (kept only in menu drawer) -->
+        <!-- Cart Shopping Bag -->
+        <button class="header-icon-btn" onclick="openCartModal()" title="Shopping Bag" style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:50%; width:36px; height:36px; display:flex; align-items:center; justify-content:center; cursor:pointer; position:relative;">
+          <i class="fa-solid fa-bag-shopping" style="font-size:1.15rem; color:var(--primary);"></i>
+          <span class="badge-count" id="cartCountBadge">0</span>
+        </button>
+
+        <!-- Sleek Three-Dot Menu Button (ছিমছাম ও প্রফেশনাল মেনু ও সেটিংস) -->
+        <button class="header-icon-btn" onclick="openMenuDrawer()" id="btnThreeDotMenu" title="Menu & Settings" style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:50%; width:36px; height:36px; display:flex; align-items:center; justify-content:center; cursor:pointer; transition:all 0.2s;">
+          <i class="fa-solid fa-ellipsis-vertical" style="font-size:1.2rem; color:#334155;"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Location Indicator -->
+    <div class="location-strip">
+      <div style="display:flex; align-items:center; gap:5px;">
+        <i class="fa-solid fa-location-dot" style="color:var(--primary);"></i>
+        <span id="t-deliveryLoc">ডেলিভারি: আমতা, হাওড়া - 711401</span>
+      </div>
+      <span style="background:#fae8ff; padding:2px 8px; border-radius:10px; font-size:0.68rem; color:#86198f;" id="t-freeDeliveryBadge">ফ্রি হোম ডেলিভারি</span>
+    </div>
+
+    <!-- 📲 App Install Promo Banner -->
+    <div id="pwaInstallBanner" style="display:none; background:linear-gradient(135deg, #2e1065, #581c87); color:#fff; padding:10px 14px; margin:8px 12px 10px 12px; border-radius:12px; align-items:center; justify-content:space-between; box-shadow:0 3px 10px rgba(88,28,135,0.25);">
+      <div style="display:flex; align-items:center; gap:10px;">
+        <div style="background:var(--primary); width:36px; height:36px; border-radius:10px; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:0.9rem;">NC</div>
+        <div>
+          <div style="font-size:0.8rem; font-weight:800;" id="t-pwaTitle">নিশা ক্রিয়েশনস অ্যাপ ইনস্টল করুন</div>
+          <div style="font-size:0.68rem; opacity:0.85;" id="t-pwaSub">ফোনে একদম আসল অ্যাপের মতো চলবে!</div>
+        </div>
+      </div>
+      <button onclick="triggerAppInstall()" style="background:#facc15; color:#78350f; border:none; padding:7px 12px; border-radius:8px; font-weight:800; font-size:0.75rem; cursor:pointer; box-shadow:0 2px 6px rgba(250,204,21,0.4);" id="t-pwaBtn">
+        ইনস্টল
+      </button>
+    </div>
+
+    <!-- Search Box -->
+          <!-- Search Box (Direct Typing & Voice Search Enabled) -->
+      <div class="search-box-wrap">
+        <div class="search-input-box" style="cursor:text; position:relative;">
+          <i class="fa-solid fa-magnifying-glass" style="color:var(--primary); cursor:pointer;" onclick="submitSearchInput()" title="অনুসন্ধান"></i>
+          <input type="text" id="searchInput" placeholder="শাড়ির নাম, জামদানি বা গহনা খুঁজুন..." autocomplete="off" oninput="handleSearchInputChange(this.value)" onkeydown="if(event.key==='Enter'){event.preventDefault(); submitSearchInput();}" style="cursor:text; width:100%; padding-right:60px;">
+          <button type="button" id="searchClearBtn" onclick="clearSearchInput()" style="display:none; position:absolute; right:36px; background:transparent; border:none; color:#94a3b8; font-size:1rem; cursor:pointer; padding:2px 6px;" title="মুছুন">✕</button>
+          <button type="button" onclick="event.stopPropagation(); triggerDirectVoiceSearch()" style="position:absolute; right:8px; background:transparent; border:none; color:var(--primary); font-size:1.05rem; cursor:pointer; padding:2px 6px;" title="মুখে বলে খুঁজুন">
+            <i class="fa-solid fa-microphone"></i>
+          </button>
+        </div>
+      </div>
+  </header>
+
+  <!-- ================= 2. MAIN HOME SCREEN (Categories, Banners, Products) ================= -->
+  <main class="main-content screen-view active" id="screen-home" style="padding-bottom: 75px;">
+
+    <!-- 🌸 Single Unified Horizontal Scrollable Category Strip -->
+    <div class="category-scroll-unified" id="unifiedCategoryScrollStrip"></div>
+
+    
+    <!-- 🌟 Auto-Sliding Dynamic Banner Carousel (নিশা ক্রিয়েশনস প্রিমিয়াম অটো-স্লাইডার ব্যানার) -->
+    <div class="home-banner-carousel-wrap" id="homeBannerCarouselWrapper">
+      <div class="banner-carousel-viewport" id="bannerCarouselViewport">
+        <div class="banner-carousel-track" id="bannerCarouselTrack">
+          <!-- Slide 1: Dhakai Jamdani -->
+          <div class="banner-carousel-slide" style="background:linear-gradient(135deg, #701a75, #9333ea, #db2777);" onclick="onBannerClick('jamdani')">
+            <div class="banner-slide-content">
+              <div class="banner-badge-tag">🔥 ফেস্টিভ্যাল ধামাকা</div>
+              <div class="banner-main-title">শারদীয়া উৎসব মেগা অফার</div>
+              <div class="banner-sub-text">খাঁটি ঢাকাই জামদানি শাড়িতে 40% - 60% ছাড়!</div>
+              <div class="banner-cta-btn">
+                <span>কালেকশন দেখুন</span> <i class="fa-solid fa-chevron-right" style="font-size:0.65rem;"></i>
+              </div>
+            </div>
+            <div class="banner-slide-image-wrap">
+              <div style="width:100px; height:100px; display:flex; align-items:center; justify-content:center; background:rgba(255,255,255,0.15); border-radius:50%; font-size:2.5rem; color:#fff;"><i class="fa-solid fa-wand-magic-sparkles"></i></div>
+            </div>
+          </div>
+          <!-- Slide 2: Soft Silk -->
+          <div class="banner-carousel-slide" style="background:linear-gradient(135deg, #831843, #be185d, #f43f5e);" onclick="onBannerClick('silk')">
+            <div class="banner-slide-content">
+              <div class="banner-badge-tag">✨ প্রিমিয়াম কোয়ালিটি</div>
+              <div class="banner-main-title">রয়েল সফট সিল্ক ও বেনারসি</div>
+              <div class="banner-sub-text">জরি বর্ডার ও প্রিমিয়াম ডিজাইনার আঁচল কালেকশন</div>
+              <div class="banner-cta-btn">
+                <span>কালেকশন দেখুন</span> <i class="fa-solid fa-chevron-right" style="font-size:0.65rem;"></i>
+              </div>
+            </div>
+            <div class="banner-slide-image-wrap">
+              <div style="width:100px; height:100px; display:flex; align-items:center; justify-content:center; background:rgba(255,255,255,0.15); border-radius:50%; font-size:2.5rem; color:#fff;"><i class="fa-solid fa-wand-magic-sparkles"></i></div>
+            </div>
+          </div>
+          <!-- Slide 3: Tant -->
+          <div class="banner-carousel-slide" style="background:linear-gradient(135deg, #065f46, #059669, #10b981);" onclick="onBannerClick('tant')">
+            <div class="banner-slide-content">
+              <div class="banner-badge-tag">🌿 100% খাঁটি সুতি</div>
+              <div class="banner-main-title">শান্তিপুরী ও ফুলিয়া সুতি তাঁত</div>
+              <div class="banner-sub-text">দৈনন্দিন ও উৎসবের সেরা আরামদায়ক হ্যান্ডলুম</div>
+              <div class="banner-cta-btn">
+                <span>কালেকশন দেখুন</span> <i class="fa-solid fa-chevron-right" style="font-size:0.65rem;"></i>
+              </div>
+            </div>
+            <div class="banner-slide-image-wrap">
+              <div style="width:100px; height:100px; display:flex; align-items:center; justify-content:center; background:rgba(255,255,255,0.15); border-radius:50%; font-size:2.5rem; color:#fff;"><i class="fa-solid fa-wand-magic-sparkles"></i></div>
+            </div>
+          </div>
+          <!-- Slide 4: Kurti -->
+          <div class="banner-carousel-slide" style="background:linear-gradient(135deg, #1e3a8a, #2563eb, #38bdf8);" onclick="onBannerClick('kurti')">
+            <div class="banner-slide-content">
+              <div class="banner-badge-tag">⚡ বেস্টসেলার</div>
+              <div class="banner-main-title">ট্রেন্ডি কুর্তি ও লং গাউন</div>
+              <div class="banner-sub-text">মাত্র ₹499 থেকে শুরু • আধুনিক ফিটিং ও ফ্যাব্রিক</div>
+              <div class="banner-cta-btn">
+                <span>কালেকশন দেখুন</span> <i class="fa-solid fa-chevron-right" style="font-size:0.65rem;"></i>
+              </div>
+            </div>
+            <div class="banner-slide-image-wrap">
+              <div style="width:100px; height:100px; display:flex; align-items:center; justify-content:center; background:rgba(255,255,255,0.15); border-radius:50%; font-size:2.5rem; color:#fff;"><i class="fa-solid fa-wand-magic-sparkles"></i></div>
+            </div>
+          </div>
+          <!-- Slide 5: Jewellery -->
+          <div class="banner-carousel-slide" style="background:linear-gradient(135deg, #78350f, #b45309, #f59e0b);" onclick="onBannerClick('jewel')">
+            <div class="banner-slide-content">
+              <div class="banner-badge-tag">💎 রয়্যাল ফিনিশিং</div>
+              <div class="banner-main-title">ব্রাইডাল জুয়েলারি ও চোকার সেট</div>
+              <div class="banner-sub-text">কুন্দন নেকলেস ও গোল্ড প্লেটেড নিখুঁত বালা কালেকশন</div>
+              <div class="banner-cta-btn">
+                <span>কালেকশন দেখুন</span> <i class="fa-solid fa-chevron-right" style="font-size:0.65rem;"></i>
+              </div>
+            </div>
+            <div class="banner-slide-image-wrap">
+              <div style="width:100px; height:100px; display:flex; align-items:center; justify-content:center; background:rgba(255,255,255,0.15); border-radius:50%; font-size:2.5rem; color:#fff;"><i class="fa-solid fa-wand-magic-sparkles"></i></div>
+            </div>
+          </div>
+          <!-- Slide 6: Girls Frock -->
+          <div class="banner-carousel-slide" style="background:linear-gradient(135deg, #581c87, #7c3aed, #ec4899);" onclick="onBannerClick('girls')">
+            <div class="banner-slide-content">
+              <div class="banner-badge-tag">👧 স্পেশাল কিডস কালেকশন</div>
+              <div class="banner-main-title">কিউট বেবি ফ্রক ও উৎসব সেট</div>
+              <div class="banner-sub-text">ছোট্ট সোনাদের জন্য আকর্ষণীয় কালারফুল ফ্রক</div>
+              <div class="banner-cta-btn">
+                <span>কালেকশন দেখুন</span> <i class="fa-solid fa-chevron-right" style="font-size:0.65rem;"></i>
+              </div>
+            </div>
+            <div class="banner-slide-image-wrap">
+              <div style="width:100px; height:100px; display:flex; align-items:center; justify-content:center; background:rgba(255,255,255,0.15); border-radius:50%; font-size:2.5rem; color:#fff;"><i class="fa-solid fa-wand-magic-sparkles"></i></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Dots Indicator -->
+      <div class="banner-carousel-dots" id="bannerCarouselDots">
+        <div class="carousel-dot active" onclick="goToBannerSlide(0)"></div>
+        <div class="carousel-dot" onclick="goToBannerSlide(1)"></div>
+        <div class="carousel-dot" onclick="goToBannerSlide(2)"></div>
+        <div class="carousel-dot" onclick="goToBannerSlide(3)"></div>
+        <div class="carousel-dot" onclick="goToBannerSlide(4)"></div>
+        <div class="carousel-dot" onclick="goToBannerSlide(5)"></div>
+      </div>
+    </div>
+
+    <!-- Filter & Sort Strip -->
+    <div class="filter-bar">
+      <button class="filter-btn" id="btnSortModalTrigger" onclick="openSortModal()">
+        <i class="fa-solid fa-arrow-down-short-wide"></i> <span id="sortBtnLabel">Sort</span>
+      </button>
+      <button class="filter-btn" onclick="filterByGender('women')" id="filterBtnWomen">👩 বড়দের / এডাল্ট</button>
+      <button class="filter-btn" onclick="filterByGender('girls')" id="filterBtnGirls">👧 ছোটদের ফ্রক</button>
+      <button class="filter-btn" onclick="openAdvancedFilterModal()">
+        <i class="fa-solid fa-sliders"></i> Filters <span id="activeFilterBadge" style="display:none; background:var(--primary); color:#fff; font-size:0.65rem; padding:1px 6px; border-radius:10px; margin-left:2px;"></span>
+      </button>
+    </div>
+
+    <!-- 2-Column Product Grid -->
+    <div class="product-grid" id="productGridContainer">
+      <div style="grid-column: 1 / -1; text-align:center; padding:45px 20px; background:#fff; border-radius:16px; border:1.5px dashed #cbd5e1; margin:16px 0;">
+        <i class="fa-solid fa-shirt" style="font-size:2.8rem; color:#cbd5e1; margin-bottom:12px; display:block;"></i>
+        <h3 style="font-size:1.05rem; font-weight:800; color:#0f172a; margin-bottom:4px;">নতুন শাড়ি ও পোশাক কালেকশন আসছে!</h3>
+        <p style="font-size:0.78rem; color:#64748b; margin:0;">দোকানের নতুন প্রোডাক্ট আপলোড হচ্ছে। খুব শীঘ্রই কেনাকাটা শুরু হবে।</p>
+      </div>
+    </div>
+  </main>
+
+  <!-- ================= NISHA BOUTIQUE STYLE SEARCH RESULTS SCREEN (ছবি 2 হুবহু) ================= -->
+  <div id="screen-search-results" class="screen-view" style="background:#f8fafc; min-height:100vh; padding-top:105px; padding-bottom:75px;">
+    <!-- Fixed Top Header: ← Query | 🔍 🛒 (ছবি 1 অনুযায়ী তীর ও সার্চ হেডার সবসময় উপরে ফিক্সড থাকবে) -->
+    <div id="ncResultsFixedHeader" style="background:#ffffff; position:fixed; top:0; left:0; right:0; z-index:150; border-bottom:1px solid #e2e8f0; box-shadow:0 2px 10px rgba(0,0,0,0.06);">
+      <div style="display:flex; align-items:center; justify-content:space-between; padding:10px 14px;">
+        <div style="display:flex; align-items:center; gap:12px; flex:1; cursor:pointer;" onclick="openBoutiqueSearch(currentSearchQuery)">
+          <button type="button" onclick="event.stopPropagation(); showScreen('home');" style="background:transparent; border:none; font-size:1.25rem; color:#334155; cursor:pointer; padding:2px; display:flex; align-items:center;">
+            <i class="fa-solid fa-arrow-left"></i>
+          </button>
+          <div style="display:flex; flex-direction:column;">
+            <span id="ncResultsQueryTitle" style="font-size:1rem; font-weight:800; color:#0f172a; line-height:1.2;">Saree</span>
+            <span style="font-size:0.68rem; color:#64748b; font-weight:600;" id="t-ncTapToEdit">ট্যাপ করে পরিবর্তন করুন</span>
+          </div>
+        </div>
+        <div style="display:flex; align-items:center; gap:14px; font-size:1.15rem; color:#475569;">
+          <i class="fa-solid fa-magnifying-glass" onclick="openBoutiqueSearch(currentSearchQuery)" style="cursor:pointer;" title="Search"></i>
+          <div style="position:relative; cursor:pointer;" onclick="openCartModal()" title="Cart">
+            <i class="fa-solid fa-bag-shopping" style="color:var(--primary);"></i>
+            <span class="badge-count" id="ncResultsCartBadge">0</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Horizontal Filter Chips Row (ছবি 1 ও 2: Sort, Filter, Budget, Silk, Delivery) -->
+      <div style="display:flex; align-items:center; gap:8px; overflow-x:auto; padding:6px 14px 10px 14px; scrollbar-width:none; border-top:1px solid #f1f5f9; background:#ffffff;">
+        <!-- Sort Chip -->
+        <button type="button" onclick="openSortModal()" style="display:inline-flex; align-items:center; gap:5px; background:#fff; border:1px solid #cbd5e1; border-radius:18px; padding:6px 12px; font-size:0.75rem; font-weight:700; color:#334155; cursor:pointer; white-space:nowrap; box-shadow:0 1px 3px rgba(0,0,0,0.04);">
+          <span id="t-chipSort">সর্ট (Sort)</span> <i class="fa-solid fa-chevron-down" style="font-size:0.65rem; color:#94a3b8;"></i>
+        </button>
+        <!-- Filter Chip -->
+        <button type="button" onclick="openAdvancedFilterModal()" style="display:inline-flex; align-items:center; gap:5px; background:#fff; border:1px solid #cbd5e1; border-radius:18px; padding:6px 12px; font-size:0.75rem; font-weight:700; color:#334155; cursor:pointer; white-space:nowrap; box-shadow:0 1px 3px rgba(0,0,0,0.04);">
+          <i class="fa-solid fa-sliders" style="font-size:0.75rem; color:var(--primary);"></i> <span id="t-chipFilter">ফিল্টার</span>
+        </button>
+        <!-- Quick Chip: Budget under 500 -->
+        <button type="button" id="ncChipBudget" onclick="toggleBoutiqueQuickChip('budget')" style="display:inline-flex; align-items:center; gap:4px; background:#fff; border:1px solid #cbd5e1; border-radius:18px; padding:6px 12px; font-size:0.75rem; font-weight:700; color:#334155; cursor:pointer; white-space:nowrap;">
+          ₹500 এর নিচে
+        </button>
+        <!-- Quick Chip: Silk / Katan -->
+        <button type="button" id="ncChipSilk" onclick="toggleBoutiqueQuickChip('silk')" style="display:inline-flex; align-items:center; gap:4px; background:#fff; border:1px solid #cbd5e1; border-radius:18px; padding:6px 12px; font-size:0.75rem; font-weight:700; color:#334155; cursor:pointer; white-space:nowrap;">
+          সিল্ক ও কাতান
+        </button>
+        <!-- Quick Chip: Free Home Delivery -->
+        <button type="button" id="ncChipDelivery" onclick="toggleBoutiqueQuickChip('delivery')" style="display:inline-flex; align-items:center; gap:4px; background:#fff; border:1px solid #cbd5e1; border-radius:18px; padding:6px 12px; font-size:0.75rem; font-weight:700; color:#334155; cursor:pointer; white-space:nowrap;">
+          আমতায় ফ্রি ডেলিভারি
+        </button>
+      </div>
+    </div>
+
+    <!-- Results Count Notice Strip (ছবি 2: saree-এর জন্য ফলাফল দেখানো হচ্ছে) -->
+    <div id="ncResultsNoticeStrip" style="background:#eff6ff; border-bottom:1px solid #dbeafe; padding:8px 14px; font-size:0.75rem; color:#1d4ed8; font-weight:700; display:flex; align-items:center; justify-content:space-between; margin-top:2px;">
+      <span id="ncResultsCountMsg">ফলাফল লোড হচ্ছে...</span>
+      <span style="font-size:0.7rem; color:#3b82f6; text-decoration:underline; cursor:pointer;" onclick="openBoutiqueSearch('')" id="t-ncAllProductsLink">সব প্রোডাক্ট ➔</span>
+    </div>
+
+    <!-- 2-Column Product Grid Container (ছবি 2 হুবহু) -->
+    <div class="product-grid" id="ncSearchResultsGrid" style="padding:10px 12px;">
+      <!-- Populated dynamically by renderBoutiqueSearchResults() -->
+    </div>
+  </div>
+
+
+  <div id="screen-categories" class="screen-view" style="padding:0; padding-bottom:65px;">
+    <!-- Categories Header Top Bar -->
+    <div class="cat-header">
+      <div class="cat-header-title" id="t-catPageTitle">CATEGORIES</div>
+      <div class="cat-header-actions">
+        <i class="fa-solid fa-magnifying-glass" onclick="showScreen('home'); document.getElementById('searchInput').focus();" style="cursor:pointer;" title="Search"></i>
+        <i class="fa-regular fa-heart" onclick="showScreen('wishlist')" style="cursor:pointer;" title="Wishlist"></i>
+        <div style="position:relative; cursor:pointer;" onclick="openCartModal()" title="Cart">
+          <i class="fa-solid fa-bag-shopping"></i>
+          <span class="badge-count" id="catCartCountBadge">0</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2-Column Split View Layout -->
+    <div class="categories-layout">
+      <!-- Left Vertical Sidebar -->
+      <aside class="cat-sidebar">
+        <div class="cat-sidebar-item" id="sidebar-popular" onclick="selectCategoryTab('popular')">
+          <div class="cat-icon-circle" style="background:#fef9c3; color:#ca8a04;">
+            <i class="fa-solid fa-star"></i>
+          </div>
+          <span id="side-t-popular">জনপ্রিয়</span>
+        </div>
+        <div class="cat-sidebar-item active" id="sidebar-saree_kurti" onclick="selectCategoryTab('saree_kurti')">
+          <div class="cat-icon-circle" style="background:#fce7f3; color:#db2777;">
+            <i class="fa-solid fa-person-dress"></i>
+          </div>
+          <span id="side-t-saree">শাড়ি ও কুর্তি</span>
+        </div>
+        <div class="cat-sidebar-item" id="sidebar-jewellery" onclick="selectCategoryTab('jewellery')">
+          <div class="cat-icon-circle" style="background:#fef3c7; color:#d97706;">
+            <i class="fa-solid fa-gem"></i>
+          </div>
+          <span id="side-t-jewel">জুয়েলারি</span>
+        </div>
+        <div class="cat-sidebar-item" id="sidebar-bags" onclick="selectCategoryTab('bags')">
+          <div class="cat-icon-circle" style="background:#ffe4e6; color:#e11d48;">
+            <i class="fa-solid fa-bag-shopping"></i>
+          </div>
+          <span id="side-t-bags">ব্যাগ ও পার্স</span>
+        </div>
+        <div class="cat-sidebar-item" id="sidebar-perfume" onclick="selectCategoryTab('perfume')">
+          <div class="cat-icon-circle" style="background:#f3e8ff; color:#9333ea;">
+            <i class="fa-solid fa-spray-can-sparkles"></i>
+          </div>
+          <span id="side-t-perfume">পারফিউম</span>
+        </div>
+        <div class="cat-sidebar-item" id="sidebar-western" onclick="selectCategoryTab('western')">
+          <div class="cat-icon-circle" style="background:#e0f2fe; color:#0284c7;">
+            <i class="fa-solid fa-shirt"></i>
+          </div>
+          <span id="side-t-western">ওয়েস্টার্ন</span>
+        </div>
+        <div class="cat-sidebar-item" id="sidebar-lingerie" onclick="selectCategoryTab('lingerie')">
+          <div class="cat-icon-circle" style="background:#fee2e2; color:#ef4444;">
+            <i class="fa-solid fa-heart"></i>
+          </div>
+          <span id="side-t-lingerie">নাইটওয়্যার</span>
+        </div>
+      </aside>
+
+      <!-- Right Scrollable Content Panel -->
+      <section class="cat-content" id="catContentArea">
+        <!-- Rendered dynamically by selectCategoryTab() -->
+      </section>
+    </div>
+  </div>
+
+  <!-- ================= 4. PRODUCT DETAIL PAGE (PDP) - NISHA BOUTIQUE STYLE (ছবি 1000028539 হুবহু) ================= -->
+  <div id="screen-pdp" class="screen-view pdp-screen">
+    <!-- Nisha Boutique Style PDP Header: ← | 🔍 Search for products | 🛒 (শুধু সার্চ বার উপরে থাকবে আর কিছু থাকবে না) -->
+    <div class="pdp-top-bar" style="background:#ffffff; display:flex; align-items:center; gap:10px; padding:10px 14px; position:sticky; top:0; z-index:120; border-bottom:1px solid #e2e8f0; box-shadow:0 2px 8px rgba(0,0,0,0.04);">
+      <button type="button" onclick="closePdpScreen()" style="background:transparent; border:none; font-size:1.25rem; color:#334155; cursor:pointer; padding:2px; display:flex; align-items:center; justify-content:center;">
+        <i class="fa-solid fa-arrow-left"></i>
+      </button>
+
+      <!-- Search Bar in PDP Header -->
+      <div onclick="openBoutiqueSearch()" style="flex:1; display:flex; align-items:center; background:#ffffff; border:1.5px solid #0284c7; border-radius:6px; padding:7px 12px; gap:8px; cursor:pointer; box-shadow:inset 0 1px 2px rgba(0,0,0,0.03);">
+        <i class="fa-solid fa-magnifying-glass" style="color:#0284c7; font-size:0.95rem;"></i>
+        <span style="font-size:0.86rem; color:#64748b; font-weight:500;" id="t-pdpSearchPlaceholder">Search for products</span>
+      </div>
+
+      <!-- Shopping Cart Icon with Red Badge -->
+      <div style="position:relative; cursor:pointer; padding:3px;" onclick="openCartModal()" title="Cart">
+        <i class="fa-solid fa-cart-shopping" style="color:#0284c7; font-size:1.25rem;"></i>
+        <span class="badge-count" id="pdpCartBadge" style="position:absolute; top:-5px; right:-7px; background:#ef4444; color:#fff; font-size:0.62rem; font-weight:800; min-width:17px; height:17px; border-radius:50%; display:flex; align-items:center; justify-content:center; border:2px solid #fff;">0</span>
+      </div>
+    </div>
+
+    <!-- Product Image Slider with Clean Action Buttons (Full Photo No Crop + Crisp Single Heart Icon) -->
+    <div class="pdp-img-slider" style="position:relative; width:100%; min-height:380px; max-height:520px; background:#ffffff; display:flex; align-items:center; justify-content:center; overflow:hidden; border-bottom:1px solid #f1f5f9;">
+      <img id="pdpMainImg" src="" alt="Product" style="width:100%; height:auto; max-height:520px; object-fit:contain; display:block; margin:0 auto;">
+      
+      <!-- Floating Action Buttons Stack on Photo (Top Right) -->
+      <div style="position:absolute; top:12px; right:12px; display:flex; flex-direction:column; gap:8px; z-index:25;">
+        <!-- 1. Floating Wishlist Heart / Love Button (♡) -->
+        <button type="button" id="pdpWishBtn" onclick="togglePdpWishlist()" title="পছন্দের তালিকায় রাখুন" style="width:38px; height:38px; border-radius:50%; background:#ffffff; border:1.5px solid #e2e8f0; display:flex; align-items:center; justify-content:center; font-size:1.15rem; color:#64748b; cursor:pointer; box-shadow:0 2px 6px rgba(0,0,0,0.08); transition:all 0.2s; padding:0; outline:none;">
+          <i id="pdpWishIcon" class="fa-regular fa-heart"></i>
+        </button>
+
+        <!-- 2. Floating Share Button (WhatsApp Direct) -->
+        <button type="button" id="pdpShareBtn" onclick="shareProductWhatsApp()" title="শেয়ার করুন" style="width:38px; height:38px; border-radius:50%; background:#ffffff; border:1.5px solid #e2e8f0; display:flex; align-items:center; justify-content:center; font-size:1.05rem; color:#475569; cursor:pointer; box-shadow:0 2px 6px rgba(0,0,0,0.08); transition:all 0.2s; padding:0; outline:none;">
+          <i class="fa-solid fa-share-nodes"></i>
+        </button>
+      </div>
+
+      <div id="pdpSubImagesStrip" style="display:flex; gap:6px; overflow-x:auto; padding:8px 0; justify-content:center; position:absolute; bottom:8px; left:0; right:0; z-index:10; background:linear-gradient(transparent, rgba(0,0,0,0.25));"></div>
+    </div>
+
+    <div class="pdp-details-box">
+      <div style="font-size:0.75rem; font-weight:700; color:var(--primary); text-transform:uppercase;" id="pdpCategory">SAREES</div>
+      <div style="font-size:1.05rem; font-weight:800; color:#0f172a; margin:4px 0 8px 0; line-height:1.3;" id="pdpTitle">Product Name</div>
+
+      <!-- Price Block -->
+      <div style="display:flex; align-items:baseline; gap:8px;">
+        <span style="font-size:1.4rem; font-weight:800; color:#0f172a;" id="pdpPrice">₹0</span>
+        <span style="font-size:0.9rem; color:#94a3b8; text-decoration:line-through;" id="pdpMrp">₹0</span>
+        <span style="font-size:0.85rem; font-weight:800; color:var(--green);" id="pdpDiscount">0% off</span>
+      </div>
+
+      <div class="upi-badge" style="margin-top:6px; font-size:0.75rem; padding:4px 8px;">
+        <i class="fa-solid fa-tags"></i> <span id="pdpUpiOffer">UPI দিয়ে পেমেন্টে অতিরিক্ত ছাড়!</span>
+      </div>
+
+      <!-- Video Preview Button (if video exists) -->
+      <div id="pdpVideoBox" style="display:none; margin:8px 0;">
+        <button type="button" onclick="openProductVideoModal()" style="width:100%; background:linear-gradient(135deg, #ef4444, #dc2626); color:#fff; border:none; padding:10px; border-radius:10px; font-weight:800; font-size:0.85rem; display:flex; align-items:center; justify-content:center; gap:8px; cursor:pointer; box-shadow:0 3px 10px rgba(239,68,68,0.25);">
+          <i class="fa-solid fa-circle-play" style="font-size:1.1rem;"></i> 🎥 রিয়েল শাড়ির ভিডিও দেখুন (Watch Video)
+        </button>
+      </div>
+
+      <!-- Color Variants Selection (ফটো সহ কালার ভ্যারিয়েন্ট) -->
+      <div class="pdp-color-section" id="pdpColorSection" style="margin:14px 0 10px 0;">
+        <div class="pdp-section-header" style="display:flex; align-items:baseline; gap:6px; margin-bottom:8px;">
+          <span style="font-weight:700; font-size:0.88rem; color:#0f172a;" id="t-pdpSelectColorLbl">Selected Color:</span>
+          <span id="pdpSelectedColorNameBadge" style="font-size:0.92rem; font-weight:800; color:#0f172a;">মূল কালার</span>
+        </div>
+        <div class="color-variants-strip" id="pdpColorVariantsStrip" style="display:flex; gap:10px; overflow-x:auto; padding:4px 0; scrollbar-width:none;">
+          <!-- Dynamically populated vertical photo cards -->
+        </div>
+      </div>
+
+      <!-- 4. Size Selection (সাইজ ও সাইজ চার্ট) -->
+      <!-- 4. Size Selection (Nisha Creations Image 4) -->
+      <div class="pdp-size-section">
+        <div class="pdp-section-header" style="display:flex; justify-content:space-between; align-items:center;">
+          <span id="t-pdpSelectSizeLbl">সাইজ নির্বাচন করুন (Select Size):</span>
+          <button type="button" id="btnPdpSizeGuide" onclick="openSizeGuideModal()" style="background:#fdf4ff; border:1px solid #f0abfc; color:var(--primary); font-size:0.75rem; font-weight:800; padding:4px 10px; border-radius:20px; cursor:pointer; display:flex; align-items:center; gap:5px;">
+            <i class="fa-solid fa-ruler-combined"></i> <span id="t-pdpSizeChartBtn">📏 সাইজ চার্ট দেখুন</span>
+          </button>
+        </div>
+        <div class="size-btn-group" id="pdpSizeBtnGroup">
+          <!-- Populated by JavaScript -->
+        </div>
+        <div id="pdpCustomSizeNote" style="display:none; background:#f8fafc; border:1px dashed #cbd5e1; border-radius:8px; padding:6px 10px; margin-top:8px; font-size:0.72rem; color:#475569;"></div>
+      </div>
+
+      <!-- 5. Smart Return Choice Cards (Nisha Special - ছবি 4) -->
+      <div class="return-choice-container">
+        <div class="pdp-section-header">
+          <span id="t-pdpReturnSecHeader">রিটার্ন পলিসি ও বিশেষ ছাড় নির্বাচন:</span>
+          <span style="font-size:0.7rem; color:var(--primary); font-weight:800;" id="t-pdpReturnSecBadge">নিশা স্পেশাল</span>
+        </div>
+
+        <!-- Option 1: All Returns -->
+        <div class="return-card active" id="returnCardAll" onclick="selectReturnChoice('all')">
+          <div class="return-radio-circle"></div>
+          <div class="return-card-info">
+            <div class="return-card-price-row">
+              <span class="return-price-val" id="returnPriceAll">₹428</span>
+              <span style="font-size:0.78rem; font-weight:700; color:#475569;" id="t-pdpReturnAllLabel">(সব ধরণের রিটার্ন সুবিধা)</span>
+            </div>
+            <div class="return-card-desc" id="t-pdpReturnAllDesc">
+              পছন্দ না হলে, সাইজ না মিললে বা অন্য যেকোনো কারণে 7 দিনের মধ্যে সহজ রিটার্ন ও পরিবর্তন।
+            </div>
+          </div>
+        </div>
+
+        <!-- Option 2: Wrong/Defective Returns Only (₹10 Discount) -->
+        <div class="return-card" id="returnCardDefective" onclick="selectReturnChoice('defective')">
+          <div class="return-radio-circle"></div>
+          <div class="return-card-info">
+            <div class="return-card-price-row">
+              <span class="return-price-val" id="returnPriceDefective" style="color:#16a34a;">₹418</span>
+              <span class="return-save-badge"><i class="fa-solid fa-tag"></i> Save ₹10</span>
+            </div>
+            <div class="return-card-desc" id="t-pdpReturnDefDesc">
+              শুধুমাত্র ছেঁড়া বা ভুল শাড়ি এলে রিটার্ন প্রযোজ্য। এতে দোকানদার ও কাস্টমার উভয়ের অতিরিক্ত সাশ্রয় হয়!
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+      <!-- Complete Look Matching Jewelry Recommendation (Idea 2-b) -->
+      <div class="matching-box" id="pdpMatchingBox">
+        <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:8px;">
+          <div style="font-size:0.8rem; font-weight:800; color:#7e22ce; display:flex; align-items:center; gap:5px;">
+            <i class="fa-solid fa-wand-magic-sparkles"></i> <span id="t-pdpMatchingTitle">ম্যাচিং গহনার কম্বো সাজ (Complete Look)</span>
+          </div>
+          <span style="font-size:0.7rem; color:#15803d; font-weight:800; background:#dcfce7; padding:1px 6px; border-radius:6px;" id="t-pdpMatchingBadge">কম্বোতে ₹50 ছাড়</span>
+        </div>
+        <div style="display:flex; gap:10px; align-items:center;">
+          <img src="logo.png" style="width:55px; height:55px; border-radius:8px; object-fit:cover;">
+          <div style="flex:1;">
+            <div style="font-size:0.78rem; font-weight:700; color:#0f172a;" id="t-pdpMatchingName">গোল্ড-প্লেটেড ব্রাইডাল নেকলেস ও কানের দুল</div>
+            <div style="font-size:0.82rem; font-weight:800; color:var(--primary);"><span id="t-pdpMatchingPrice">+ মাত্র ₹349</span> <span style="font-size:0.7rem; text-decoration:line-through; color:#94a3b8;">₹799</span></div>
+          </div>
+          <button id="btnPdpAddCombo" onclick="addMatchingJewelCombo()" style="background:#f59e0b; color:#0f172a; border:none; padding:7px 10px; border-radius:8px; font-size:0.75rem; font-weight:800; cursor:pointer;">
+            + কম্বো যোগ করুন
+          </button>
+        </div>
+      </div>
+
+      <!-- Real Customer Photo Reviews (Customer Wall) -->
+      <div style="border-top:1px solid #f1f5f9; padding-top:14px; margin-top:14px;" id="pdpCustomerWallWrapper">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+          <div>
+            <div style="font-size:0.92rem; font-weight:800; color:#0f172a;" id="t-pdpReviewWallTitle">গ্রাহকদের রিভিউ ও আসল ছবি (Customer Wall)</div>
+            <div style="font-size:0.72rem; color:#64748b;" id="pdpReviewCountSummary">4.9 ★ (40+ রেটিং ও ছবি)</div>
+          </div>
+          <button type="button" onclick="openPdpReviewModalDirect()" style="background:#fdf4ff; border:1.5px solid var(--primary); color:var(--primary); font-size:0.75rem; font-weight:800; padding:5px 12px; border-radius:20px; cursor:pointer; display:flex; align-items:center; gap:5px; box-shadow:0 1px 4px rgba(156,39,176,0.15);">
+            <i class="fa-solid fa-pen-to-square"></i> <span id="t-btnPdpWriteReview">রিভিউ লিখুন</span>
+          </button>
+        </div>
+
+        <!-- Real Customer Photo Strip -->
+        <div class="review-photo-strip" id="pdpReviewPhotoStrip" style="display:flex; gap:8px; overflow-x:auto; padding-bottom:6px; margin-bottom:10px;">
+          <!-- Populated dynamically by renderPdpCustomerWall() -->
+        </div>
+
+        <!-- Customer Reviews List Container -->
+        <div id="pdpCustomerReviewsContainer" style="display:flex; flex-direction:column; gap:8px;">
+          <!-- Populated dynamically by renderPdpCustomerWall() -->
+        </div>
+      </div>
+    </div>
+
+    <!-- Sticky Bottom Buy Bar -->
+    <div class="pdp-sticky-bar" style="position:fixed; bottom:0; left:0; right:0; height:62px; background:#ffffff; border-top:1px solid #e2e8f0; display:flex; align-items:center; padding:0 14px; gap:10px; z-index:100; box-shadow:0 -4px 14px rgba(0,0,0,0.06);">
+      <button class="btn-wa-direct" onclick="orderCurrentOnWhatsApp()" title="Direct WhatsApp Order" style="width:44px; height:44px; background:#25d366; color:#fff; border-radius:10px; border:none; font-size:1.3rem; display:flex; align-items:center; justify-content:center; cursor:pointer; flex-shrink:0;">
+        <i class="fa-brands fa-whatsapp"></i>
+      </button>
+      <button class="btn-add-cart" onclick="addCurrentToCart()" id="btnPdpAddCart" style="flex:1; height:46px; border:1.5px solid #cbd5e1; background:#ffffff; color:#0f172a; border-radius:10px; font-weight:800; font-size:0.9rem; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:6px;">
+        <i class="fa-solid fa-cart-shopping"></i> <span id="t-btnPdpAddCart">কার্টে যোগ করুন</span>
+      </button>
+      <button class="btn-buy-now" onclick="buyCurrentNow()" id="btnPdpBuyNow" style="flex:1.2; height:46px; background:#ffc200; color:#111827; border:none; border-radius:10px; font-weight:800; font-size:0.95rem; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:6px; box-shadow:0 3px 10px rgba(255,194,0,0.35);">
+        <i class="fa-solid fa-bolt"></i> <span id="t-btnPdpBuyNow">এখনই কিনুন</span>
+      </button>
+    </div>
+  </div>
+  <!-- ================= 5. MY ORDERS & LIVE TRACKING (Like Nisha Creations Image 23 & 24) ================= -->
+  <div id="screen-orders" class="screen-view nisha-orders-container" style="padding:12px 14px 75px 14px; max-width:540px; margin:0 auto;">
+    <!-- Nisha Creations Style Top Header (ছবি 1 ও 2) -->
+    <div class="nisha-orders-header-bar">
+      <div class="nisha-orders-title-left">
+        <button onclick="showScreen('home')" style="background:transparent; border:none; font-size:1.15rem; color:#475569; cursor:pointer;"><i class="fa-solid fa-arrow-left"></i></button>
+        <span id="t-ordersHeaderTitleTxt">MY ORDERS</span>
+      </div>
+      <a href="tel:9239413517" class="nisha-help-btn">
+        <i class="fa-solid fa-headset"></i> <span id="t-ordersHelpTxt">HELP</span>
+      </a>
+    </div>
+
+    <!-- Orders List Container -->
+    <div id="ordersListContainer"></div>
+  </div>
+
+  <!-- ================= 5. COMPREHENSIVE CUSTOMER ACCOUNT & ORDERS HUB ================= -->
+  <!-- ================= 5. NISHA BOUTIQUE / NISHA STYLE ACCOUNT SCREEN (ছবি 1 হুবহু) ================= -->
+  <div id="screen-customer-settings" class="screen-view nc-account-container">
+    
+    <!-- 1. Top Greeting Header (Dynamic Customer Greeting & Login Button) -->
+    <div class="nc-account-top-header">
+      <div>
+        <div class="nc-greeting-title" id="ncGreetingName">Hey, Guest!</div>
+        <div style="font-size:0.72rem; color:#64748b; margin-top:2px;" id="ncAccountSubtitle">নিশা ক্রিয়েশনস বুটিক শপ</div>
+      </div>
+      <div style="display:flex; align-items:center; gap:8px;">
+        
+        <a href="tel:9239413517" class="nc-help-pill-btn">
+          <i class="fa-solid fa-headset" style="color:var(--primary);"></i>
+          <span>Help</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- 1B. GUEST LOGIN PROMPT BANNER (Only shows when user is not logged in) -->
+    <div id="ncGuestLoginCard" class="nc-options-list-card" style="display:none;" style="padding:16px; background:linear-gradient(135deg, #eff6ff, #f0fdf4); border:1.5px solid #93c5fd; margin-bottom:12px; text-align:center;">
+      <div style="font-weight:800; font-size:0.95rem; color:#1e3a8a; margin-bottom:4px;">
+        <i class="fa-solid fa-mobile-screen-button"></i> <span id="t-guestLoginTitle">মোবাইল নম্বর দিয়ে লগইন / সাইন-আপ করুন</span>
+      </div>
+      <p style="font-size:0.75rem; color:#475569; margin-bottom:12px; line-height:1.4;" id="t-guestLoginSub">
+        আপনার নিজস্ব ফোন নম্বর ও ডেলিভারি ঠিকানা যোগ করে অর্ডার ট্র্যাক ও দ্রুত বুকিং করুন।
+      </p>
+      <button type="button" onclick="openCustomerAuthModal()" style="background:var(--primary); color:#fff; border:none; padding:10px 18px; border-radius:10px; font-weight:800; font-size:0.84rem; cursor:pointer; display:inline-flex; align-items:center; gap:8px; box-shadow:0 3px 10px rgba(147,51,234,0.3);">
+        <i class="fa-solid fa-right-to-bracket"></i> <span id="t-btnOpenAuthLogin">লগইন বা রেজিস্টার করুন</span>
+      </button>
+    </div>
+
+    <!-- 2. SuperCoin / Nisha Coin Balance Card -->
+    <div class="nc-coin-balance-card">
+      <div class="nc-coin-top-row">
+        <span class="nc-coin-label" id="t-ncCoinLabel">Your SuperCoin balance</span>
+        <div class="nc-coin-pill">
+          <span>🪙</span>
+          <span id="ncCoinBalanceNum">150</span>
+        </div>
+      </div>
+      <div class="nc-coin-sub-strip" onclick="alert(currentLang === 'bn' ? 'নিশা ক্রিয়েশনসের প্রতিটি অর্ডারে আপনি অতিরিক্ত সুপারকয়েন পাবেন। 1টি কয়েন = ₹1 ছাড়!' : 'You get extra SuperCoins on every order. 1 Coin = ₹1 discount!')">
+        <span id="t-ncCoinSub">Extra SuperCoins on every order with Boutique Member</span>
+        <i class="fa-solid fa-chevron-right" style="font-size:0.75rem;"></i>
+      </div>
+    </div>
+
+    <!-- 3. The Two Iconic Big Action Buttons (Orders & Wishlist) -->
+    <div class="nc-action-buttons-grid">
+      <!-- Orders Button -->
+      <div class="nc-action-card-btn" onclick="showScreen('orders')">
+        <i class="fa-solid fa-box" style="color:#0284c7;"></i>
+        <span class="nc-action-btn-text">Orders</span>
+      </div>
+
+      <!-- Wishlist Button (লাভ চিহ্ন) -->
+      <div class="nc-action-card-btn wishlist-btn" onclick="openWishlistScreen()">
+        <i class="fa-solid fa-heart" style="color:#e11d48;"></i>
+        <span class="nc-action-btn-text">Wishlist (<span id="ncWishlistCountBadge">0</span>)</span>
+      </div>
+    </div>
+
+    <!-- 4. Finance & Boutique Specials (ছবি 1-এর Finance Options আদলে) -->
+    <div class="nc-section-title" id="t-ncFinanceTitle">Finance & Boutique Specials</div>
+    <div class="nc-options-list-card">
+      <!-- Option 1: Refer & Earn -->
+      <div class="nc-option-row-item" onclick="openReferModal()">
+        <div class="nc-option-icon-box" style="background:#eff6ff; color:#2563eb;">
+          <i class="fa-solid fa-sack-dollar"></i>
+        </div>
+        <div class="nc-option-info">
+          <div class="nc-option-title" id="t-ncOpt1Title">রেফার ও আর্ন (Refer & Earn)</div>
+          <div class="nc-option-desc" id="t-ncOpt1Desc">পান ₹50 ক্যাশব্যাক | বান্ধবীদের সাথে শেয়ার করে ছাড় পান</div>
+        </div>
+        <i class="fa-solid fa-chevron-right nc-option-chevron"></i>
+      </div>
+
+      <!-- Option 2: Pre-Approved COD & Fast Delivery -->
+      <div class="nc-option-row-item" onclick="alert(currentLang === 'en' ? '100% Cash on Delivery & Fast 2-Hour Home Delivery in Amta!' : 'আমতা ও সংলগ্ন এলাকায় 100% ক্যাশ অন ডেলিভারি (COD) ও মাত্র 2 ঘণ্টায় হোম ডেলিভারি সুবিধা!')">
+        <div class="nc-option-icon-box" style="background:#faf5ff; color:#9333ea;">
+          <i class="fa-solid fa-truck-fast"></i>
+        </div>
+        <div class="nc-option-info">
+          <div class="nc-option-title" id="t-ncOpt2Title">আমতায় 2 ঘণ্টায় ফ্রি হোম ডেলিভারি</div>
+          <div class="nc-option-desc" id="t-ncOpt2Desc">100% ক্যাশ অন ডেলিভারি (COD) ও দ্রুত ডেলিভারি গ্যারান্টি</div>
+        </div>
+        <i class="fa-solid fa-chevron-right nc-option-chevron"></i>
+      </div>
+
+      <!-- Option 3: Return & Quality Guarantee -->
+      <div class="nc-option-row-item" onclick="alert(currentLang === 'en' ? '7 Days easy return and exchange on every saree and dress at Nisha Creations!' : 'নিশা ক্রিয়েশনসে প্রতিটি শাড়ি ও কাপড়ে রয়েছে 7 দিনের সহজ রিটার্ন ও এক্সচেঞ্জ সুবিধা!')">
+        <div class="nc-option-icon-box" style="background:#f0fdf4; color:#16a34a;">
+          <i class="fa-solid fa-shield-halved"></i>
+        </div>
+        <div class="nc-option-info">
+          <div class="nc-option-title" id="t-ncOpt3Title">7 দিনের ইজি রিটার্ন ও এক্সচেঞ্জ</div>
+          <div class="nc-option-desc" id="t-ncOpt3Desc">খাঁটি ও জেনুইন ফেব্রিক গ্যারান্টি | কোনো ঝামেলা নেই</div>
+        </div>
+        <i class="fa-solid fa-chevron-right nc-option-chevron"></i>
+      </div>
+    </div>
+
+    <!-- 5. সম্প্রতি দেখা কালেকশন (Recently Viewed Collections - ছবি 1 হুবহু) -->
+    <div class="nc-section-title" id="t-ncRecentTitle">সম্প্রতি দেখা কালেকশন</div>
+    <div class="nc-recent-stores-strip">
+      <div class="nc-recent-store-item" onclick="filterByUnifiedCat('saree')">
+        <img src="https://images.unsplash.com/photo-1610030469983-98e550d6193c?w=200&auto=format&fit=crop&q=75" class="nc-recent-store-thumb" alt="শাড়ি" onerror="this.onerror=null; this.src='logo.png';">
+        <div class="nc-recent-store-label" id="t-ncRecent1">মহিলাদের শাড়ি</div>
+      </div>
+      <div class="nc-recent-store-item" onclick="filterByUnifiedCat('kurti')">
+        <img src="https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?w=200&auto=format&fit=crop&q=75" class="nc-recent-store-thumb" alt="কুর্তি" onerror="this.onerror=null; this.src='logo.png';">
+        <div class="nc-recent-store-label" id="t-ncRecent2">কুর্তি ও সেট</div>
+      </div>
+      <div class="nc-recent-store-item" onclick="filterByUnifiedCat('girls')">
+        <img src="https://images.unsplash.com/photo-1622290291468-a28f7a7dc6a8?w=200&auto=format&fit=crop&q=75" class="nc-recent-store-thumb" alt="ফ্রক" onerror="this.onerror=null; this.src='logo.png';">
+        <div class="nc-recent-store-label" id="t-ncRecent3">মেয়েদের ফ্রক</div>
+      </div>
+      <div class="nc-recent-store-item" onclick="filterByUnifiedCat('jewel')">
+        <img src="https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=200&auto=format&fit=crop&q=75" class="nc-recent-store-thumb" alt="গহনা" onerror="this.onerror=null; this.src='logo.png';">
+        <div class="nc-recent-store-label" id="t-ncRecent4">গহনা ও চোকার</div>
+      </div>
+      <div class="nc-recent-store-item" onclick="filterByUnifiedCat('tant')">
+        <img src="https://images.unsplash.com/photo-1609357605129-26f69add5d6e?w=200&auto=format&fit=crop&q=75" class="nc-recent-store-thumb" alt="তাঁত" onerror="this.onerror=null; this.src='logo.png';">
+        <div class="nc-recent-store-label" id="t-ncRecent5">সুতি তাঁত</div>
+      </div>
+    </div>
+
+    <!-- 6. Coupons & Offers Card (ছবি 1 হুবহু) -->
+    <div class="nc-section-title" id="t-ncCouponsTitle">Coupons & Offers</div>
+    <div class="nc-coupons-card" onclick="alert(currentLang === 'en' ? 'Special Discount Coupons:\n1. PUJA50 (Flat ₹50 OFF)\n2. SAVE38 (Extra ₹38 OFF on UPI)\n3. BOUTIQUE100 (₹100 Mega Savings)' : 'স্পেশাল অফার কুপন:\n1. PUJA50 (ফ্ল্যাট ₹50 ছাড়)\n2. SAVE38 (অনলাইন ইউপিআই পেমেন্টে ₹38 ছাড়)\n3. BOUTIQUE100 (₹100 মেগা ছাড়)')">
+      <div class="nc-coupon-icon-circle">
+        <i class="fa-solid fa-percent"></i>
+      </div>
+      <div style="flex:1;">
+        <div class="nc-coupon-title" id="t-ncCouponCardTitle">Explore and grab the best deals</div>
+        <div class="nc-coupon-sub" id="t-ncCouponCardSub">কুপন কোড ও আকর্ষণীয় অফার এক্সপ্লোর করুন</div>
+      </div>
+      <i class="fa-solid fa-chevron-right nc-option-chevron"></i>
+    </div>
+
+    <!-- 7. Delivery Address & Profile Card -->
+    <div class="nc-options-list-card" style="padding:14px 16px; margin-bottom:14px;">
+      <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:8px;">
+        <div style="font-size:0.85rem; font-weight:800; color:#0f172a; display:flex; align-items:center; gap:6px;">
+          <i class="fa-solid fa-location-dot" style="color:var(--primary);"></i>
+          <span id="t-ncSavedAddrHeading">আমার ডেলিভারি প্রোফাইল ও ঠিকানা</span>
+        </div>
+        <button type="button" onclick="openCustomerAuthModal()" style="background:#f1f5f9; border:1px solid #cbd5e1; color:#334155; padding:4px 10px; border-radius:12px; font-size:0.72rem; font-weight:800; cursor:pointer;" id="t-ncBtnEditAddr">
+          <i class="fa-solid fa-pen"></i> <span id="t-ncBtnEditAddrTxt">আপডেট করুন</span>
+        </button>
+      </div>
+      <div id="ncDisplayAddressBox">
+        <div style="font-size:0.88rem; font-weight:800; color:#1e293b;" id="ncAccountCustName">অতিথি গ্রাহক (Guest)</div>
+        <div style="font-size:0.75rem; color:#64748b; line-height:1.4; margin:4px 0;" id="ncAccountCustAddr">ডেলিভারি ঠিকানা সেট করতে লগইন করুন বা আপডেট বাটনে চাপুন।</div>
+        <div style="font-size:0.78rem; font-weight:700; color:#334155;" id="ncAccountCustPhone">📞 লগইন করা নেই</div>
+      </div>
+
+      <!-- Action buttons for logged in customer: Edit Address & Log Out -->
+      <div id="ncLoggedInActions" style="display:none; margin-top:12px; padding-top:10px; border-top:1px dashed #cbd5e1; display:flex; gap:8px;">
+        <button type="button" onclick="openCustomerAuthModal()" style="flex:1; background:#f3e8ff; border:1px solid #d8b4fe; color:#7e22ce; padding:8px 12px; border-radius:8px; font-size:0.78rem; font-weight:800; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:6px;">
+          <i class="fa-solid fa-user-pen"></i> <span id="t-btnAccountEditProf">প্রোফাইল এডিট</span>
+        </button>
+        <button type="button" onclick="customerLogout()" style="background:#fee2e2; border:1px solid #fca5a5; color:#b91c1c; padding:8px 14px; border-radius:8px; font-size:0.78rem; font-weight:800; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:6px;">
+          <i class="fa-solid fa-arrow-right-from-bracket"></i> <span id="t-btnAccountLogout">লগআউট</span>
+        </button>
+      </div>
+    </div>
+
+    
+
+  </div>
+
+  <!-- ================= 5B. MY WISHLIST SCREEN (লাভ চিহ্ন দিয়ে রাখা পছন্দের প্রোডাক্ট তালিকা) ================= -->
+  <div id="screen-wishlist" class="screen-view" style="padding:14px 16px 80px 16px; max-width:540px; margin:0 auto;">
+    <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:14px; padding-bottom:8px; border-bottom:1px solid #f1f5f9;">
+      <div style="display:flex; align-items:center; gap:10px;">
+        <button onclick="showScreen('customer-settings')" style="background:transparent; border:none; font-size:1.2rem; color:#475569; cursor:pointer;"><i class="fa-solid fa-arrow-left"></i></button>
+        <div style="font-size:1.05rem; font-weight:800; color:#0f172a;" id="t-wishlistHeaderTitle">MY WISHLIST (পছন্দের তালিকা)</div>
+      </div>
+      <span style="font-size:0.78rem; font-weight:800; color:#e11d48; background:#ffe4e6; padding:2px 8px; border-radius:12px;" id="wishlistCountHeaderBadge">❤️ 0</span>
+    </div>
+
+    <!-- Wishlist Grid Container -->
+    <div id="wishlistGridContainer"></div>
+  </div>
+
+  <!-- ================= BOTTOM NAVIGATION ================= -->
+  <nav class="bottom-nav">
+    <button class="nav-tab active" id="tab-home" onclick="showScreen('home')">
+      <i class="fa-solid fa-house"></i>
+      <span id="nav-t-home">হোম</span>
+    </button>
+    <button class="nav-tab" id="tab-categories" onclick="showScreen('categories')">
+      <i class="fa-solid fa-table-cells-large"></i>
+      <span id="nav-t-categories">ক্যাটাগরি</span>
+    </button>
+    <button class="nav-tab" id="tab-wishlist" onclick="showScreen('wishlist')">
+      <i class="fa-solid fa-heart"></i>
+      <span id="nav-t-wishlist">উইশলিস্ট</span>
+    </button>
+    <button class="nav-tab" id="tab-orders" onclick="showScreen('orders')">
+      <i class="fa-solid fa-truck-fast"></i>
+      <span id="nav-t-orders">অর্ডার</span>
+    </button>
+    <button class="nav-tab" id="tab-customer-settings" onclick="showScreen('customer-settings')">
+      <i class="fa-solid fa-circle-user"></i>
+      <span id="nav-t-account">অ্যাকাউন্ট</span>
+    </button>
+  </nav>
+
+  <!-- ================= MODALS ================= -->
+
+</div>
+
+</div>
+
+<div class="sort-modal-sheet" id="sortModal" onclick="closeSortModalOnOutside(event)">
+<div class="sort-modal-content" onclick="event.stopPropagation()">
+<div style="display:flex; align-items:center; justify-content:space-between; padding:16px 18px; border-bottom:1px solid #f1f5f9;">
+<div style="font-size:0.95rem; font-weight:800; color:#0f172a;">
+<i class="fa-solid fa-arrow-down-short-wide" style="color:var(--primary); margin-right:6px;"></i> শাড়ি ও পোশাক সাজান (Sort By)
+        </div>
+<button onclick="closeSortModal()" style="background:transparent; border:none; font-size:1.2rem; color:#64748b; cursor:pointer;"><i class="fa-solid fa-xmark"></i></button>
+</div>
+<div class="sort-option-row active" id="sort-opt-relevance" onclick="applySortOption('relevance', 'জনপ্রিয় শাড়ি (Relevance)')">
+<div>
+<div style="font-weight:700;">🌟 জনপ্রিয় শাড়ি (Relevance)</div>
+<div style="font-size:0.72rem; color:#64748b;">সর্বাধিক বিক্রিত ও জনপ্রিয় ডিজাইন আগে দেখাবে</div>
+</div>
+<div class="sort-option-radio"></div>
+</div>
+<div class="sort-option-row" id="sort-opt-new" onclick="applySortOption('new', 'নতুন কালেকশন (New Arrivals)')">
+<div>
+<div style="font-weight:700;">✨ নতুন কালেকশন (New Arrivals)</div>
+<div style="font-size:0.72rem; color:#64748b;">সদ্য আপলোড হওয়া লেটেস্ট শাড়ি ও ড্রেস</div>
+</div>
+<div class="sort-option-radio"></div>
+</div>
+<div class="sort-option-row" id="sort-opt-price-asc" onclick="applySortOption('price-asc', 'দাম: কম থেকে বেশি')">
+<div>
+<div style="font-weight:700;">📉 কম থেকে বেশি দাম (Price: Low to High)</div>
+<div style="font-size:0.72rem; color:#64748b;">বাজেট অনুযায়ী কেনাকাটার সুবিধা</div>
+</div>
+<div class="sort-option-radio"></div>
+</div>
+<div class="sort-option-row" id="sort-opt-price-desc" onclick="applySortOption('price-desc', 'দাম: বেশি থেকে কম')">
+<div>
+<div style="font-weight:700;">📈 বেশি থেকে কম দাম (Price: High to Low)</div>
+<div style="font-size:0.72rem; color:#64748b;">প্রিমিয়াম ও ব্রাইডাল লাক্সারি শাড়ি</div>
+</div>
+<div class="sort-option-radio"></div>
+</div>
+<div class="sort-option-row" id="sort-opt-rating" onclick="applySortOption('rating', 'রেটিং: 4.5+ স্টার')">
+<div>
+<div style="font-weight:700;">⭐ কাস্টমার রেটিং (Customer Rating)</div>
+<div style="font-size:0.72rem; color:#64748b;">সেরা রেটিং প্রাপ্ত 5-স্টার শাড়ি</div>
+</div>
+<div class="sort-option-radio"></div>
+</div>
+</div>
+</div>
+
+<div class="filter-modal-sheet" id="advancedFilterModal" onclick="closeAdvancedFilterOnOutside(event)">
+<div class="filter-modal-content" onclick="event.stopPropagation()">
+<!-- Top Header -->
+<div style="display:flex; align-items:center; justify-content:space-between; padding:14px 18px; border-bottom:1px solid #e2e8f0;">
+<div style="font-size:0.95rem; font-weight:800; color:#0f172a; display:flex; align-items:center; gap:8px;">
+<i class="fa-solid fa-sliders" style="color:var(--primary);"></i> ফিল্টার নির্বাচন করুন (Filters)
+        </div>
+<button onclick="closeAdvancedFilterModal()" style="background:transparent; border:none; font-size:1.2rem; color:#64748b; cursor:pointer;"><i class="fa-solid fa-xmark"></i></button>
+</div>
+<!-- 2-Column Split Body -->
+<div class="filter-split-body">
+<!-- Left Column: Tabs -->
+<div class="filter-left-tabs">
+<div class="filter-tab-item active" id="ftab-fabric" onclick="switchFilterTab('fabric')">
+<span>🧵 ফ্যাব্রিক</span>
+<span class="filter-tab-badge" id="fbadge-fabric" style="display:none;">0</span>
+</div>
+<div class="filter-tab-item" id="ftab-color" onclick="switchFilterTab('color')">
+<span>🎨 রং</span>
+<span class="filter-tab-badge" id="fbadge-color" style="display:none;">0</span>
+</div>
+<div class="filter-tab-item" id="ftab-price" onclick="switchFilterTab('price')">
+<span>💰 বাজেট</span>
+<span class="filter-tab-badge" id="fbadge-price" style="display:none;">0</span>
+</div>
+<div class="filter-tab-item" id="ftab-occasion" onclick="switchFilterTab('occasion')">
+<span>🎉 অনুষ্ঠান</span>
+<span class="filter-tab-badge" id="fbadge-occasion" style="display:none;">0</span>
+</div>
+</div>
+<!-- Right Column: Checkbox Options -->
+<div class="filter-right-options">
+<!-- Fabric Options Panel -->
+<div class="filter-options-panel" id="fpanel-fabric">
+<label class="filter-option-checkbox-row"><input onchange="updateFilterBadgeCount()" type="checkbox" value="cotton"/> <span>খাঁটি সুতি (Pure Cotton)</span></label>
+<label class="filter-option-checkbox-row"><input onchange="updateFilterBadgeCount()" type="checkbox" value="jamdani"/> <span>ঢাকাই জামদানি (Jamdani)</span></label>
+<label class="filter-option-checkbox-row"><input onchange="updateFilterBadgeCount()" type="checkbox" value="silk"/> <span>সফট সিল্ক / কাতান (Silk)</span></label>
+<label class="filter-option-checkbox-row"><input onchange="updateFilterBadgeCount()" type="checkbox" value="tant"/> <span>শান্তিপুরী তাঁত (Tant)</span></label>
+<label class="filter-option-checkbox-row"><input onchange="updateFilterBadgeCount()" type="checkbox" value="georgette"/> <span>জর্জেট ও শিফন (Georgette)</span></label>
+<label class="filter-option-checkbox-row"><input onchange="updateFilterBadgeCount()" type="checkbox" value="organza"/> <span>অরগাঞ্জা (Organza)</span></label>
+</div>
+<!-- Color Options Panel -->
+<div class="filter-options-panel" id="fpanel-color" style="display:none;">
+<label class="filter-option-checkbox-row"><input onchange="updateFilterBadgeCount()" type="checkbox" value="red"/> <span>🔴 লাল (Traditional Red)</span></label>
+<label class="filter-option-checkbox-row"><input onchange="updateFilterBadgeCount()" type="checkbox" value="pink"/> <span>🌸 রানী গোলাপী (Rani Pink)</span></label>
+<label class="filter-option-checkbox-row"><input onchange="updateFilterBadgeCount()" type="checkbox" value="yellow"/> <span>🟡 হলুদ (Festive Yellow)</span></label>
+<label class="filter-option-checkbox-row"><input onchange="updateFilterBadgeCount()" type="checkbox" value="blue"/> <span>🔵 রয়্যাল ব্লু (Royal Blue)</span></label>
+<label class="filter-option-checkbox-row"><input onchange="updateFilterBadgeCount()" type="checkbox" value="green"/> <span>🟢 সবুজ (Emerald Green)</span></label>
+<label class="filter-option-checkbox-row"><input onchange="updateFilterBadgeCount()" type="checkbox" value="pastel"/> <span>⚪ প্যাস্টেল শেড (Pastel)</span></label>
+</div>
+<!-- Price Options Panel -->
+<div class="filter-options-panel" id="fpanel-price" style="display:none;">
+<label class="filter-option-checkbox-row"><input onchange="updateFilterBadgeCount()" type="checkbox" value="under500"/> <span>₹500-এর নিচে (Under ₹500)</span></label>
+<label class="filter-option-checkbox-row"><input onchange="updateFilterBadgeCount()" type="checkbox" value="500to1000"/> <span>₹500 - ₹1000 টাকা</span></label>
+<label class="filter-option-checkbox-row"><input onchange="updateFilterBadgeCount()" type="checkbox" value="above1000"/> <span>₹1000+ টাকা (প্রিমিয়াম)</span></label>
+</div>
+<!-- Occasion Options Panel -->
+<div class="filter-options-panel" id="fpanel-occasion" style="display:none;">
+<label class="filter-option-checkbox-row"><input onchange="updateFilterBadgeCount()" type="checkbox" value="wedding"/> <span>👰 বিয়ে বাড়ি ও রিসেপশন</span></label>
+<label class="filter-option-checkbox-row"><input onchange="updateFilterBadgeCount()" type="checkbox" value="puja"/> <span>🪔 পুজো ও উৎসব স্পেশাল</span></label>
+<label class="filter-option-checkbox-row"><input onchange="updateFilterBadgeCount()" type="checkbox" value="daily"/> <span>☀️ রোজকার আরামদায়ক পরিধান</span></label>
+</div>
+</div>
+</div>
+<!-- Bottom Actions -->
+<div style="display:flex; align-items:center; justify-content:space-between; padding:12px 18px; border-top:1px solid #e2e8f0; background:#f8fafc;">
+<button onclick="clearAllAdvancedFilters()" style="background:transparent; border:none; color:#64748b; font-size:0.85rem; font-weight:700; cursor:pointer;">
+          সব মুছুন (Clear All)
+        </button>
+<button onclick="applyAdvancedFilters()" style="background:linear-gradient(135deg, var(--primary), var(--primary-dark)); color:#fff; border:none; padding:10px 24px; border-radius:10px; font-size:0.88rem; font-weight:800; cursor:pointer; box-shadow:0 3px 10px rgba(156,39,176,0.3);">
+          ফিল্টার প্রয়োগ করুন <span id="fapplyCountSpan"></span>
+</button>
+</div>
+</div>
+</div>
+
+<div id="cartModal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.65); z-index:200; align-items:flex-end; justify-content:center;">
+<div style="background:#fff; width:100%; max-width:500px; max-height:92vh; border-radius:22px 22px 0 0; display:flex; flex-direction:column; overflow:hidden; animation:slideUp 0.25s ease-out;">
+<!-- Top Title & Close -->
+<div style="display:flex; align-items:center; justify-content:space-between; padding:12px 16px; border-bottom:1px solid #f1f5f9;">
+<div style="font-size:0.95rem; font-weight:800; color:#0f172a; display:flex; align-items:center; gap:8px;">
+<i class="fa-solid fa-bag-shopping" style="color:var(--primary);"></i>
+<span id="t-cartModalTitle">আপনার চেকআউট</span> (<span id="cartModalCount">0</span>)
+        </div>
+<button onclick="closeCartModal()" style="background:transparent; border:none; font-size:1.2rem; color:#64748b; cursor:pointer;"><i class="fa-solid fa-xmark"></i></button>
+</div>
+<!-- 2-Step Nav Indicator (Nisha Creations Image 5) -->
+<div class="checkout-step-nav">
+<div class="checkout-step-indicator active" id="stepIndicator1">
+<div class="checkout-step-num">1</div>
+<span id="t-step1Title">অর্ডার ও ঠিকানা</span>
+</div>
+<i class="fa-solid fa-arrow-right" style="color:#cbd5e1; font-size:0.7rem;"></i>
+<div class="checkout-step-indicator" id="stepIndicator2">
+<div class="checkout-step-num">2</div>
+<span id="t-step2Title">পেমেন্ট ও ছাড়</span>
+</div>
+</div>
+<!-- Top Wave Offer Ribbon (Nisha Special) -->
+<div class="top-offer-wave-ribbon" style="display:flex; justify-content:space-between; align-items:center; background:linear-gradient(135deg, #15803d, #16a34a); color:#fff; padding:8px 14px; border-radius:10px; margin-bottom:12px; font-size:0.78rem;">
+  <span style="display:flex; align-items:center; gap:6px; font-weight:800;">
+    <i class="fa-solid fa-bolt" style="color:#fde047;"></i> <span id="t-cartOfferRibbonMain">অনলাইন পেমেন্টে ₹38 ছাড়</span>
+  </span>
+  <span id="t-cartOfferRibbonSub" style="font-size:0.72rem; opacity:0.95; font-weight:700;">UPI / GPay / PhonePe প্রযোজ্য</span>
+</div>
+<!-- SCROLLABLE CONTENT BODY -->
+<div style="flex:1; overflow-y:auto; padding:14px;">
+<!-- STEP 1: REVIEW ORDER & DELIVERY ADDRESS (ছবি 5) -->
+<div id="checkoutStep1View">
+<!-- Customer Address Card (With Change Button) -->
+<div class="checkout-address-card">
+<div class="address-header-row">
+<div class="address-user-name" id="displayCustName">অতিথি গ্রাহক (Guest)</div>
+<button class="btn-change-addr" onclick="toggleAddressEdit()" type="button">
+<i class="fa-solid fa-pen"></i> <span id="btnChangeAddrLabel">ঠিকানা বদলান</span>
+</button>
+</div>
+<div id="displayCustPhone" style="font-size:0.78rem; font-weight:700; color:#1e293b; margin-bottom:2px;">📞 ফোন নম্বর লিখুন</div>
+<div class="address-details-text" id="displayCustAddr">
+              📍 ডেলিভারি ঠিকানা সেট করতে নিচে পূরণ করুন
+            </div>
+<!-- Inline Address Edit Form -->
+<div id="inlineAddressEditForm" style="display:none; margin-top:10px; padding-top:10px; border-top:1px dashed #cbd5e1;">
+<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+<span style="font-size:0.75rem; font-weight:800; color:#334155;">ডেলিভারি বিবরণ:</span>
+<button onclick="detectCheckoutGpsLocation()" style="background:#ecfdf5; border:1px solid #10b981; color:#065f46; font-size:0.7rem; font-weight:800; padding:3px 8px; border-radius:6px; cursor:pointer;" type="button">
+<i class="fa-solid fa-location-crosshairs"></i> 📍 GPS লোকেশন
+                </button>
+</div>
+<input id="cust_name" placeholder="আপনার পুরো নাম লিখুন *" style="width:100%; padding:8px 10px; margin-bottom:6px; border:1px solid #cbd5e1; border-radius:6px; font-size:0.82rem;" type="text" value=""/>
+<input id="cust_phone" maxlength="10" placeholder="১০ ডিজিটের মোবাইল নম্বর *" style="width:100%; padding:8px 10px; margin-bottom:6px; border:1px solid #cbd5e1; border-radius:6px; font-size:0.82rem;" type="tel" value=""/>
+<textarea id="cust_addr" placeholder="আমতা ও সংলগ্ন এলাকার ঠিকানা ও ল্যান্ডমার্ক *" rows="2" style="width:100%; padding:8px 10px; margin-bottom:6px; border:1px solid #cbd5e1; border-radius:6px; font-size:0.82rem;"></textarea>
+<button id="t-btnSaveAddrInline" onclick="saveAddressInline()" style="background:var(--primary); color:#fff; border:none; padding:6px 14px; border-radius:6px; font-size:0.75rem; font-weight:800; cursor:pointer;" type="button">
+                ঠিকানা সংরক্ষণ করুন
+              </button>
+</div>
+</div>
+<!-- Estimated Delivery Date (ছবি 5) -->
+<div class="delivery-date-card">
+<i class="fa-solid fa-truck-fast delivery-truck-icon"></i>
+<div>
+<div id="estimatedDeliveryDateText" style="font-size:0.82rem; font-weight:800; color:#15803d;">
+                ডেলিভারি: শুক্রবার, 18ই সেপ্টেম্বর
+              </div>
+<div id="t-cartDeliveryNote" style="font-size:0.7rem; color:#166534;">আমতা ও সংলগ্ন এলাকায় মাত্র 2 দিনে এক্সপ্রেস হোম ডেলিভারি!</div>
+</div>
+</div>
+<!-- Order Items List -->
+<div id="t-cartItemDetailsHeader" style="font-size:0.84rem; font-weight:800; color:#0f172a; margin-bottom:8px;">অর্ডার সামগ্রী (Item Details):</div>
+<div id="cartItemsList" style="margin-bottom:12px;"></div>
+<!-- SuperCoins Redemption Card (100 কয়েন = 1 টাকা ছাড়) -->
+<div class="checkout-supercoin-card" style="background:linear-gradient(135deg, #fffbeb, #fef3c7); border:1.5px solid #fde68a; border-radius:12px; padding:10px 12px; margin-bottom:12px;">
+<div style="display:flex; align-items:center; justify-content:space-between;">
+<div style="display:flex; align-items:center; gap:8px;">
+<span style="font-size:1.4rem;">🪙</span>
+<div>
+<div id="t-coinRedeemTitle" style="font-size:0.82rem; font-weight:800; color:#92400e;">সুপারকয়েন ব্যবহার করুন (Redeem Coins)</div>
+<div id="t-coinRedeemSub" style="font-size:0.72rem; color:#b45309; margin-top:2px;">১০০ কয়েন = ₹১ নগদ ছাড় • আপনার ব্যালেন্স: <strong id="checkoutCoinBal" style="font-size:0.85rem; color:#92400e;">1000</strong> কয়েন (<span id="checkoutCoinRupees" style="font-weight:800; color:#15803d;">₹10 ছাড় প্রযোজ্য</span>)</div>
+</div>
+</div>
+<label style="display:flex; align-items:center; cursor:pointer; gap:6px;">
+<input id="useSuperCoinsCheck" onchange="toggleSuperCoinsRedeem()" style="width:18px; height:18px; accent-color:#d97706; cursor:pointer;" type="checkbox"/>
+<span id="t-coinApplyLabel" style="font-size:0.75rem; font-weight:800; color:#92400e;">ছাড় নিন</span>
+</label>
+</div>
+<div id="coinAppliedStatusMsg" style="display:none; margin-top:6px; font-size:0.72rem; font-weight:700; color:#15803d; border-top:1px dashed #fcd34d; padding-top:4px;">
+              ✓ <span id="coinAppliedText">500 কয়েন সফলভাবে প্রয়োগ হয়েছে (-₹5 নগদ ছাড়)!</span>
+</div>
+</div>
+<!-- Promo code system removed in favor of pure 100-Coins=₹1 discount -->
+<!-- Gift Wrap Option -->
+<label style="display:flex; align-items:center; gap:8px; background:#fff; padding:8px 10px; border-radius:8px; border:1px solid #e2e8f0; font-size:0.78rem; font-weight:700; color:#7e22ce; margin-bottom:12px; cursor:pointer;">
+<input id="giftWrapCheck" type="checkbox"/>
+<span id="t-cartGiftWrapLabel">🎁 উপহার হিসেবে পাঠান (ফ্রি গিফট র‍্যাপ ও মিষ্টি বার্তা কার্ড)</span>
+</label>
+<!-- Price Summary Box -->
+<div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:10px; padding:12px; margin-bottom:14px;">
+<div id="t-cartPriceDetailsHeader" style="font-size:0.82rem; font-weight:800; color:#0f172a; margin-bottom:8px;">মূল্য বিবরণী (Price Details):</div>
+<div style="display:flex; justify-content:space-between; font-size:0.78rem; color:#64748b; margin-bottom:4px;">
+<span id="t-lblTotalMrp">মোট আসল দাম (Total MRP):</span>
+<span id="billTotalMrp">₹0</span>
+</div>
+<div style="display:flex; justify-content:space-between; font-size:0.78rem; color:#16a34a; margin-bottom:4px;">
+<span id="t-lblStoreDiscount">স্টোর বিশেষ ছাড়:</span>
+<span id="billStoreDiscount">-₹0</span>
+</div>
+<div id="billCoinDiscountRow" style="display:none; justify-content:space-between; font-size:0.78rem; color:#d97706; margin-bottom:4px;">
+<span id="t-lblCoinDiscount">সুপারকয়েন ছাড় (100 Coins = ₹1):</span>
+<span id="billCoinDiscountVal" style="font-weight:800;">-₹0</span>
+</div>
+<div id="billReturnDiscountRow" style="display:none; justify-content:space-between; font-size:0.78rem; color:#16a34a; margin-bottom:4px;">
+<span id="t-lblReturnDiscount">স্মার্ট রিটার্ন ছাড় (Wrong/Defective):</span>
+<span id="billReturnDiscountVal">-₹10</span>
+</div>
+<div style="display:flex; justify-content:space-between; font-size:0.78rem; color:#16a34a; margin-bottom:4px;">
+<span id="t-lblDeliveryFee">ডেলিভারি চার্জ (Delivery):</span>
+<span style="font-weight:800;">FREE (ফ্রি)</span>
+</div>
+<div style="display:flex; justify-content:space-between; font-size:0.95rem; font-weight:800; color:#0f172a; border-top:1px dashed #cbd5e1; padding-top:6px; margin-top:6px;">
+<span id="t-lblTotalPayable">মোট পেয়িং অ্যামাউন্ট:</span>
+<span id="billStep1Total" style="color:var(--primary);">₹0</span>
+</div>
+</div>
+<!-- Continue to Step 2 Button -->
+<button onclick="goToCheckoutStep2()" style="width:100%; background:linear-gradient(135deg, var(--primary), var(--primary-dark)); color:#fff; border:none; padding:13px; border-radius:12px; font-weight:800; font-size:0.95rem; cursor:pointer; box-shadow:0 4px 14px rgba(156,39,176,0.3); display:flex; align-items:center; justify-content:center; gap:8px;" type="button">
+<span id="t-btnStep1Continue">পেমেন্ট ও অতিরিক্ত ছাড়ে যান (Step 2)</span> <i class="fa-solid fa-arrow-right"></i>
+</button>
+</div>
+<!-- STEP 2: PAYMENT METHOD & UPI EXTRA DISCOUNT (ছবি 6) -->
+<div id="checkoutStep2View" style="display:none;">
+<div style="display:flex; align-items:center; gap:8px; margin-bottom:12px;">
+<button onclick="goToCheckoutStep1()" style="background:transparent; border:none; font-size:1.1rem; color:#475569; cursor:pointer;"><i class="fa-solid fa-arrow-left"></i></button>
+<div id="t-cartStep2Header" style="font-size:0.88rem; font-weight:800; color:#0f172a;">পেমেন্ট পদ্ধতি নির্বাচন করুন (Payment Option):</div>
+</div>
+<!-- Option 1: Online UPI (Recommended with Extra ₹38 OFF) -->
+<div class="payment-option-card active" id="payOptCardUpi" onclick="selectPaymentMethod('UPI')">
+<div class="payment-card-left">
+<div class="payment-radio-dot"></div>
+<div>
+<div style="display:flex; align-items:center;">
+<span id="t-cartUpiTitle" style="font-size:0.88rem; font-weight:800; color:#0f172a;">অনলাইন পেমেন্ট (UPI)</span>
+<span class="upi-instant-save-badge">Save ₹38</span>
+</div>
+<div style="font-size:0.72rem; color:#16a34a; font-weight:700; margin-top:2px;">
+                  PhonePe / Google Pay / Paytm / QR Code
+                </div>
+</div>
+</div>
+<div style="text-align:right;">
+<div id="payUpiFinalAmount" style="font-size:1.05rem; font-weight:800; color:#15803d;">₹428</div>
+<div id="payUpiStrikedAmount" style="font-size:0.68rem; color:#94a3b8; text-decoration:line-through;">₹466</div>
+</div>
+</div>
+<!-- Inline UPI Payment Box -->
+<div id="upiPaymentActionBox" style="background:#faf5ff; border:1px solid #c084fc; border-radius:14px; padding:14px; margin-bottom:14px; text-align:center;">
+  <div style="display:inline-flex; align-items:center; gap:6px; background:#dcfce7; border:1px solid #86efac; color:#15803d; padding:4px 10px; border-radius:20px; font-size:0.75rem; font-weight:800; margin-bottom:8px;">
+    <i class="fa-solid fa-circle-check"></i> পাঞ্জাব অ্যান্ড সিন্ধ ব্যাংক • নিশা সিং (Nisha Singh)
+  </div>
+  
+  <div id="t-cartUpiInstructions" style="font-size:0.85rem; font-weight:800; color:#6b21a8; margin-bottom:6px;">
+    📲 Navi / PhonePe / Google Pay / Paytm দিয়ে পেমেন্ট করুন
+  </div>
+
+  <!-- Realtime Dynamic UPI QR Code -->
+  <div style="background:#fff; border:2px solid #e9d5ff; border-radius:12px; padding:10px; width:190px; margin:8px auto; box-shadow:0 4px 12px rgba(126,34,206,0.1);">
+    <img id="cartDynamicUpiQrImg" src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=upi%3A%2F%2Fpay%3Fpa%3D9239413517-1%40naviaxis%26pn%3DNisha%2520Singh%26cu%3DINR" alt="Nisha Creations UPI QR" style="width:170px; height:170px; display:block; margin:0 auto; border-radius:8px;">
+    <div style="font-size:0.68rem; color:#64748b; font-weight:700; margin-top:4px;">ক্যামেরা দিয়ে স্ক্যান করে পে করুন</div>
+  </div>
+
+  <div id="t-cartUpiOfficialText" style="font-size:0.75rem; color:#475569; margin:6px 0;">
+    অফিসিয়াল UPI ID: <strong style="color:#7e22ce; font-size:0.85rem;" id="activeUpiIdDisplay">9239413517-1@naviaxis</strong>
+    <button type="button" onclick="copyUpiIdToClipboard()" style="background:#ede9fe; color:#7e22ce; border:1px solid #c4b5fd; padding:3px 8px; border-radius:6px; font-size:0.7rem; font-weight:800; cursor:pointer; margin-left:6px;">
+      <i class="fa-regular fa-copy"></i> কপি
+    </button>
+  </div>
+
+  <div style="margin-top:10px; display:flex; flex-direction:column; gap:8px; align-items:center;">
+    <a href="#" id="upiDirectPayLink" onclick="handleUpiAppPayClick()" style="display:inline-flex; align-items:center; justify-content:center; gap:8px; width:100%; max-width:320px; background:linear-gradient(135deg, #7e22ce, #9333ea); color:#fff; text-decoration:none; padding:12px 18px; border-radius:12px; font-size:0.9rem; font-weight:800; box-shadow:0 4px 14px rgba(126,34,206,0.35);">
+      <i class="fa-solid fa-mobile-screen"></i> <span id="t-cartUpiOpenBtn">📲 PhonePe / GPay তে পেমেন্ট করুন</span>
+    </a>
+    
+    <!-- Instant Booking Button right inside UPI box so user never has to scroll down! -->
+    <button type="button" onclick="submitFinalOrder()" style="display:inline-flex; align-items:center; justify-content:center; gap:8px; width:100%; max-width:320px; background:linear-gradient(135deg, #16a34a, #15803d); color:#fff; border:none; padding:12px 18px; border-radius:12px; font-size:0.88rem; font-weight:800; cursor:pointer; box-shadow:0 4px 14px rgba(22,163,74,0.3);">
+      <i class="fa-solid fa-circle-check"></i> <span>পেমেন্ট করেছি - অর্ডার বুক করুন</span>
+    </button>
+  </div>
+</div>
+<!-- Option 2: Cash on Delivery (COD) -->
+<div class="payment-option-card" id="payOptCardCod" onclick="selectPaymentMethod('COD')" style="cursor:pointer; transition:all 0.2s ease;">
+<div class="payment-card-left">
+<div class="payment-radio-dot" id="codRadioDot"></div>
+<div>
+<div id="t-cartCodTitle" style="font-size:0.92rem; font-weight:800; color:#0f172a; display:flex; align-items:center; gap:6px;">
+  <span>💵 ক্যাশ অন ডেলিভারি (Cash on Delivery)</span>
+</div>
+<div id="t-cartCodSub" style="font-size:0.74rem; color:#64748b; margin-top:2px;">পার্সেল হাতে পেয়ে ডেলিভারি বয়কে নগদ টাকা দিন</div>
+</div>
+</div>
+<div style="text-align:right;">
+<div id="payCodFinalAmount" style="font-size:1.1rem; font-weight:800; color:#0f172a;">₹0</div>
+<div id="t-cartCodNoDiscount" style="font-size:0.68rem; color:#64748b; font-weight:600;">(কোনো অনলাইন ছাড় নেই)</div>
+</div>
+</div>
+<!-- Savings Guarantee Banner -->
+<div style="background:#f0fdf4; border:1px solid #bbf7d0; border-radius:8px; padding:10px; font-size:0.75rem; color:#15803d; margin-bottom:14px; display:flex; align-items:center; gap:8px;">
+<i class="fa-solid fa-shield-halved" style="font-size:1.2rem;"></i>
+<span id="paymentSavingsBannerText">অনলাইনে পেমেন্ট করে আপনি মোট <strong>₹38 অতিরিক্ত সাশ্রয়</strong> করছেন!</span>
+</div>
+<!-- Final Order Confirmation Button -->
+<button onclick="submitFinalOrder()" style="width:100%; background:linear-gradient(135deg, #16a34a, #15803d); color:#fff; border:none; padding:14px; border-radius:12px; font-weight:800; font-size:1rem; cursor:pointer; box-shadow:0 4px 14px rgba(22,163,74,0.35); display:flex; align-items:center; justify-content:center; gap:8px;" type="button">
+<i class="fa-solid fa-circle-check"></i> <span id="finalConfirmBtnLabel">অর্ডার কনফার্ম করুন</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+
+<div id="referModal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.6); z-index:220; align-items:center; justify-content:center; padding:16px;">
+<div style="background:#fff; width:100%; max-width:380px; border-radius:20px; padding:20px; text-align:center;">
+<span style="font-size:2.5rem;">🎉</span>
+<div style="font-size:1.15rem; font-weight:800; color:#0f172a; margin-top:6px;">রেফার করুন ও 50 টাকা ছাড় পান!</div>
+<div style="font-size:0.78rem; color:#64748b; margin:6px 0 14px 0;">আপনার বান্ধবীর সাথে শেয়ার করুন। তিনি প্রথম শাড়ি কিনলে আপনি ও আপনার বান্ধবী দুজনেই 50 টাকা ছাড় পাবেন!</div>
+<div style="background:#f1f5f9; border:1px dashed var(--primary); padding:10px; border-radius:8px; font-weight:800; font-size:1rem; color:var(--primary); margin-bottom:14px;">
+        কুপন কোড: <span id="refCodeText">NISHA50</span>
+</div>
+<button onclick="shareReferralWhatsApp()" style="width:100%; background:#25d366; color:#fff; border:none; padding:11px; border-radius:8px; font-weight:800; font-size:0.88rem; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:8px;">
+<i class="fa-brands fa-whatsapp"></i> WhatsApp-এ শেয়ার করুন
+      </button>
+<button onclick="closeReferModal()" style="margin-top:12px; background:transparent; border:none; color:#94a3b8; font-size:0.75rem; cursor:pointer;">বন্ধ করুন</button>
+</div>
+</div>
+
+<div id="menuDrawerModal" onclick="closeMenuDrawerOnOutside(event)" style="display:none; position:fixed; inset:0; background:rgba(15,23,42,0.65); z-index:9999; justify-content:flex-end; animation:fadeIn 0.2s ease;">
+<div class="menu-drawer-panel" onclick="event.stopPropagation()" style="background:#ffffff; width:85%; max-width:340px; height:100%; display:flex; flex-direction:column; box-shadow:-4px 0 25px rgba(0,0,0,0.2); animation:slideLeft 0.25s ease-out; overflow-y:auto;">
+<!-- Drawer Header -->
+<div style="padding:16px 18px; border-bottom:1px solid #f1f5f9; display:flex; align-items:center; justify-content:space-between; background:linear-gradient(135deg, #fdf4ff, #faf5ff);">
+<div style="display:flex; align-items:center; gap:10px;">
+<img alt="Logo" src="logo.png" style="width:38px; height:38px; border-radius:50%; object-fit:cover; border:2px solid #f59e0b; box-shadow:0 2px 6px rgba(156,39,176,0.25); background:#fff;"/>
+<div>
+<div id="drawerBrandTitle" style="font-size:0.95rem; font-weight:800; color:#0f172a;">Nisha Creations</div>
+<div id="drawerBrandSub" style="font-size:0.7rem; color:#64748b;">বুটিক মেনু ও সেটিংস</div>
+</div>
+</div>
+<button onclick="closeMenuDrawer()" style="background:#f1f5f9; border:none; width:32px; height:32px; border-radius:50%; font-size:1rem; color:#475569; cursor:pointer; display:flex; align-items:center; justify-content:center;">✕</button>
+</div>
+<!-- Drawer Body -->
+<div style="padding:16px; flex:1; display:flex; flex-direction:column; gap:12px;">
+<!-- 0. Drawer Auth Card (Login / Logout - দু'নম্বর ছবিতে লগ ইন লগ আউট অপশন) -->
+<div id="drawerAuthBoxLoggedOut" style="background:linear-gradient(135deg, #fdf4ff, #fae8ff); border:1.5px solid #d8b4fe; border-radius:14px; padding:12px 14px; display:flex; align-items:center; justify-content:space-between; gap:10px; box-shadow:0 2px 8px rgba(156,39,176,0.1);">
+<div style="display:flex; align-items:center; gap:10px;">
+<div style="width:38px; height:38px; border-radius:50%; background:#fff; display:flex; align-items:center; justify-content:center; color:var(--primary); font-size:1.1rem; box-shadow:0 2px 5px rgba(156,39,176,0.15);">
+<i class="fa-solid fa-user-plus"></i>
+</div>
+<div>
+<div id="drawerAuthGuestTitle" style="font-size:0.85rem; font-weight:800; color:#1e293b;">স্বাগতম অতিথি!</div>
+<div id="drawerAuthGuestSub" style="font-size:0.7rem; color:#64748b;">অর্ডার ট্র্যাক ও ছাড় পেতে</div>
+</div>
+</div>
+<button onclick="closeMenuDrawer(); openCustomerAuthModal();" style="background:linear-gradient(135deg, var(--primary), var(--primary-dark)); color:#fff; border:none; padding:8px 14px; border-radius:10px; font-weight:800; font-size:0.78rem; cursor:pointer; display:flex; align-items:center; gap:5px; box-shadow:0 2px 6px rgba(156,39,176,0.3);" type="button">
+<i class="fa-solid fa-right-to-bracket"></i> <span id="drawerBtnLoginTxt">লগইন</span>
+</button>
+</div>
+<div id="drawerAuthBoxLoggedIn" style="display:none; background:linear-gradient(135deg, #ecfdf5, #f0fdf4); border:1.5px solid #bbf7d0; border-radius:14px; padding:12px 14px; display:flex; align-items:center; justify-content:space-between; gap:10px; box-shadow:0 2px 8px rgba(16,185,129,0.1);">
+<div style="display:flex; align-items:center; gap:10px; overflow:hidden;">
+<div id="drawerUserAvatar" style="width:38px; height:38px; border-radius:50%; background:#10b981; color:#fff; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:1rem; flex-shrink:0;">
+              N
+            </div>
+<div style="overflow:hidden;">
+<div id="drawerUserName" style="font-size:0.85rem; font-weight:800; color:#065f46; white-space:nowrap; text-overflow:ellipsis; overflow:hidden;">Nisha Ghanti</div>
+<div id="drawerUserPhone" style="font-size:0.7rem; color:#047857; font-weight:700;">📞 9641405426</div>
+</div>
+</div>
+<button onclick="customerLogout()" style="background:#fff; color:#dc2626; border:1.5px solid #fca5a5; padding:6px 12px; border-radius:8px; font-weight:800; font-size:0.75rem; cursor:pointer; display:flex; align-items:center; gap:4px; flex-shrink:0; box-shadow:0 1px 3px rgba(220,38,38,0.1);" type="button">
+<i class="fa-solid fa-right-from-bracket"></i> <span id="drawerBtnLogoutTxt">লগআউট</span>
+</button>
+</div>
+<!-- 1. Language Switcher (ভাষা নির্বাচন - একমাত্র মেনু ড্রয়ারে সংরক্ষিত) -->
+<div style="background:#f8fafc; border:1.5px solid #e2e8f0; border-radius:14px; padding:12px;">
+<div style="font-size:0.78rem; font-weight:800; color:#334155; margin-bottom:8px; display:flex; align-items:center; gap:6px;">
+<i class="fa-solid fa-globe" style="color:var(--primary);"></i>
+<span id="drawerLangTitle">অ্যাপের ভাষা (Language)</span>
+</div>
+<div style="display:grid; grid-template-columns:1fr 1fr; gap:6px;">
+<button id="drawerBtnLangBn" onclick="setLanguage('bn'); updateDrawerActiveStates();" style="padding:8px; border-radius:10px; border:2px solid var(--primary); background:#fdf4ff; color:var(--primary); font-weight:800; font-size:0.8rem; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:5px; transition:all 0.2s;" type="button">
+<span id="drawerCheckBn">✓</span> 🇮🇳 বাংলা
+            </button>
+<button id="drawerBtnLangEn" onclick="setLanguage('en'); updateDrawerActiveStates();" style="padding:8px; border-radius:10px; border:1.5px solid #cbd5e1; background:#fff; color:#475569; font-weight:700; font-size:0.8rem; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:5px; transition:all 0.2s;" type="button">
+<span id="drawerCheckEn" style="display:none;">✓</span> 🇬🇧 English
+            </button>
+</div>
+</div>
+<!-- SuperCoins Wallet in Drawer -->
+<div class="drawer-menu-item" onclick="closeMenuDrawer(); showScreen('customer-settings');" style="display:flex; align-items:center; gap:12px; padding:10px 12px; background:linear-gradient(135deg, #fffbeb, #fef3c7); border:1.5px solid #fde68a; border-radius:12px; cursor:pointer;">
+<div style="width:36px; height:36px; border-radius:10px; background:#f59e0b; color:#fff; display:flex; align-items:center; justify-content:center; font-size:1.2rem;">
+            🪙
+          </div>
+<div style="flex:1;">
+<div style="font-size:0.82rem; font-weight:800; color:#92400e;">সুপারকয়েন ব্যালেন্স (SuperCoins)</div>
+<div id="drawerCoinsDisplay" style="font-size:0.72rem; font-weight:800; color:#b45309;">500 (ছাড় ₹5)</div>
+</div>
+<span style="background:#f59e0b; color:#fff; font-size:0.65rem; font-weight:800; padding:2px 6px; border-radius:10px;">100 = ₹1</span>
+</div>
+<!-- 2. Customer Profile & Delivery Address -->
+<div class="drawer-menu-item" onclick="closeMenuDrawer(); showScreen('customer-settings');" style="display:flex; align-items:center; gap:12px; padding:10px 12px; background:#fff; border:1px solid #e2e8f0; border-radius:12px; cursor:pointer; transition:background 0.15s;">
+<div style="width:36px; height:36px; border-radius:10px; background:#eff6ff; color:#2563eb; display:flex; align-items:center; justify-content:center; font-size:1.1rem;">
+<i class="fa-regular fa-circle-user"></i>
+</div>
+<div style="flex:1;">
+<div id="drawerItemProfile" style="font-size:0.82rem; font-weight:800; color:#0f172a;">প্রোফাইল ও ঠিকানা</div>
+<div id="drawerItemProfileSub" style="font-size:0.68rem; color:#64748b;">আপনার নাম ও ডেলিভারি তথ্য</div>
+</div>
+<i class="fa-solid fa-chevron-right" style="color:#cbd5e1; font-size:0.75rem;"></i>
+</div>
+<!-- 3. My Orders & Live Tracking -->
+<div class="drawer-menu-item" onclick="closeMenuDrawer(); showScreen('orders');" style="display:flex; align-items:center; gap:12px; padding:10px 12px; background:#fff; border:1px solid #e2e8f0; border-radius:12px; cursor:pointer; transition:background 0.15s;">
+<div style="width:36px; height:36px; border-radius:10px; background:#f0fdf4; color:#16a34a; display:flex; align-items:center; justify-content:center; font-size:1.1rem;">
+<i class="fa-solid fa-truck-fast"></i>
+</div>
+<div style="flex:1;">
+<div id="drawerItemOrders" style="font-size:0.82rem; font-weight:800; color:#0f172a;">আমার সমস্ত অর্ডার</div>
+<div id="drawerItemOrdersSub" style="font-size:0.68rem; color:#64748b;">লাইভ ট্র্যাকিং ও ডেলিভারি স্ট্যাটাস</div>
+</div>
+<i class="fa-solid fa-chevron-right" style="color:#cbd5e1; font-size:0.75rem;"></i>
+</div>
+<!-- 4. Wishlist -->
+<div class="drawer-menu-item" onclick="closeMenuDrawer(); showScreen('wishlist');" style="display:flex; align-items:center; gap:12px; padding:10px 12px; background:#fff; border:1px solid #e2e8f0; border-radius:12px; cursor:pointer; transition:background 0.15s;">
+<div style="width:36px; height:36px; border-radius:10px; background:#fff1f2; color:#e11d48; display:flex; align-items:center; justify-content:center; font-size:1.1rem;">
+<i class="fa-solid fa-heart"></i>
+</div>
+<div style="flex:1;">
+<div id="drawerItemWishlist" style="font-size:0.82rem; font-weight:800; color:#0f172a;">পছন্দের তালিকা (Wishlist)</div>
+<div id="drawerItemWishlistSub" style="font-size:0.68rem; color:#64748b;">সংরক্ষণ করা শাড়ি ও গহনা</div>
+</div>
+<i class="fa-solid fa-chevron-right" style="color:#cbd5e1; font-size:0.75rem;"></i>
+</div>
+<!-- 5. Refer & Earn -->
+<div class="drawer-menu-item" onclick="closeMenuDrawer(); openReferModal();" style="display:flex; align-items:center; gap:12px; padding:10px 12px; background:#fff; border:1px solid #e2e8f0; border-radius:12px; cursor:pointer; transition:background 0.15s;">
+<div style="width:36px; height:36px; border-radius:10px; background:#fef3c7; color:#d97706; display:flex; align-items:center; justify-content:center; font-size:1.1rem;">
+<i class="fa-solid fa-gift"></i>
+</div>
+<div style="flex:1;">
+<div id="drawerItemRefer" style="font-size:0.82rem; font-weight:800; color:#0f172a;">রেফার করুন ও 50 টাকা ছাড় পান</div>
+<div id="drawerItemReferSub" style="font-size:0.68rem; color:#64748b;">বান্ধবীদের সাথে শেয়ার করে ছাড় পান</div>
+</div>
+<i class="fa-solid fa-chevron-right" style="color:#cbd5e1; font-size:0.75rem;"></i>
+</div>
+<!-- 6. Call & WhatsApp Support -->
+<div class="drawer-menu-item" onclick="window.open('https://wa.me/919239413517?text=' + encodeURIComponent(currentLang === 'bn' ? 'নমস্কার নিশা দিদি, আমার কিছু তথ্য জানা প্রয়োজন।' : 'Hello Nisha Creations, I need some assistance.'), '_blank');" style="display:flex; align-items:center; gap:12px; padding:10px 12px; background:#fff; border:1px solid #e2e8f0; border-radius:12px; cursor:pointer; transition:background 0.15s;">
+<div style="width:36px; height:36px; border-radius:10px; background:#dcfce7; color:#15803d; display:flex; align-items:center; justify-content:center; font-size:1.1rem;">
+<i class="fa-brands fa-whatsapp"></i>
+</div>
+<div style="flex:1;">
+<div id="drawerItemSupport" style="font-size:0.82rem; font-weight:800; color:#0f172a;">সহায়তা ও যোগাযোগ</div>
+<div id="drawerItemSupportSub" style="font-size:0.68rem; color:#64748b;">সরাসরি কল বা WhatsApp করুন</div>
+</div>
+<i class="fa-solid fa-arrow-up-right-from-square" style="color:#cbd5e1; font-size:0.75rem;"></i>
+</div>
+<!-- 7. Install App Button -->
+<div class="drawer-menu-item" onclick="triggerPwaInstallPrompt();" style="display:flex; align-items:center; gap:12px; padding:10px 12px; background:#fdf4ff; border:1.5px dashed #d946ef; border-radius:12px; cursor:pointer; transition:background 0.15s;">
+<div style="width:36px; height:36px; border-radius:10px; background:var(--primary); color:#fff; display:flex; align-items:center; justify-content:center; font-size:1.1rem;">
+<i class="fa-solid fa-mobile-screen"></i>
+</div>
+<div style="flex:1;">
+<div id="drawerItemInstall" style="font-size:0.82rem; font-weight:800; color:var(--primary);">অ্যাপ ইনস্টল করুন</div>
+<div id="drawerItemInstallSub" style="font-size:0.68rem; color:#86198f;">ফোনের হোমস্ক্রিনে সহজে খুলুন</div>
+</div>
+<i class="fa-solid fa-download" style="color:var(--primary); font-size:0.8rem;"></i>
+</div>
+<!-- 8. Drawer Login / Logout Action Menu Item -->
+
+<div style="flex:1;">
+<div id="drawerAuthItemTitle" style="font-size:0.82rem; font-weight:800; color:#0f172a;">লগইন বা সাইন-আপ</div>
+<div id="drawerAuthItemSub" style="font-size:0.68rem; color:#64748b;">মোবাইল নম্বর ও ওটিপি দিয়ে প্রবেশ করুন</div>
+
+
+</div>
+<i class="fa-solid fa-chevron-right" style="color:#cbd5e1; font-size:0.75rem;"></i>
+</div>
+</div>
+</div>
+</div>
+
+<div id="welcomeGiftModal" style="display:none; position:fixed; inset:0; background:rgba(15,23,42,0.75); z-index:99999; align-items:center; justify-content:center; padding:16px; animation:fadeIn 0.25s ease;">
+<div style="background:#ffffff; border-radius:22px; width:100%; max-width:380px; text-align:center; overflow:hidden; box-shadow:0 25px 50px -12px rgba(0,0,0,0.3); border:2px solid #fde68a; animation:slideUp 0.3s ease-out;">
+<!-- Top Celebratory Banner -->
+<div style="background:linear-gradient(135deg, #f59e0b, #d97706); padding:20px 16px; color:#fff; position:relative;">
+<button onclick="closeWelcomeGiftModal()" style="position:absolute; top:12px; right:12px; background:rgba(0,0,0,0.25); border:none; color:#fff; width:30px; height:30px; border-radius:50%; font-size:1rem; cursor:pointer; font-weight:bold; display:flex; align-items:center; justify-content:center; transition:background 0.2s;" title="Close" type="button">✕</button>
+<span id="giftBoxEmoji" style="font-size:3rem; display:block; filter:drop-shadow(0 4px 6px rgba(0,0,0,0.2));">🎁</span>
+<div id="t-welcomeTitle" style="font-size:1.25rem; font-weight:900; margin-top:6px; letter-spacing:-0.3px;">🎉 স্বাগতম উপহার!</div>
+<div id="t-welcomeSub" style="font-size:0.78rem; opacity:0.95; margin-top:2px;">নিশা ক্রিয়েশনসে প্রথমবার প্রবেশের বিশেষ উপহার</div>
+</div>
+<!-- Content Body -->
+<div style="padding:20px 18px;">
+<!-- State A: Before Opening (Tap to Reveal) -->
+<div id="giftStateUnopened">
+<div id="t-mysteryBoxHeading" style="font-size:0.88rem; font-weight:800; color:#0f172a; margin-bottom:6px;">
+            আপনার ভাগ্যের উপহারটি আনলক করুন!
+          </div>
+<div id="t-mysteryBoxSub" style="font-size:0.75rem; color:#64748b; line-height:1.4; margin-bottom:16px;">
+            সবার জন্য রয়েছে ন্যূনতম <strong>500 সুপারকয়েন</strong> নিশ্চিত উপহার! ভাগ্যের ছোঁয়ায় পেতে পারেন আরও বেশি কয়েন!
+          </div>
+<!-- Value Notice Card (100 Coins = 1 Taka) -->
+<div style="background:#fef3c7; border:1px dashed #d97706; border-radius:10px; padding:8px 12px; font-size:0.76rem; font-weight:800; color:#92400e; margin-bottom:16px; display:inline-flex; align-items:center; gap:6px;">
+<span>🪙 100 কয়েন = 1 টাকা নগদ ছাড় (100 Coins = ₹1)</span>
+</div>
+<button onclick="revealLuckyWelcomeGift()" style="width:100%; background:linear-gradient(135deg, #f59e0b, #d97706); color:#fff; border:none; padding:13px; border-radius:14px; font-weight:900; font-size:1rem; cursor:pointer; box-shadow:0 4px 14px rgba(217,119,6,0.35); display:flex; align-items:center; justify-content:center; gap:8px;" type="button">
+<span>🎁 ভাগ্যের উপহার খুলুন (Open Gift)</span>
+</button>
+</div>
+<!-- State B: After Opening (Coins Won & Credited) -->
+<div id="giftStateRevealed" style="display:none; animation:fadeIn 0.3s ease;">
+<div style="background:linear-gradient(135deg, #ecfdf5, #f0fdf4); border:2px solid #86efac; border-radius:16px; padding:14px; margin-bottom:14px;">
+<div id="t-congratsHeader" style="font-size:0.72rem; font-weight:800; color:#15803d; text-transform:uppercase; letter-spacing:0.5px;">
+              ✓ অভিনন্দন! ওয়ালেটে জমা হয়েছে
+            </div>
+<div style="font-size:2.2rem; font-weight:900; color:#b45309; margin:4px 0; display:flex; align-items:center; justify-content:center; gap:6px;">
+<span>🪙</span> <span id="revealedCoinsNum">500</span>
+</div>
+<div id="revealedRupeeVal" style="font-size:0.85rem; font-weight:800; color:#166534;">
+              মূল্য: ₹5 নগদ ছাড় (100 Coins = ₹1)
+            </div>
+</div>
+<div id="t-giftInstructionText" style="font-size:0.78rem; color:#475569; line-height:1.4; margin-bottom:16px;">
+            শপে যেকোনো শাড়ি বা পোশাক কেনার সময় চেকআউটে এই কয়েন ব্যবহার করে সরাসরি দাম কমাতে পারবেন!
+          </div>
+<button onclick="closeWelcomeGiftModal()" style="width:100%; background:linear-gradient(135deg, var(--primary), var(--primary-dark)); color:#fff; border:none; padding:13px; border-radius:14px; font-weight:800; font-size:0.95rem; cursor:pointer; box-shadow:0 4px 14px rgba(156,39,176,0.3); display:flex; align-items:center; justify-content:center; gap:8px;" type="button">
+<i class="fa-solid fa-bag-shopping"></i> <span id="t-btnStartShopping">কেনাকাটা শুরু করুন (Shop Now)</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+
+<div id="orderSuccessModal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.8); z-index:9999; align-items:center; justify-content:center; padding:16px;">
+  <!-- Celebration Fireworks Canvas -->
+  <canvas id="fireworksCanvas" style="position:absolute; inset:0; pointer-events:none; z-index:1;"></canvas>
+
+  <div style="position:relative; z-index:2; background:#fff; width:100%; max-width:440px; border-radius:24px; overflow:hidden; box-shadow:0 20px 50px rgba(0,0,0,0.4); text-align:center; animation:slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);">
+    
+    <!-- Top Celebration Header -->
+    <div style="background:linear-gradient(135deg, #16a34a, #15803d); padding:22px 20px; color:#fff; position:relative; overflow:hidden;">
+      <div style="font-size:2.8rem; margin-bottom:4px; animation:bounce 1s infinite alternate;">🎉 🎆</div>
+      <div style="font-size:1.35rem; font-weight:900; letter-spacing:0.3px;">অর্ডার সফলভাবে বুক হয়েছে!</div>
+      <div style="font-size:0.8rem; opacity:0.95; margin-top:2px;">নিশা ক্রিয়েশনস বুটিক • আমতা, হাওড়া</div>
+    </div>
+
+    <div style="padding:18px 20px; max-height:80vh; overflow-y:auto;">
+
+      <!-- SAVINGS BADGE (ক টাকা সেভ করেছে সেটার বড় ডিসপ্লে) -->
+      <div id="successSavingsCard" style="background:linear-gradient(135deg, #fefce8, #fef08a); border:2px solid #eab308; border-radius:14px; padding:12px; margin-bottom:14px; text-align:center; box-shadow:0 4px 14px rgba(234,179,8,0.25);">
+        <div style="font-size:1.05rem; font-weight:900; color:#854d0e; display:flex; align-items:center; justify-content:center; gap:6px;">
+          <span>💰 এই অর্ডারে আপনার মোট সাশ্রয়:</span>
+          <span style="font-size:1.3rem; color:#b45309; background:#fff; padding:2px 10px; border-radius:8px; border:1.5px solid #f59e0b;">₹<span id="successSavingsAmount">0</span></span>
+        </div>
+        <div style="font-size:0.72rem; color:#a16207; margin-top:4px; font-weight:700;">
+          (এমআরপি বিশেষ ছাড় + কয়েন ও অনলাইন পেমেন্ট অফার)
+        </div>
+      </div>
+
+      <!-- DYNAMIC PAYMENT STATUS CARD (ক্যাশ অন ডেলিভারি বা ইউপিআই বড় করে প্রদর্শন) -->
+      <div id="successPaymentStatusCard" style="background:#f0fdf4; border:2px solid #86efac; border-radius:14px; padding:14px; margin-bottom:14px; text-align:center;">
+        <div id="successPayModeTitle" style="font-size:1.15rem; font-weight:900; color:#15803d; display:flex; align-items:center; justify-content:center; gap:8px;">
+          <span>💵 ক্যাশ অন ডেলিভারি (Cash on Delivery)</span>
+        </div>
+        <div style="margin-top:6px; font-size:0.88rem; color:#166534; font-weight:700;">
+          ডেলিভারির সময় নগদ প্রদেয় বিল: <span id="successOrderTotal" style="font-size:1.25rem; font-weight:900; color:#15803d;">₹0</span>
+        </div>
+        <div id="successPayModeDesc" style="font-size:0.75rem; color:#4b5563; margin-top:6px; background:#fff; padding:6px 10px; border-radius:8px; border:1px solid #bbf7d0;">
+          📦 পার্সেল যখন আপনার দরজায় পৌঁছাবে, তখন ডেলিভারি বয়কে এই টাকা দেবেন।
+        </div>
+      </div>
+
+      <!-- Order Meta Box -->
+      <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:12px; padding:12px; margin-bottom:14px; text-align:left; font-size:0.8rem;">
+        <div style="display:flex; justify-content:space-between; margin-bottom:4px;">
+          <span style="color:#64748b; font-weight:700;">অর্ডার আইডি:</span>
+          <span id="successOrderId" style="font-weight:900; color:var(--primary); font-size:0.95rem;">#NC-5019</span>
+        </div>
+        <div id="successCustomerDetails" style="color:#475569; margin-top:4px; line-height:1.4;">
+          গ্রাহক বিবরণ
+        </div>
+      </div>
+<!-- Primary In-App View Order Button -->
+<button onclick="closeOrderSuccessModal(); showScreen('orders');" style="width:100%; background:linear-gradient(135deg, var(--primary), #9333ea); color:#fff; border:none; padding:14px; border-radius:12px; font-weight:800; font-size:0.95rem; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:8px; box-shadow:0 4px 14px rgba(147,51,234,0.3); margin-bottom:10px;" type="button">
+<i class="fa-solid fa-bag-shopping"></i> 📦 আমার অর্ডার ও ট্র্যাকিং দেখুন
+        </button>
+<!-- Secondary Continue Shopping -->
+<button onclick="closeOrderSuccessModal(); showScreen('home');" style="width:100%; background:#f1f5f9; color:#334155; border:1px solid #cbd5e1; padding:11px; border-radius:12px; font-weight:800; font-size:0.85rem; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:6px; margin-bottom:10px;" type="button">
+<i class="fa-solid fa-house"></i> 🛍️ আরও শপিং করুন
+        </button>
+<!-- Prominent WhatsApp Order Dispatch to Owner Phone -->
+<a href="#" id="successWhatsAppLink" style="width:100%; background:#16a34a; color:#fff; border:none; padding:12px; border-radius:12px; font-weight:800; font-size:0.88rem; text-decoration:none; display:flex; align-items:center; justify-content:center; gap:8px; box-shadow:0 4px 12px rgba(22,163,74,0.3); margin-top:6px;" target="_blank">
+  <i class="fa-brands fa-whatsapp" style="font-size:1.15rem;"></i> দোকানদারের হোয়াটসঅ্যাপে স্লিপ পাঠান (Confirm on WhatsApp)
+</a>
+<div style="font-size:0.72rem; color:#64748b; margin-top:6px;">
+  💡 টিপস: উপরের সবুজ বোতামে ট্যাপ করে হোয়াটসঅ্যাপে মেসেজ পাঠালে দোকানদারের ফোনে সাথে সাথে অর্ডার কনফার্মেশন পৌঁছে যাবে।
+</div>
+</div>
+</div>
+</div>
+
+<div id="deliveryReviewModal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.65); z-index:250; align-items:center; justify-content:center; padding:16px;">
+<div style="background:#fff; width:100%; max-width:420px; border-radius:20px; overflow:hidden; box-shadow:0 12px 35px rgba(0,0,0,0.25); max-height:90vh; display:flex; flex-direction:column;">
+<div style="background:linear-gradient(135deg, #f59e0b, #d97706); padding:16px 20px; color:#fff; display:flex; align-items:center; justify-content:space-between;">
+<div style="display:flex; align-items:center; gap:8px;">
+<span style="font-size:1.5rem;">🌟</span>
+<div>
+<div style="font-size:1rem; font-weight:800;">ডেলিভারি রিভিউ ও রেটিং</div>
+<div style="font-size:0.72rem; opacity:0.9;">আপনার অভিজ্ঞতা নিশা ক্রিয়েশনসের সাথে শেয়ার করুন</div>
+</div>
+</div>
+<button onclick="closeDeliveryReviewModal()" style="background:transparent; border:none; color:#fff; font-size:1.3rem; cursor:pointer;"><i class="fa-solid fa-xmark"></i></button>
+</div>
+<div style="padding:16px 20px; overflow-y:auto; flex:1;">
+<div style="background:#fef3c7; border:1px solid #fde68a; border-radius:10px; padding:8px 12px; margin-bottom:14px; display:flex; align-items:center; gap:10px;">
+<div style="font-size:1.4rem;">👗</div>
+<div>
+<div style="font-size:0.72rem; color:#92400e; font-weight:700;">ডেলিভারি সম্পন্ন হওয়া শাড়ি:</div>
+<div id="delivReviewProdTitle" style="font-size:0.85rem; font-weight:800; color:#78350f;">ঢাকাই জামদানি শাড়ি</div>
+</div>
+</div>
+<!-- 5-Star Interactive Box (এক খুব খারাপ, দুই খারাপ, তিন মোটামুটি ভালো, চার ভালো, পাঁচ খুব ভালো) -->
+<div style="text-align:center; margin-bottom:16px; background:#f8fafc; border:1px solid #e2e8f0; border-radius:12px; padding:14px;">
+<div style="font-size:0.8rem; font-weight:700; color:#475569; margin-bottom:6px;">পাঁচ তারায় ক্লিক করে রেট করুন:</div>
+<div id="delivStarGroup" style="font-size:2.2rem; color:#cbd5e1; cursor:pointer; display:flex; justify-content:center; gap:10px; user-select:none;">
+<i class="fa-solid fa-star" onclick="setDelivStar(1)"></i>
+<i class="fa-solid fa-star" onclick="setDelivStar(2)"></i>
+<i class="fa-solid fa-star" onclick="setDelivStar(3)"></i>
+<i class="fa-solid fa-star" onclick="setDelivStar(4)"></i>
+<i class="fa-solid fa-star" onclick="setDelivStar(5)"></i>
+</div>
+<div id="delivRatingLabel" style="font-size:0.95rem; font-weight:800; color:#d97706; margin-top:8px; background:#fef3c7; display:inline-block; padding:4px 12px; border-radius:20px;">
+            ⭐⭐⭐⭐⭐ পাঁচ - খুব ভালো
+          </div>
+</div>
+<!-- Customer Photo Upload -->
+<div class="form-group">
+<label style="display:flex; align-items:center; gap:6px; font-weight:800; font-size:0.82rem; color:#0f172a; margin-bottom:6px;">
+<i class="fa-solid fa-camera" style="color:var(--primary);"></i>
+<span>শাড়ির ছবি আপলোড করুন (মোবাইল গ্যালারি বা ক্যামেরা):</span>
+</label>
+<div onclick="document.getElementById('delivPhotoInput').click()" style="border:1.5px dashed var(--primary); background:#fdf4ff; border-radius:12px; padding:14px; text-align:center; cursor:pointer;">
+<input accept="image/*" id="delivPhotoInput" onchange="handleDelivReviewPhoto(this)" style="display:none;" type="file"/>
+<div id="delivPhotoPrompt">
+<i class="fa-solid fa-cloud-arrow-up" style="font-size:1.8rem; color:var(--primary); margin-bottom:4px;"></i>
+<div style="font-size:0.82rem; font-weight:700; color:#334155;">ছবি তুলতে বা বাছতে এখানে চাপুন</div>
+<div style="font-size:0.68rem; color:#94a3b8; margin-top:2px;">(শাড়ি পরা বা হাতে ধরা ছবি দিয়ে অন্য মা-বোনেদের উৎসাহিত করুন)</div>
+</div>
+<div id="delivPhotoPreviewBox" style="display:none; text-align:center;">
+<img id="delivPhotoPreviewImg" src="" style="width:100px; height:100px; object-fit:cover; border-radius:10px; border:2px solid var(--primary); box-shadow:0 3px 10px rgba(0,0,0,0.1);"/>
+<div style="font-size:0.72rem; color:#16a34a; font-weight:700; margin-top:4px;">✓ ছবি প্রস্তুত হয়েছে</div>
+<button onclick="event.stopPropagation(); clearDelivReviewPhoto()" style="background:#fee2e2; color:#ef4444; border:none; padding:4px 10px; border-radius:6px; font-size:0.7rem; font-weight:700; margin-top:6px; cursor:pointer;" type="button">
+                অন্য ছবি বাছুন
+              </button>
+</div>
+</div>
+</div>
+<!-- Customer Feedback Comments -->
+<div class="form-group">
+<label style="display:flex; align-items:center; gap:6px; font-weight:800; font-size:0.82rem; color:#0f172a; margin-bottom:6px;">
+<i class="fa-solid fa-pen-nib" style="color:var(--primary);"></i>
+<span>আপনার মূল্যবান মতামত ও অভিজ্ঞতা লিখুন:</span>
+</label>
+<textarea id="delivReviewText" placeholder="শাড়ির কোয়ালিটি, কাপড়ের আরাম, রঙ বা কাজের ফিনিশিং কেমন হয়েছে লিখুন..." rows="3"></textarea>
+</div>
+<button onclick="submitDelivReviewModal()" style="width:100%; background:linear-gradient(135deg, #f59e0b, #d97706); color:#fff; border:none; padding:13px; border-radius:12px; font-weight:800; font-size:0.95rem; cursor:pointer; box-shadow:0 4px 14px rgba(245,158,11,0.35); display:flex; align-items:center; justify-content:center; gap:8px;" type="button">
+<i class="fa-solid fa-star"></i> রিভিউ সাবমিট করুন (+20 কয়েন বোনাস)
+        </button>
+</div>
+</div>
+</div>
+
+<div id="sizeGuideModal" style="display:none; position:fixed; inset:0; background:rgba(15,23,42,0.75); z-index:9999; align-items:center; justify-content:center; padding:12px;">
+<div style="background:#ffffff; border-radius:16px; width:100%; max-width:440px; max-height:90vh; overflow-y:auto; box-shadow:0 20px 25px -5px rgba(0,0,0,0.25); display:flex; flex-direction:column;">
+<!-- Modal Header -->
+<div style="padding:14px 16px; border-bottom:1px solid #f1f5f9; display:flex; justify-content:space-between; align-items:center; position:sticky; top:0; background:#fff; z-index:10;">
+<div style="display:flex; align-items:center; gap:8px;">
+<span style="font-size:1.2rem;">📏</span>
+<div>
+<div style="font-size:0.98rem; font-weight:800; color:#0f172a;">সাইজ চার্ট ও মাপের নির্দেশিকা</div>
+<div style="font-size:0.68rem; color:#64748b;">100% পারফেক্ট ফিটিং গ্যারান্টি (ইঞ্চিতে মাপ)</div>
+</div>
+</div>
+<button onclick="closeSizeGuideModal()" style="background:#f1f5f9; border:none; width:28px; height:28px; border-radius:50%; font-size:0.85rem; font-weight:bold; cursor:pointer; color:#64748b;">✕</button>
+</div>
+<!-- Navigation Tabs -->
+<div style="display:flex; gap:6px; overflow-x:auto; padding:10px 14px; background:#f8fafc; border-bottom:1px solid #e2e8f0;">
+<button class="sg-tab-btn active" id="sgTabBtn-frock" onclick="switchSizeGuideTab('frock')" style="padding:6px 12px; border-radius:20px; border:none; font-size:0.75rem; font-weight:700; cursor:pointer; white-space:nowrap; background:var(--primary); color:#fff;">👧 বাচ্চাদের ফ্রক</button>
+<button class="sg-tab-btn" id="sgTabBtn-kurti" onclick="switchSizeGuideTab('kurti')" style="padding:6px 12px; border-radius:20px; border:none; font-size:0.75rem; font-weight:700; cursor:pointer; white-space:nowrap; background:#e2e8f0; color:#334155;">👗 কুর্তি ও স্যুট</button>
+<button class="sg-tab-btn" id="sgTabBtn-palazzo" onclick="switchSizeGuideTab('palazzo')" style="padding:6px 12px; border-radius:20px; border:none; font-size:0.75rem; font-weight:700; cursor:pointer; white-space:nowrap; background:#e2e8f0; color:#334155;">👖 প্লাজো ও প্যান্ট</button>
+<button class="sg-tab-btn" id="sgTabBtn-saree" onclick="switchSizeGuideTab('saree')" style="padding:6px 12px; border-radius:20px; border:none; font-size:0.75rem; font-weight:700; cursor:pointer; white-space:nowrap; background:#e2e8f0; color:#334155;">🥻 শাড়ি ও ব্লাউজ</button>
+<button class="sg-tab-btn" id="sgTabBtn-howto" onclick="switchSizeGuideTab('howto')" style="padding:6px 12px; border-radius:20px; border:none; font-size:0.75rem; font-weight:700; cursor:pointer; white-space:nowrap; background:#e2e8f0; color:#334155;">📐 মাপ নেওয়ার নিয়ম</button>
+</div>
+<!-- Tab Content Area -->
+<div style="padding:14px; font-size:0.8rem;">
+<!-- 1. KIDS FROCK TAB -->
+<div class="sg-content-pane" id="sgContent-frock">
+<div style="background:#fdf4ff; border:1px solid #f0abfc; padding:8px 12px; border-radius:8px; font-size:0.75rem; color:#86198f; margin-bottom:10px;">
+            💡 <strong>মায়ের জন্য টিপস:</strong> বাচ্চার স্বাস্থ্য ভালো হলে বা দ্রুত লম্বা হলে 1 সাইজ বড় বেছে নিন।
+          </div>
+<table style="width:100%; border-collapse:collapse; text-align:center; font-size:0.75rem;">
+<thead>
+<tr style="background:#f1f5f9; color:#0f172a;">
+<th style="padding:8px 4px; border:1px solid #cbd5e1;">বয়স (Age)</th>
+<th style="padding:8px 4px; border:1px solid #cbd5e1;">সাইজ</th>
+<th style="padding:8px 4px; border:1px solid #cbd5e1;">ছাতি (Chest)</th>
+<th style="padding:8px 4px; border:1px solid #cbd5e1;">কোমর</th>
+<th style="padding:8px 4px; border:1px solid #cbd5e1;">ঝুল (Length)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="padding:7px 4px; border:1px solid #e2e8f0; font-weight:700;">1 - 2 বছর</td>
+<td style="padding:7px 4px; border:1px solid #e2e8f0; color:var(--primary); font-weight:800;">20 / S</td>
+<td style="padding:7px 4px; border:1px solid #e2e8f0;">20" - 22"</td>
+<td style="padding:7px 4px; border:1px solid #e2e8f0;">19" - 20"</td>
+<td style="padding:7px 4px; border:1px solid #e2e8f0;">18" - 20"</td>
+</tr>
+<tr style="background:#f8fafc;">
+<td style="padding:7px 4px; border:1px solid #e2e8f0; font-weight:700;">3 - 4 বছর</td>
+<td style="padding:7px 4px; border:1px solid #e2e8f0; color:var(--primary); font-weight:800;">22 / M</td>
+<td style="padding:7px 4px; border:1px solid #e2e8f0;">22" - 24"</td>
+<td style="padding:7px 4px; border:1px solid #e2e8f0;">21" - 22"</td>
+<td style="padding:7px 4px; border:1px solid #e2e8f0;">22" - 24"</td>
+</tr>
+<tr>
+<td style="padding:7px 4px; border:1px solid #e2e8f0; font-weight:700;">5 - 6 বছর</td>
+<td style="padding:7px 4px; border:1px solid #e2e8f0; color:var(--primary); font-weight:800;">24 / L</td>
+<td style="padding:7px 4px; border:1px solid #e2e8f0;">24" - 26"</td>
+<td style="padding:7px 4px; border:1px solid #e2e8f0;">23" - 24"</td>
+<td style="padding:7px 4px; border:1px solid #e2e8f0;">26" - 28"</td>
+</tr>
+<tr style="background:#f8fafc;">
+<td style="padding:7px 4px; border:1px solid #e2e8f0; font-weight:700;">7 - 8 বছর</td>
+<td style="padding:7px 4px; border:1px solid #e2e8f0; color:var(--primary); font-weight:800;">26 / XL</td>
+<td style="padding:7px 4px; border:1px solid #e2e8f0;">26" - 28"</td>
+<td style="padding:7px 4px; border:1px solid #e2e8f0;">25" - 26"</td>
+<td style="padding:7px 4px; border:1px solid #e2e8f0;">30" - 32"</td>
+</tr>
+<tr>
+<td style="padding:7px 4px; border:1px solid #e2e8f0; font-weight:700;">9 - 10 বছর</td>
+<td style="padding:7px 4px; border:1px solid #e2e8f0; color:var(--primary); font-weight:800;">28 / XXL</td>
+<td style="padding:7px 4px; border:1px solid #e2e8f0;">28" - 30"</td>
+<td style="padding:7px 4px; border:1px solid #e2e8f0;">27" - 28"</td>
+<td style="padding:7px 4px; border:1px solid #e2e8f0;">34" - 36"</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- 2. KURTI TAB -->
+<div class="sg-content-pane" id="sgContent-kurti" style="display:none;">
+<div style="background:#f0fdf4; border:1px solid #bbf7d0; padding:8px 12px; border-radius:8px; font-size:0.75rem; color:#166534; margin-bottom:10px;">
+            ✓ রেডিমেড কুর্তির ছাতি (Bust) ইঞ্চি হিসেবে দেওয়া হলো।
+          </div>
+<table style="width:100%; border-collapse:collapse; text-align:center; font-size:0.75rem;">
+<thead>
+<tr style="background:#f1f5f9; color:#0f172a;">
+<th style="padding:8px 4px; border:1px solid #cbd5e1;">সাইজ</th>
+<th style="padding:8px 4px; border:1px solid #cbd5e1;">বক্ষ / ছাতি</th>
+<th style="padding:8px 4px; border:1px solid #cbd5e1;">কোমর</th>
+<th style="padding:8px 4px; border:1px solid #cbd5e1;">হিপ</th>
+<th style="padding:8px 4px; border:1px solid #cbd5e1;">ঝুল</th>
+</tr>
+</thead>
+<tbody>
+<tr><td style="padding:7px 4px; border:1px solid #e2e8f0; font-weight:800; color:var(--primary);">S (36)</td><td style="padding:7px 4px; border:1px solid #e2e8f0;">36"</td><td style="padding:7px 4px; border:1px solid #e2e8f0;">32"</td><td style="padding:7px 4px; border:1px solid #e2e8f0;">38"</td><td style="padding:7px 4px; border:1px solid #e2e8f0;">42"-44"</td></tr>
+<tr style="background:#f8fafc;"><td style="padding:7px 4px; border:1px solid #e2e8f0; font-weight:800; color:var(--primary);">M (38)</td><td style="padding:7px 4px; border:1px solid #e2e8f0;">38"</td><td style="padding:7px 4px; border:1px solid #e2e8f0;">34"</td><td style="padding:7px 4px; border:1px solid #e2e8f0;">40"</td><td style="padding:7px 4px; border:1px solid #e2e8f0;">42"-44"</td></tr>
+<tr><td style="padding:7px 4px; border:1px solid #e2e8f0; font-weight:800; color:var(--primary);">L (40)</td><td style="padding:7px 4px; border:1px solid #e2e8f0;">40"</td><td style="padding:7px 4px; border:1px solid #e2e8f0;">36"</td><td style="padding:7px 4px; border:1px solid #e2e8f0;">42"</td><td style="padding:7px 4px; border:1px solid #e2e8f0;">43"-45"</td></tr>
+<tr style="background:#f8fafc;"><td style="padding:7px 4px; border:1px solid #e2e8f0; font-weight:800; color:var(--primary);">XL (42)</td><td style="padding:7px 4px; border:1px solid #e2e8f0;">42"</td><td style="padding:7px 4px; border:1px solid #e2e8f0;">38"</td><td style="padding:7px 4px; border:1px solid #e2e8f0;">44"</td><td style="padding:7px 4px; border:1px solid #e2e8f0;">43"-45"</td></tr>
+<tr><td style="padding:7px 4px; border:1px solid #e2e8f0; font-weight:800; color:var(--primary);">XXL (44)</td><td style="padding:7px 4px; border:1px solid #e2e8f0;">44"</td><td style="padding:7px 4px; border:1px solid #e2e8f0;">40"</td><td style="padding:7px 4px; border:1px solid #e2e8f0;">46"</td><td style="padding:7px 4px; border:1px solid #e2e8f0;">44"-46"</td></tr>
+<tr style="background:#f8fafc;"><td style="padding:7px 4px; border:1px solid #e2e8f0; font-weight:800; color:var(--primary);">3XL (46)</td><td style="padding:7px 4px; border:1px solid #e2e8f0;">46"</td><td style="padding:7px 4px; border:1px solid #e2e8f0;">42"</td><td style="padding:7px 4px; border:1px solid #e2e8f0;">48"</td><td style="padding:7px 4px; border:1px solid #e2e8f0;">44"-46"</td></tr>
+</tbody>
+</table>
+</div>
+<!-- 3. PALAZZO TAB -->
+<div class="sg-content-pane" id="sgContent-palazzo" style="display:none;">
+<div style="background:#eff6ff; border:1px solid #bfdbfe; padding:8px 12px; border-radius:8px; font-size:0.75rem; color:#1e40af; margin-bottom:10px;">
+            ✓ ইলাস্টিক ওয়েস্টব্যান্ড সহ সব ধরণের শারীরিক গঠনে আরামদায়ক ফিটিং।
+          </div>
+<table style="width:100%; border-collapse:collapse; text-align:center; font-size:0.75rem;">
+<thead>
+<tr style="background:#f1f5f9;">
+<th style="padding:8px; border:1px solid #cbd5e1;">সাইজ</th>
+<th style="padding:8px; border:1px solid #cbd5e1;">কোমর (Waist)</th>
+<th style="padding:8px; border:1px solid #cbd5e1;">হিপ (Hip)</th>
+<th style="padding:8px; border:1px solid #cbd5e1;">ঝুল (Length)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="padding:8px; border:1px solid #e2e8f0; font-weight:800; color:var(--primary);">Free Size</td>
+<td style="padding:8px; border:1px solid #e2e8f0;">28" - 38" (ইলাস্টিক)</td>
+<td style="padding:8px; border:1px solid #e2e8f0;">40" - 46"</td>
+<td style="padding:8px; border:1px solid #e2e8f0;">38" - 40"</td>
+</tr>
+<tr style="background:#f8fafc;">
+<td style="padding:8px; border:1px solid #e2e8f0; font-weight:800; color:var(--primary);">Plus Size</td>
+<td style="padding:8px; border:1px solid #e2e8f0;">36" - 48" (ইলাস্টিক)</td>
+<td style="padding:8px; border:1px solid #e2e8f0;">48" - 54"</td>
+<td style="padding:8px; border:1px solid #e2e8f0;">39" - 41"</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- 4. SAREE & BLOUSE TAB -->
+<div class="sg-content-pane" id="sgContent-saree" style="display:none;">
+<div style="line-height:1.6;">
+<div style="background:#fef3c7; border:1px solid #fde68a; padding:10px; border-radius:8px; margin-bottom:10px;">
+<div style="font-weight:800; color:#92400e; font-size:0.8rem;">🥻 শাড়ির প্রামাণ্য মাপ:</div>
+<div style="font-size:0.75rem; color:#78350f; margin-top:2px;">
+                • শাড়ির দৈর্ঘ্য: <strong>5.5 মিটার</strong> (12 হাত সম্পূর্ণ স্ট্যান্ডার্ড)<br/>
+                • রানিং ব্লাউজ পিস: <strong>0.8 মিটার (80 সেমি)</strong> আলাদা কাটা যাবে<br/>
+                • আঁচল ও পাড় সম্পূর্ণ নিখুঁত ফিনিশিং
+              </div>
+</div>
+<div style="background:#f8fafc; border:1px solid #e2e8f0; padding:10px; border-radius:8px;">
+<div style="font-weight:800; color:#334155; font-size:0.8rem;">✂️ রেডিমেড ব্লাউজ মাপ:</div>
+<div style="font-size:0.73rem; color:#64748b; margin-top:3px;">
+                32, 34, 36, 38, 40, 42 সাইজ উপলব্ধ (প্রতিটি ব্লাউজে ভেতরে 2 ইঞ্চি এক্সট্রা মার্জিন থাকে যা সহজে আলগা করা যায়)।
+              </div>
+</div>
+</div>
+</div>
+<!-- 5. HOW TO MEASURE TAB -->
+<div class="sg-content-pane" id="sgContent-howto" style="display:none;">
+<div style="display:flex; flex-direction:column; gap:10px;">
+<div style="display:flex; gap:10px; align-items:flex-start;">
+<div style="background:#fdf4ff; color:var(--primary); font-weight:800; width:26px; height:26px; border-radius:50%; display:flex; align-items:center; justify-content:center; flex-shrink:0;">1</div>
+<div>
+<strong style="color:#0f172a;">ছাতি / বক্ষ (Chest):</strong>
+<div style="font-size:0.73rem; color:#64748b;">ফিতাটি বক্ষের সবচেয়ে স্ফীত অংশের চারপাশ দিয়ে সোজাভাবে ধরুন। খুব আঁটসাঁট করবেন না।</div>
+</div>
+</div>
+<div style="display:flex; gap:10px; align-items:flex-start;">
+<div style="background:#fdf4ff; color:var(--primary); font-weight:800; width:26px; height:26px; border-radius:50%; display:flex; align-items:center; justify-content:center; flex-shrink:0;">2</div>
+<div>
+<strong style="color:#0f172a;">কোমর (Waist):</strong>
+<div style="font-size:0.73rem; color:#64748b;">নাভির ঠিক ওপরে শরীরের স্বাভাবিক খাঁজের ওপর দিয়ে ফিতা দিয়ে মাপ নিন।</div>
+</div>
+</div>
+<div style="display:flex; gap:10px; align-items:flex-start;">
+<div style="background:#fdf4ff; color:var(--primary); font-weight:800; width:26px; height:26px; border-radius:50%; display:flex; align-items:center; justify-content:center; flex-shrink:0;">3</div>
+<div>
+<strong style="color:#0f172a;">ঝুল (Length):</strong>
+<div style="font-size:0.73rem; color:#64748b;">বাচ্চাদের ফ্রকের ক্ষেত্রে কাঁধের ওপর থেকে হাঁটু বা পায়ের গোড়ালি পর্যন্ত ঝুল মাপুন।</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Footer Help Button -->
+<div style="padding:10px 16px; background:#f8fafc; border-top:1px solid #f1f5f9; display:flex; justify-content:space-between; align-items:center;">
+<a href="https://wa.me/919239413517?text=নমস্কার নিশা ক্রিয়েশনস, সাইজ ও মাপ নিয়ে কিছু সাহায্য লাগবে।" style="color:#15803d; font-weight:700; font-size:0.73rem; text-decoration:none; display:flex; align-items:center; gap:4px;" target="_blank">
+<i class="fa-brands fa-whatsapp"></i> সাইজ বুঝতে হোয়াটসঅ্যাপে সাহায্য নিন
+        </a>
+<button onclick="closeSizeGuideModal()" style="background:var(--primary); color:#fff; border:none; padding:7px 16px; border-radius:8px; font-weight:800; font-size:0.78rem; cursor:pointer;">ঠিক আছে</button>
+</div>
+</div>
+</div>
+
+<div id="productVideoModal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.92); z-index:9999; align-items:center; justify-content:center; padding:12px;">
+<div style="background:#0f172a; border-radius:16px; width:100%; max-width:420px; overflow:hidden; display:flex; flex-direction:column; box-shadow:0 25px 50px -12px rgba(0,0,0,0.5);">
+<div style="padding:12px 16px; display:flex; justify-content:space-between; align-items:center; background:#1e293b; color:#fff;">
+<div style="font-size:0.9rem; font-weight:800; display:flex; align-items:center; gap:6px;">
+<span>🎥</span> <span id="pdpVideoTitle">প্রোডাক্ট ভিডিও প্রিভিউ</span>
+</div>
+<button onclick="closeProductVideoModal()" style="background:#334155; border:none; color:#fff; width:28px; height:28px; border-radius:50%; cursor:pointer; font-weight:bold;">✕</button>
+</div>
+<div id="pdpVideoContainer" style="width:100%; aspect-ratio:9/16; max-height:70vh; background:#000; display:flex; align-items:center; justify-content:center;">
+<!-- iframe or video inserted dynamically -->
+</div>
+<div style="padding:10px 14px; background:#1e293b; text-align:center;">
+<button onclick="closeProductVideoModal()" style="width:100%; background:var(--primary); color:#fff; border:none; padding:10px; border-radius:8px; font-weight:800; font-size:0.85rem; cursor:pointer;">
+          ভিডিও বন্ধ করে অর্ডার করুন →
+        </button>
+</div>
+</div>
+</div>
+
+<div id="returnRequestModal" style="display:none; position:fixed; inset:0; background:rgba(15,23,42,0.8); z-index:9999; align-items:center; justify-content:center; padding:12px;">
+<div style="background:#ffffff; border-radius:16px; width:100%; max-width:440px; max-height:90vh; overflow-y:auto; padding:18px; box-shadow:0 20px 25px -5px rgba(0,0,0,0.25);">
+<!-- Header -->
+<div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #e2e8f0; padding-bottom:10px; margin-bottom:12px;">
+<div style="display:flex; align-items:center; gap:8px;">
+<span style="font-size:1.3rem;">🔄</span>
+<div>
+<div id="retModalStepTitle" style="font-size:0.95rem; font-weight:800; color:#0f172a;">ধাপ 1/2: রিটার্ন বা পরিবর্তনের কারণ</div>
+<div id="retModalOrderInfo" style="font-size:0.7rem; color:#64748b;">অর্ডার তথ্য</div>
+</div>
+</div>
+<button onclick="closeReturnModal()" style="background:#f1f5f9; border:none; width:28px; height:28px; border-radius:50%; font-weight:bold; cursor:pointer;">✕</button>
+</div>
+<input id="retOrderId" type="hidden"/>
+<!-- Product Preview -->
+<div id="retProdPreview" style="display:flex; align-items:center; gap:10px; background:#f8fafc; border:1px solid #e2e8f0; border-radius:10px; padding:10px; margin-bottom:14px;">
+<!-- Filled dynamically -->
+</div>
+<!-- ================= STEP 1: REASON & TYPE ================= -->
+<div id="retStep1Container">
+<!-- Type: Exchange or Refund -->
+<div style="margin-bottom:14px;">
+<label style="font-size:0.78rem; font-weight:800; color:#334155; display:block; margin-bottom:6px;">আপনি কি সুবিধা চান?</label>
+<div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
+<label style="display:flex; align-items:center; gap:6px; background:#fdf4ff; border:1.5px solid #f0abfc; padding:8px 10px; border-radius:8px; font-size:0.75rem; font-weight:700; cursor:pointer;">
+<input checked="" name="retActionType" onchange="handleRetTypeChange(true)" type="radio" value="Exchange"/>
+<span>🔄 সাইজ এক্সচেঞ্জ</span>
+</label>
+<label style="display:flex; align-items:center; gap:6px; background:#f8fafc; border:1.5px solid #cbd5e1; padding:8px 10px; border-radius:8px; font-size:0.75rem; font-weight:700; cursor:pointer;">
+<input name="retActionType" onchange="handleRetTypeChange(false)" type="radio" value="Refund"/>
+<span>💵 টাকা রিফান্ড / ফেরত</span>
+</label>
+</div>
+</div>
+<!-- Exchange Size Selector (shown when Exchange is selected) -->
+<div id="retExchangeSizeBox" style="margin-bottom:14px; background:#faf5ff; border:1px solid #e9d5ff; padding:10px; border-radius:8px;">
+<label style="font-size:0.75rem; font-weight:800; color:#7e22ce; display:block; margin-bottom:4px;">কোন নতুন সাইজটি আপনার লাগবে?</label>
+<select id="retNewSizeSelect" style="width:100%; padding:7px; border:1px solid #c084fc; border-radius:6px; font-size:0.78rem; font-weight:700;">
+<option value="S (36)">S (36 ইঞ্চি)</option>
+<option value="M (38)">M (38 ইঞ্চি)</option>
+<option value="L (40)">L (40 ইঞ্চি)</option>
+<option value="XL (42)">XL (42 ইঞ্চি)</option>
+<option value="XXL (44)">XXL (44 ইঞ্চি)</option>
+<option value="3XL (46)">3XL (46 ইঞ্চি)</option>
+<option value="1-2 Yrs">বাচ্চাদের 1-2 বছর</option>
+<option value="3-4 Yrs">বাচ্চাদের 3-4 বছর</option>
+<option value="5-6 Yrs">বাচ্চাদের 5-6 বছর</option>
+<option value="7-8 Yrs">বাচ্চাদের 7-8 বছর</option>
+<option value="9-10 Yrs">বাচ্চাদের 9-10 বছর</option>
+</select>
+</div>
+<!-- Predefined Reasons -->
+<div style="margin-bottom:14px;">
+<label style="font-size:0.78rem; font-weight:800; color:#334155; display:block; margin-bottom:6px;">রিটার্ন বা পরিবর্তনের কারণ নির্বাচন করুন:</label>
+<div style="display:flex; flex-direction:column; gap:6px; font-size:0.75rem;">
+<label style="display:flex; align-items:center; gap:8px; background:#fff; border:1px solid #cbd5e1; padding:7px 10px; border-radius:8px; cursor:pointer;">
+<input checked="" name="retReasonOpt" type="radio" value="সাইজে ছোট হচ্ছে (এক সাইজ বড় চাই)"/>
+<span>📏 সাইজে ছোট হচ্ছে (এক সাইজ বড় চাই)</span>
+</label>
+<label style="display:flex; align-items:center; gap:8px; background:#fff; border:1px solid #cbd5e1; padding:7px 10px; border-radius:8px; cursor:pointer;">
+<input name="retReasonOpt" type="radio" value="সাইজে বড় বা ঢিলে হচ্ছে (এক সাইজ ছোট চাই)"/>
+<span>📐 সাইজে বড় বা ঢিলে হচ্ছে (এক সাইজ ছোট চাই)</span>
+</label>
+<label style="display:flex; align-items:center; gap:8px; background:#fff; border:1px solid #cbd5e1; padding:7px 10px; border-radius:8px; cursor:pointer;">
+<input name="retReasonOpt" type="radio" value="ফিটিং ঠিকঠাক নয় বা পরতে অসুবিধা"/>
+<span>👗 ফিটিং ঠিকঠাক নয় বা পরতে অসুবিধা</span>
+</label>
+<label style="display:flex; align-items:center; gap:8px; background:#fff; border:1px solid #cbd5e1; padding:7px 10px; border-radius:8px; cursor:pointer;">
+<input name="retReasonOpt" type="radio" value="কাপড় বা কোয়ালিটি মনের মতো নয়"/>
+<span>🧵 কাপড় বা কোয়ালিটি মনের মতো নয়</span>
+</label>
+<label style="display:flex; align-items:center; gap:8px; background:#fff; border:1px solid #cbd5e1; padding:7px 10px; border-radius:8px; cursor:pointer;">
+<input name="retReasonOpt" type="radio" value="ভুল প্রোডাক্ট বা ভুল কালার এসেছে"/>
+<span>🎨 ভুল প্রোডাক্ট বা ভুল কালার এসেছে</span>
+</label>
+<label style="display:flex; align-items:center; gap:8px; background:#fff; border:1px solid #cbd5e1; padding:7px 10px; border-radius:8px; cursor:pointer;">
+<input name="retReasonOpt" type="radio" value="পোশাকে ত্রুটি / ছেঁড়া বা দাগ রয়েছে"/>
+<span>⚠️ পোশাকে ত্রুটি / ছেঁড়া বা দাগ রয়েছে</span>
+</label>
+<label style="display:flex; align-items:center; gap:8px; background:#fff; border:1px solid #cbd5e1; padding:7px 10px; border-radius:8px; cursor:pointer;">
+<input name="retReasonOpt" type="radio" value="অন্যান্য কারণ"/>
+<span>✍️ অন্যান্য কারণ</span>
+</label>
+</div>
+</div>
+<!-- Custom Note textarea -->
+<div style="margin-bottom:16px;">
+<label style="font-size:0.75rem; font-weight:800; color:#475569; display:block; margin-bottom:4px;">বিস্তারিত বিবরণ লিখুন:</label>
+<textarea id="retCustomNote" placeholder="যেমন: বক্ষ একটু চাপা লাগছে, বা কোমর ঢিলে হচ্ছে..." rows="2" style="width:100%; padding:8px; border:1px solid #cbd5e1; border-radius:8px; font-size:0.75rem;"></textarea>
+</div>
+<!-- Step 1 Button -->
+<div style="display:flex; gap:8px;">
+<button onclick="closeReturnModal()" style="flex:1; background:#f1f5f9; border:none; padding:10px; border-radius:8px; font-weight:700; font-size:0.8rem; cursor:pointer; color:#475569;">ফিরে যান</button>
+<button id="btnGoToStep2" onclick="goToReturnStep2()" style="flex:2; background:var(--primary); color:#fff; border:none; padding:10px; border-radius:8px; font-weight:800; font-size:0.85rem; cursor:pointer; box-shadow:0 3px 10px rgba(156,39,176,0.3);">
+            পরবর্তী: ব্যাংক বিবরণ দিন →
+          </button>
+</div>
+</div>
+<!-- ================= STEP 2: BANK DETAILS PAGE ================= -->
+<div id="retStep2Container" style="display:none;">
+<div style="background:#f0fdf4; border:1.5px solid #86efac; border-radius:10px; padding:12px; margin-bottom:14px;">
+<div style="font-size:0.82rem; font-weight:800; color:#166534; display:flex; align-items:center; gap:6px; margin-bottom:4px;">
+<i class="fa-solid fa-building-columns"></i> রিফান্ডের ব্যাংক ও UPI বিবরণ
+          </div>
+<div style="font-size:0.72rem; color:#15803d; line-height:1.4; background:#dcfce7; padding:8px 10px; border-radius:6px; margin-top:6px;">
+            📢 <strong>জরুরি নিয়ম:</strong> ক্যাশ অন ডেলিভারি (COD) অর্ডারে হাতে নগদ ক্যাশ টাকা ফেরত দেওয়া হয় না। পার্সেলটি আমাদের ডেলিভারি পার্টনার পিকআপ করার সাথে সাথে আপনার নিচের ব্যাংক অ্যাকাউন্টে সরাসরি রিফান্ডের টাকা পাঠিয়ে দেওয়া হবে।
+          </div>
+</div>
+<div style="display:flex; flex-direction:column; gap:10px; margin-bottom:16px;">
+<div>
+<label style="font-size:0.73rem; font-weight:800; color:#334155;">1. ব্যাংক একাউন্ট নম্বর (Account Number): *</label>
+<input id="ret_bank_acc" placeholder="যেমন: 30123456789" style="width:100%; padding:8px; border:1.5px solid #cbd5e1; border-radius:8px; font-size:0.8rem; margin-top:3px;" type="text"/>
+</div>
+<div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
+<div>
+<label style="font-size:0.73rem; font-weight:800; color:#334155;">2. IFSC কোড: *</label>
+<input id="ret_bank_ifsc" placeholder="SBIN0001234" style="width:100%; padding:8px; border:1.5px solid #cbd5e1; border-radius:8px; font-size:0.8rem; text-transform:uppercase; margin-top:3px;" type="text"/>
+</div>
+<div>
+<label style="font-size:0.73rem; font-weight:800; color:#334155;">3. একাউন্ট হোল্ডার: *</label>
+<input id="ret_bank_holder" placeholder="যেমন: অনন্যা দাস (Account Holder Name)" style="width:100%; padding:8px; border:1.5px solid #cbd5e1; border-radius:8px; font-size:0.8rem; margin-top:3px;" type="text"/>
+</div>
+</div>
+<div>
+<label style="font-size:0.73rem; font-weight:800; color:#334155;">4. অথবা PhonePe / Google Pay UPI ID (দ্রুততম রিফান্ড):</label>
+<input id="ret_bank_upi" placeholder="যেমন: 9832000000@upi বা paytm" style="width:100%; padding:8px; border:1.5px solid #cbd5e1; border-radius:8px; font-size:0.8rem; margin-top:3px;" type="text"/>
+</div>
+</div>
+<div style="display:flex; gap:8px;">
+<button onclick="goToReturnStep1()" style="flex:1; background:#f1f5f9; border:none; padding:11px; border-radius:8px; font-weight:700; font-size:0.8rem; cursor:pointer; color:#475569;">
+            ← আগের ধাপে
+          </button>
+<button onclick="submitReturnRequest()" style="flex:2; background:#16a34a; color:#fff; border:none; padding:11px; border-radius:8px; font-weight:800; font-size:0.85rem; cursor:pointer; box-shadow:0 3px 10px rgba(22,163,74,0.3);">
+            ✓ ব্যাংক ডিটেলস সহ জমা দিন →
+          </button>
+</div>
+</div>
+</div>
+</div>
+
+
+
+<div id="cancelOrderModal" style="display:none; position:fixed; inset:0; background:rgba(15,23,42,0.8); z-index:9999; align-items:center; justify-content:center; padding:12px;">
+<div style="background:#ffffff; border-radius:16px; width:100%; max-width:420px; padding:18px; box-shadow:0 20px 25px -5px rgba(0,0,0,0.25);">
+<div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #e2e8f0; padding-bottom:10px; margin-bottom:12px;">
+<div style="display:flex; align-items:center; gap:8px;">
+<span style="font-size:1.3rem; color:#dc2626;">❌</span>
+<div>
+<div style="font-size:0.95rem; font-weight:800; color:#dc2626;">অর্ডার বাতিল / ক্যানসেল করুন</div>
+<div id="cancelModalOrderInfo" style="font-size:0.7rem; color:#64748b;">অর্ডার নং</div>
+</div>
+</div>
+<button onclick="closeCancelModal()" style="background:#f1f5f9; border:none; width:28px; height:28px; border-radius:50%; font-weight:bold; cursor:pointer;">✕</button>
+</div>
+<input id="cancelOrderId" type="hidden"/>
+<div style="background:#fef2f2; border:1px solid #fecaca; border-radius:8px; padding:10px; margin-bottom:12px; font-size:0.75rem; color:#991b1b; line-height:1.4;">
+        ⚠️ <strong>সতর্কতা:</strong> অর্ডার বাতিল করলে এটি ডেলিভারি করা হবে না এবং বুকিং সাথে সাথে বাতিল হয়ে যাবে।
+      </div>
+<div style="margin-bottom:14px;">
+<label style="font-size:0.78rem; font-weight:800; color:#334155; display:block; margin-bottom:6px;">অর্ডার বাতিলের কারণ নির্বাচন করুন:</label>
+<div style="display:flex; flex-direction:column; gap:6px; font-size:0.75rem;">
+<label style="display:flex; align-items:center; gap:8px; background:#fff; border:1px solid #cbd5e1; padding:7px 10px; border-radius:8px; cursor:pointer;">
+<input checked="" name="cancelReasonOpt" type="radio" value="ভুলবশত অর্ডার করা হয়েছে"/>
+<span>ভুলবশত অর্ডার করা হয়েছে</span>
+</label>
+<label style="display:flex; align-items:center; gap:8px; background:#fff; border:1px solid #cbd5e1; padding:7px 10px; border-radius:8px; cursor:pointer;">
+<input name="cancelReasonOpt" type="radio" value="সাইজ বা ডেলিভারি ঠিকানা পরিবর্তন করতে চাই"/>
+<span>সাইজ বা ডেলিভারি ঠিকানা পরিবর্তন করতে চাই</span>
+</label>
+<label style="display:flex; align-items:center; gap:8px; background:#fff; border:1px solid #cbd5e1; padding:7px 10px; border-radius:8px; cursor:pointer;">
+<input name="cancelReasonOpt" type="radio" value="ডেলিভারিতে দেরি হবে মনে হচ্ছে"/>
+<span>ডেলিভারিতে দেরি হবে মনে হচ্ছে</span>
+</label>
+<label style="display:flex; align-items:center; gap:8px; background:#fff; border:1px solid #cbd5e1; padding:7px 10px; border-radius:8px; cursor:pointer;">
+<input name="cancelReasonOpt" type="radio" value="অন্যত্র পছন্দসই পোশাক পেয়ে গেছি"/>
+<span>অন্যত্র পছন্দসই পোশাক পেয়ে গেছি</span>
+</label>
+<label style="display:flex; align-items:center; gap:8px; background:#fff; border:1px solid #cbd5e1; padding:7px 10px; border-radius:8px; cursor:pointer;">
+<input name="cancelReasonOpt" type="radio" value="অন্যান্য ব্যক্তিগত কারণ"/>
+<span>অন্যান্য ব্যক্তিগত কারণ</span>
+</label>
+</div>
+</div>
+<div style="margin-bottom:16px;">
+<label style="font-size:0.75rem; font-weight:800; color:#475569; display:block; margin-bottom:4px;">অন্য কোনো মন্তব্য (ঐচ্ছিক):</label>
+<textarea id="cancelCustomNote" placeholder="অর্ডার বাতিল সম্পর্কিত কোনো কথা থাকলে লিখুন..." rows="2" style="width:100%; padding:8px; border:1px solid #cbd5e1; border-radius:8px; font-size:0.75rem;"></textarea>
+</div>
+<div style="display:flex; gap:8px;">
+<button onclick="closeCancelModal()" style="flex:1; background:#f1f5f9; border:none; padding:10px; border-radius:8px; font-weight:700; font-size:0.8rem; cursor:pointer; color:#475569;">না, বাতিল নয়</button>
+<button onclick="confirmCancelOrder()" style="flex:2; background:#dc2626; color:#fff; border:none; padding:10px; border-radius:8px; font-weight:800; font-size:0.85rem; cursor:pointer;">
+          ✕ নিশ্চিত অর্ডার বাতিল করুন
+        </button>
+</div>
+</div>
+</div>
+
+
+
+<div id="comingSoonModal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.65); z-index:280; align-items:center; justify-content:center; padding:16px;">
+<div style="background:#fff; width:100%; max-width:380px; border-radius:18px; padding:20px; text-align:center; box-shadow:0 10px 25px rgba(0,0,0,0.2);">
+<div style="font-size:2.5rem; margin-bottom:10px;">✨</div>
+<div id="comingSoonTitle" style="font-size:1.1rem; font-weight:800; color:var(--primary); margin-bottom:6px;">লেডিস কালেকশন</div>
+<div id="comingSoonMsg" style="font-size:0.8rem; color:#64748b; line-height:1.4; margin-bottom:18px;">এই কালেকশনটি খুব শীঘ্রই স্টকে আসছে!</div>
+<div style="display:flex; flex-direction:column; gap:8px;">
+<a href="#" id="comingSoonWhatsAppBtn" style="background:#25d366; color:#fff; padding:11px; border-radius:10px; font-weight:700; font-size:0.85rem; text-decoration:none; display:flex; align-items:center; justify-content:center; gap:8px;" target="_blank">
+<i class="fa-brands fa-whatsapp" style="font-size:1.1rem;"></i> হোয়াটসঅ্যাপে প্রি-বুকিং করুন
+        </a>
+<button onclick="document.getElementById('comingSoonModal').style.display='none';" style="background:#f1f5f9; border:none; padding:10px; border-radius:10px; font-weight:700; font-size:0.82rem; color:#475569; cursor:pointer;" type="button">
+          বন্ধ করুন
+        </button>
+</div>
+</div>
+</div>
+
+<div id="customerAuthModal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.65); z-index:99999; align-items:center; justify-content:center; padding:16px; backdrop-filter:blur(4px);">
+<div onclick="event.stopPropagation()" style="background:#fff; width:100%; max-width:420px; border-radius:22px; overflow:hidden; box-shadow:0 12px 35px rgba(0,0,0,0.3); animation:fadeIn 0.2s ease-out;">
+<!-- Modal Header -->
+<div style="padding:16px 18px; background:linear-gradient(135deg, var(--primary), var(--primary-dark)); color:#fff; display:flex; justify-content:space-between; align-items:center;">
+<div style="font-size:1rem; font-weight:800; display:flex; align-items:center; gap:8px;">
+<i class="fa-solid fa-shield-halved"></i>
+<span id="t-authModalTitle">কাস্টমার ওটিপি লগইন</span>
+</div>
+<button onclick="closeCustomerAuthModal()" style="background:rgba(255,255,255,0.2); border:none; color:#fff; width:30px; height:30px; border-radius:50%; font-size:1rem; cursor:pointer; display:flex; align-items:center; justify-content:center;" title="Close" type="button"><i class="fa-solid fa-xmark"></i></button>
+</div>
+<!-- STEP 1: Phone Number Input (মোবাইল নম্বর ও ওটিপি রিকোয়েস্ট) -->
+<div id="otpStepPhoneSection" style="padding:20px;">
+<div style="text-align:center; margin-bottom:16px;">
+<div style="width:52px; height:52px; border-radius:50%; background:#fdf4ff; color:var(--primary); font-size:1.6rem; display:inline-flex; align-items:center; justify-content:center; margin-bottom:8px; border:2px solid #f0abfc;">
+<i class="fa-solid fa-mobile-screen-button"></i>
+</div>
+<div id="t-otpPhoneHeading" style="font-size:1rem; font-weight:800; color:#0f172a;">মোবাইল নম্বর লিখুন</div>
+<div id="t-otpPhoneSub" style="font-size:0.75rem; color:#64748b; margin-top:4px;">আপনার ১০ ডিজিটের মোবাইল নম্বরে ৪-সংখ্যার ওটিপি পাঠানো হবে</div>
+</div>
+<div style="margin-bottom:16px;">
+<label id="t-authLblPhone" style="font-size:0.8rem; font-weight:800; color:#334155; display:block; margin-bottom:6px;">
+            মোবাইল নম্বর (১০ ডিজিট) *
+          </label>
+<div id="otpPhoneWrap" style="display:flex; align-items:center; border:2px solid #cbd5e1; border-radius:12px; overflow:hidden; background:#fff;">
+<span style="background:#f8fafc; padding:12px 14px; font-weight:800; font-size:0.95rem; color:#475569; border-right:1.5px solid #e2e8f0;">+91</span>
+<input id="auth_phone" maxlength="10" placeholder="যেমন: 9832100000" style="width:100%; border:none; padding:12px 14px; font-size:1.05rem; font-weight:800; letter-spacing:1px; outline:none; color:#0f172a;" type="tel"/>
+</div>
+</div>
+<button id="btnSendOtp" onclick="sendCustomerOtp()" style="width:100%; background:linear-gradient(135deg, var(--primary), var(--primary-dark)); color:#fff; border:none; padding:13px; border-radius:12px; font-weight:800; font-size:0.95rem; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:8px; box-shadow:0 4px 12px rgba(147,51,234,0.35);" type="button">
+<i class="fa-solid fa-paper-plane"></i> <span id="t-btnSendOtpText">ওটিপি কোড পাঠান</span>
+</button>
+<div style="margin-top:14px; text-align:center; font-size:0.72rem; color:#64748b; display:flex; align-items:center; justify-content:center; gap:6px;">
+<i class="fa-solid fa-lock" style="color:#10b981;"></i> ১০০% নিরাপদ ও কোনো পাসওয়ার্ড মনে রাখার প্রয়োজন নেই
+        </div>
+</div>
+<!-- STEP 2: OTP Verification & Profile Info (ওটিপি যাচাই ও প্রোফাইল নিশ্চিতকরণ) -->
+<div id="otpStepVerifySection" style="display:none; padding:20px;">
+<!-- Live Alert Notification of OTP (ওটিপি প্রাপ্তি সহজ করার জন্য লাইভ ব্যানার) -->
+<div id="otpLiveNotificationBanner" style="background:linear-gradient(135deg, #0f172a, #1e293b); color:#fff; border-radius:14px; padding:12px 14px; margin-bottom:14px; border:1.5px solid #6366f1; box-shadow:0 4px 15px rgba(0,0,0,0.25);">
+<div style="display:flex; justify-content:space-between; align-items:center; font-size:0.72rem; color:#94a3b8;">
+<span><i class="fa-solid fa-comment-sms" style="color:#818cf8;"></i> SMS Alert • Nisha Creations</span>
+<span style="background:#3730a3; color:#c7d2fe; font-size:0.65rem; padding:2px 6px; border-radius:6px;">সবেমাত্র পাঠানো হয়েছে</span>
+</div>
+<div style="font-size:0.85rem; font-weight:700; margin-top:6px; color:#f8fafc;">
+            আপনার লগইন ওটিপি কোড: <span id="liveOtpDisplayCode" style="font-size:1.25rem; font-weight:900; color:#fde047; letter-spacing:4px; background:rgba(253,224,71,0.15); padding:2px 8px; border-radius:6px; border:1px dashed #fde047; display:inline-block; margin-left:4px;">1234</span>
+</div>
+</div>
+<div style="text-align:center; margin-bottom:12px;">
+<div style="font-size:0.82rem; font-weight:700; color:#475569;">
+<span id="displaySentToPhone">+91 9641405426</span> নম্বরে ওটিপি পাঠানো হয়েছে
+          </div>
+<button onclick="backToPhoneStep()" style="background:none; border:none; color:var(--primary); font-size:0.74rem; font-weight:800; cursor:pointer; margin-top:3px; text-decoration:underline;" type="button">
+            ← নম্বর পরিবর্তন করুন
+          </button>
+</div>
+<!-- 4-Digit OTP Inputs -->
+<div style="margin-bottom:14px;">
+<label id="t-lblEnterOtp" style="font-size:0.78rem; font-weight:800; color:#334155; display:block; margin-bottom:6px; text-align:center;">
+            ৪ ডিজিটের ওটিপি লিখুন *
+          </label>
+<div style="display:flex; justify-content:center; gap:10px;">
+<input class="otp-box" id="otp_box_1" maxlength="1" oninput="handleOtpBoxInput(1)" onkeydown="handleOtpBoxKey(event, 1)" style="width:48px; height:50px; text-align:center; font-size:1.4rem; font-weight:900; border:2px solid #cbd5e1; border-radius:12px; outline:none; color:#0f172a; background:#f8fafc;" type="tel"/>
+<input class="otp-box" id="otp_box_2" maxlength="1" oninput="handleOtpBoxInput(2)" onkeydown="handleOtpBoxKey(event, 2)" style="width:48px; height:50px; text-align:center; font-size:1.4rem; font-weight:900; border:2px solid #cbd5e1; border-radius:12px; outline:none; color:#0f172a; background:#f8fafc;" type="tel"/>
+<input class="otp-box" id="otp_box_3" maxlength="1" oninput="handleOtpBoxInput(3)" onkeydown="handleOtpBoxKey(event, 3)" style="width:48px; height:50px; text-align:center; font-size:1.4rem; font-weight:900; border:2px solid #cbd5e1; border-radius:12px; outline:none; color:#0f172a; background:#f8fafc;" type="tel"/>
+<input class="otp-box" id="otp_box_4" maxlength="1" oninput="handleOtpBoxInput(4)" onkeydown="handleOtpBoxKey(event, 4)" style="width:48px; height:50px; text-align:center; font-size:1.4rem; font-weight:900; border:2px solid #cbd5e1; border-radius:12px; outline:none; color:#0f172a; background:#f8fafc;" type="tel"/>
+</div>
+<!-- One Tap Auto-Fill Button -->
+<div style="text-align:center; margin-top:8px;">
+<button onclick="autoFillOtp()" style="background:#fdf4ff; border:1px solid #d8b4fe; color:var(--primary); font-size:0.75rem; font-weight:800; padding:4px 10px; border-radius:8px; cursor:pointer;" type="button">
+              ⚡ <span id="t-btnAutoFillOtp">এক-ক্লিকে ওটিপি বসান</span> (<span id="autoFillOtpVal">1234</span>)
+            </button>
+</div>
+</div>
+<!-- Name & Address -->
+<div id="otpProfileFields" style="border-top:1px solid #f1f5f9; padding-top:12px; margin-top:10px;">
+<div style="margin-bottom:10px;">
+<label id="t-authLblName" style="font-size:0.78rem; font-weight:800; color:#334155; display:block; margin-bottom:4px;">
+              আপনার পুরো নাম *
+            </label>
+<input id="auth_name" placeholder="যেমন: Nisha Ghanti" style="width:100%; padding:10px 12px; border:1.5px solid #cbd5e1; border-radius:10px; font-size:0.9rem; font-weight:700; color:#0f172a; outline:none;" type="text"/>
+</div>
+<div style="margin-bottom:12px;">
+  <div style="font-size:0.78rem; font-weight:800; color:#334155; margin-bottom:8px;">
+    <i class="fa-solid fa-map-location-dot" style="color:var(--primary);"></i> সম্পূর্ণ ডেলিভারি ঠিকানা ও ল্যান্ডমার্ক *
+  </div>
+  
+  <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:8px;">
+    <div>
+      <label style="font-size:0.72rem; color:#64748b; font-weight:700;">বাড়ি নং / ফ্ল্যাট / বাড়ির নাম *</label>
+      <input type="text" id="auth_house" required placeholder="যেমন: বাড়ি নং ১২ / ঘাঁটি বাড়ি" style="width:100%; padding:8px 10px; border:1.5px solid #cbd5e1; border-radius:8px; font-size:0.82rem; font-weight:700;">
+    </div>
+    <div>
+      <label style="font-size:0.72rem; color:#64748b; font-weight:700;">রাস্তা / পাড়া / লেন *</label>
+      <input type="text" id="auth_road" required placeholder="যেমন: ভগবতী পাড়া / চাঁদনী রোড" style="width:100%; padding:8px 10px; border:1.5px solid #cbd5e1; border-radius:8px; font-size:0.82rem; font-weight:700;">
+    </div>
+  </div>
+
+  <div style="margin-bottom:8px;">
+    <label style="font-size:0.72rem; color:#b45309; font-weight:800;">
+      🏫 বিখ্যাত ল্যান্ডমার্ক (স্কুল / কলেজ / মন্দির / মোড়) *
+    </label>
+    <input type="text" id="auth_landmark" required placeholder="যেমন: আমতা হাই স্কুলের কাছে / রামকৃষ্ণ মন্দির মোড়" style="width:100%; padding:8px 10px; border:1.5px solid #f59e0b; background:#fffbeb; border-radius:8px; font-size:0.82rem; font-weight:700;">
+    <div style="font-size:0.68rem; color:#b45309; margin-top:2px;">💡 ল্যান্ডমার্ক দিলে ডেলিভারি বয় খুব দ্রুত বাড়ি খুঁজে পাবে</div>
+  </div>
+
+  <div style="display:grid; grid-template-columns:1.2fr 0.8fr; gap:8px; margin-bottom:8px;">
+    <div>
+      <label style="font-size:0.72rem; color:#64748b; font-weight:700;">গ্রাম / শহর / এলাকা *</label>
+      <input type="text" id="auth_village" required placeholder="যেমন: আমতা / জয়পুর / রসপুর" style="width:100%; padding:8px 10px; border:1.5px solid #cbd5e1; border-radius:8px; font-size:0.82rem;">
+    </div>
+    <div>
+      <label style="font-size:0.72rem; color:#64748b; font-weight:700;">পিনকোড *</label>
+      <input type="tel" id="auth_pincode" maxlength="6" value="711401" style="width:100%; padding:8px 10px; border:1.5px solid #cbd5e1; border-radius:8px; font-size:0.82rem; font-weight:700;">
+    </div>
+  </div>
+
+  <div style="display:flex; justify-content:space-between; align-items:center; margin-top:6px;">
+    <button type="button" onclick="detectCustomerGpsLocation()" style="background:#ecfdf5; border:1px solid #10b981; color:#065f46; font-size:0.7rem; font-weight:800; padding:4px 10px; border-radius:6px; cursor:pointer; display:inline-flex; align-items:center; gap:4px;">
+      <i class="fa-solid fa-location-crosshairs"></i> 📍 লাইভ GPS লোকেশন যোগ করুন
+    </button>
+    <div id="authGpsStatus" style="font-size:0.68rem; color:#15803d; font-weight:700;"></div>
+  </div>
+  <input type="hidden" id="auth_addr" value="">
+</div>
+</div>
+</div>
+<div style="display:flex; gap:8px; margin-top:14px;">
+<button onclick="verifyCustomerOtpAndLogin()" style="flex:1; background:linear-gradient(135deg, var(--primary), var(--primary-dark)); color:#fff; border:none; padding:12px; border-radius:10px; font-weight:800; font-size:0.9rem; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:6px; box-shadow:0 3px 10px rgba(147,51,234,0.35);" type="button">
+<i class="fa-solid fa-circle-check"></i> <span id="t-btnVerifyOtpText">ওটিপি যাচাই ও লগইন সম্পন্ন করুন</span>
+</button>
+<button onclick="closeCustomerAuthModal()" style="background:#f1f5f9; color:#475569; border:none; padding:12px 14px; border-radius:10px; font-weight:700; font-size:0.85rem; cursor:pointer;" type="button">
+            বাতিল
+          </button>
+</div>
+<div style="margin-top:10px; text-align:center;">
+<button id="btnResendOtpTimer" onclick="resendCustomerOtp()" style="background:none; border:none; font-size:0.74rem; color:#64748b; font-weight:700; cursor:pointer;" type="button">
+            ওটিপি পাননি? <span style="color:var(--primary); font-weight:800;">পুনরায় ওটিপি পাঠান</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+  <!-- Google Firebase Cloud Firestore (Nisha Creations) -->
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+  <script src="firebase-config.js?v=20260923_v16"></script>
+  <script src="products.js?v=20260923_v16"></script>
+  <script src="app.js?v=20260923_v16"></script>
+
+  <!-- Secret Owner PIN Dialog (Hidden from customers) -->
+  <div id="secretOwnerModal" style="display:none; position:fixed; inset:0; background:rgba(15,23,42,0.8); z-index:999999; align-items:center; justify-content:center; padding:16px;">
+    <div style="background:#1e293b; border:1.5px solid #38bdf8; border-radius:18px; max-width:340px; width:100%; padding:20px; text-align:center; box-shadow:0 10px 30px rgba(0,0,0,0.5);">
+      <div style="width:44px; height:44px; border-radius:12px; background:#0284c7; color:#fff; display:flex; align-items:center; justify-content:center; font-size:1.3rem; margin:0 auto 10px auto;">
+        <i class="fa-solid fa-user-shield"></i>
+      </div>
+      <h3 style="font-size:1.05rem; font-weight:800; color:#fff; margin-bottom:4px;">গোপন অ্যাডমিন ও পোর্টাল</h3>
+      <p style="font-size:0.75rem; color:#94a3b8; margin-bottom:14px;">মালিকের সিক্রেট পিন কোড দিন (ডিফল্ট: 1234):</p>
+      
+      <input type="password" id="secretOwnerPinInput" maxlength="6" placeholder="PIN কোড" style="width:100%; padding:10px; background:#0f172a; border:1.5px solid #334155; border-radius:10px; color:#fde047; font-size:1.2rem; font-weight:800; text-align:center; letter-spacing:4px; margin-bottom:14px;">
+      
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:10px;">
+        <button type="button" onclick="verifySecretPinAndGo('admin.html')" style="background:#4338ca; color:#fff; border:none; padding:10px; border-radius:10px; font-weight:800; font-size:0.8rem; cursor:pointer;">
+          <i class="fa-solid fa-gauge-high"></i> অ্যাডমিন প্যানেল
+        </button>
+        <button type="button" onclick="verifySecretPinAndGo('delivery.html')" style="background:#0284c7; color:#fff; border:none; padding:10px; border-radius:10px; font-weight:800; font-size:0.8rem; cursor:pointer;">
+          <i class="fa-solid fa-motorcycle"></i> ডেলিভারি হাব
+        </button>
+      </div>
+      <button type="button" onclick="closeSecretOwnerModal()" style="background:transparent; border:none; color:#94a3b8; font-size:0.8rem; cursor:pointer; font-weight:700;">
+        বাতিল করুন
+      </button>
+    </div>
+  </div>
+
+  <script>
+    let secretLogoTapCount = 0;
+    let secretLogoTapTimer = null;
+
+    function triggerSecretOwnerAccess() {
+      secretLogoTapCount++;
+      clearTimeout(secretLogoTapTimer);
+      secretLogoTapTimer = setTimeout(() => {
+        secretLogoTapCount = 0;
+      }, 1500);
+
+      if (secretLogoTapCount >= 3) {
+        secretLogoTapCount = 0;
+        openSecretOwnerModal();
+      }
+    }
+
+    function openSecretOwnerModal() {
+      const m = document.getElementById('secretOwnerModal');
+      const inp = document.getElementById('secretOwnerPinInput');
+      if (m) {
+        m.style.display = 'flex';
+        if (inp) { inp.value = ''; setTimeout(() => inp.focus(), 200); }
+      }
+    }
+
+    function closeSecretOwnerModal() {
+      const m = document.getElementById('secretOwnerModal');
+      if (m) m.style.display = 'none';
+    }
+
+    function verifySecretPinAndGo(targetPage) {
+      const pin = (document.getElementById('secretOwnerPinInput') ? document.getElementById('secretOwnerPinInput').value.trim() : '');
+      if (pin === '1234') {
+        closeSecretOwnerModal();
+        window.location.href = targetPage;
+      } else {
+        alert("ভুল পিন কোড! সঠিক পিন দিন (ডিফল্ট: 1234)");
+      }
+    }
+  </script>
+
+</body>
+</html>
