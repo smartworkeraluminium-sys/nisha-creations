@@ -369,7 +369,7 @@ try {
         cartModalTitle: "আপনার চেকআউট",
         step1Title: "অর্ডার ও ঠিকানা",
         step2Title: "পেমেন্ট ও ছাড়",
-        cartOfferRibbonSub: "অনলাইনে পেমেন্ট করলে সাথে সাথে অতিরিক্ত ₹38 ছাড় পাবেন!",
+        cartOfferRibbonSub: "দ্রুত ও নিরাপদ হোম ডেলিভারি পেতে ঠিকানা নিশ্চিত করুন",
         btnSaveAddrInline: "ঠিকানা সেভ করুন",
         cartDeliveryNote: "আমতায় দ্রুত ফ্রি ডেলিভারি: আজকের মধ্যে পাঠানো হবে",
         cartItemDetailsHeader: "অর্ডার করা পণ্যের বিবরণ",
@@ -5824,10 +5824,17 @@ function loadAndRenderBanners() {
     }
   } catch(e) {}
 
-  // If banners are empty or only contain logo.png placeholders, upgrade to real fashion banners!
-  if (!Array.isArray(bannerList) || bannerList.length === 0 || bannerList.every(b => b.image === 'logo.png')) {
+  // If banners are empty, upgrade to real fashion banners with models
+  if (!Array.isArray(bannerList) || bannerList.length === 0) {
     bannerList = RELIABLE_FASHION_BANNERS;
     try { localStorage.setItem('nc_banners', JSON.stringify(bannerList)); } catch(e){}
+  } else {
+    // Replace any legacy empty or logo.png with gorgeous saree model photos
+    bannerList.forEach((b, i) => {
+      if (!b.image || b.image === 'logo.png' || b.image === '') {
+        b.image = RELIABLE_FASHION_BANNERS[i % RELIABLE_FASHION_BANNERS.length].image;
+      }
+    });
   }
 
   if (false) {
@@ -5926,7 +5933,7 @@ function loadAndRenderBanners() {
         </div>
       </div>
       <div class="banner-slide-image-wrap">
-        <img class="banner-slide-img" src="${b.image || 'logo.png'}" alt="${b.title || 'Banner'}">
+        <img class="banner-slide-img" src="${(b.image && b.image !== 'logo.png') ? b.image : (RELIABLE_FASHION_BANNERS[idx % RELIABLE_FASHION_BANNERS.length].image)}" alt="${b.title || 'Fashion Banner'}" onerror="this.src=RELIABLE_FASHION_BANNERS[0].image">
       </div>
     `;
     track.appendChild(slide);
@@ -6251,36 +6258,41 @@ var selectedPayMethod = 'UPI';
 // Other Pincodes (দূরবর্তী এলাকা) = ₹90
 // Platform Fee = ফিক্সড ₹10
 // =========================================================================
+// =========================================================================
+// STEALTH DELIVERY ENGINE:
+// 1. CUSTOMER PERSPECTIVE: 100% FREE HOME DELIVERY EVERYWHERE! (কাস্টমার যেন কোনোভাবেই না টের পায়)
+// 2. B2B / SETTLEMENT PERSPECTIVE: NO DELIVERY IS FREE! (অ্যাডমিন ও দোকানদারের মধ্যে ডেলিভারি ফি ধার্য)
+//    - 711401 (আমতা সদর): সেন্ট্রাল ডেলিভারি ফি ₹৫০ (দোকানদারের প্রাপ্য থেকে অ্যাডমিন কেটে নেবে)
+//    - 711402 - 711414 (পার্শ্ববর্তী এলাকা): সেন্ট্রাল ডেলিভারি ফি ₹৬০
+//    - Other Pincodes (দূরবর্তী এলাকা): সেন্ট্রাল ডেলিভারি ফি ₹৯০
+// =========================================================================
 function calcPincodeDeliveryCharge(pin) {
   const cleanPin = String(pin || '').trim();
-  if (cleanPin === '711401' || cleanPin === '') {
-    return {
-      fee: 0,
-      label: '<span style="color:#15803d; font-weight:800;"><span style="text-decoration:line-through; color:#94a3b8; font-weight:normal; margin-right:4px;">₹৬০</span>FREE (ফ্রি)</span>',
-      badge: '✓ আমতা লোকাল (ফ্রি ডেলিভারি)',
-      badgeColor: '#dcfce7',
-      badgeText: '#15803d',
-      border: '#86efac'
-    };
-  }
+  let internalFee = 50; // Amta Local default B2B delivery fee
+  let areaName = 'আমতা সদর';
+
   const num = parseInt(cleanPin, 10);
-  if (!isNaN(num) && num >= 711402 && num <= 711414) {
-    return {
-      fee: 60,
-      label: '<span style="color:#b45309; font-weight:800;">+₹60</span>',
-      badge: '🚚 পার্শ্ববর্তী এলাকা (+₹৬০)',
-      badgeColor: '#fef3c7',
-      badgeText: '#92400e',
-      border: '#fcd34d'
-    };
+  if (cleanPin === '711401' || cleanPin === '') {
+    internalFee = 50;
+    areaName = 'আমতা সদর (লোকাল)';
+  } else if (!isNaN(num) && num >= 711402 && num <= 711414) {
+    internalFee = 60;
+    areaName = 'পার্শ্ববর্তী গ্রামীণ এলাকা';
+  } else {
+    internalFee = 90;
+    areaName = 'দূরবর্তী জেলা / এলাকা';
   }
+
   return {
-    fee: 90,
-    label: '<span style="color:#dc2626; font-weight:800;">+₹90</span>',
-    badge: '🚀 দূরবর্তী এলাকা (+₹৯০)',
-    badgeColor: '#fee2e2',
-    badgeText: '#b91c1c',
-    border: '#fca5a5'
+    customerFee: 0, // Customer pays ZERO delivery fee!
+    fee: 0,         // For backwards compatibility in customer checkout
+    internalFee: internalFee, // Admin vs Seller internal delivery fee
+    areaName: areaName,
+    label: '<span style="color:#15803d; font-weight:800;"><span style="text-decoration:line-through; color:#94a3b8; font-weight:normal; margin-right:4px;">₹৬০</span>FREE (১০০% ফ্রি হোম ডেলিভারি)</span>',
+    badge: '✓ আপনার ঠিকানায় ১০০% ফ্রি হোম ডেলিভারি',
+    badgeColor: '#dcfce7',
+    badgeText: '#15803d',
+    border: '#86efac'
   };
 }
 
@@ -6350,7 +6362,9 @@ function updateCheckoutPriceDetails() {
     badge.style.borderColor = delivInfo.border;
   }
 
-  const finalPayable = Math.max(0, rawSubtotal - coinDiscount - returnDiscount + platformFee + deliveryCharge);
+  // Customer bill does NOT show internal platform fees.
+  // Delivery Charge is FREE for 711401, ₹60 for 711402-711414, and ₹90 for others.
+  const finalPayable = Math.max(0, rawSubtotal - coinDiscount - returnDiscount + deliveryCharge);
 
   // Update DOM elements in Price Details table
   const elTotalMrp = document.getElementById('billTotalMrp');
@@ -6375,17 +6389,17 @@ function updateCheckoutPriceDetails() {
   const elBillProdTotal = document.getElementById('billStep1ProdTotal');
   if (elBillProdTotal) elBillProdTotal.textContent = `₹${rawSubtotal}`;
 
-  // Update Step 2 Payment options as well
+  // Update Step 2 Payment options: NO EXTRA 38 DISCOUNT! Exact amount!
   const payCodAmount = document.getElementById('payCodFinalAmount');
   const payUpiAmount = document.getElementById('payUpiFinalAmount');
   const payUpiStriked = document.getElementById('payUpiStrikedAmount');
 
   const codTotal = finalPayable;
-  const upiTotal = Math.max(0, finalPayable - 38);
+  const upiTotal = finalPayable; // NO 38 minus! Exact bill amount!
 
   if (payCodAmount) payCodAmount.textContent = `₹${codTotal}`;
   if (payUpiAmount) payUpiAmount.textContent = `₹${upiTotal}`;
-  if (payUpiStriked) payUpiStriked.textContent = `₹${codTotal}`;
+  if (payUpiStriked) payUpiStriked.style.display = 'none';
 }
 
 
@@ -6526,9 +6540,13 @@ function goToCheckoutStep2() {
   if (ind2) ind2.classList.add('active');
 
   const rawSubtotal = cart.reduce((sum, item) => sum + (item.price || 0), 0);
-  const payableBase = Math.max(0, rawSubtotal - (appliedCoinDiscountRupees || 0));
+  const currentPin = (pinVal || localStorage.getItem('nc_cust_pincode') || '711401').trim();
+  const delivInfo = calcPincodeDeliveryCharge(currentPin);
+  const deliveryCharge = (rawSubtotal > 0) ? delivInfo.fee : 0;
+  const payableBase = Math.max(0, rawSubtotal - (appliedCoinDiscountRupees || 0) + deliveryCharge);
+  
   const codTotal = payableBase;
-  const upiTotal = Math.max(0, payableBase - 38);
+  const upiTotal = payableBase; // NO 38 minus! Exact bill amount!
 
   const payCodAmount = document.getElementById('payCodFinalAmount');
   const payUpiAmount = document.getElementById('payUpiFinalAmount');
@@ -6537,7 +6555,7 @@ function goToCheckoutStep2() {
 
   if (payCodAmount) payCodAmount.textContent = `₹${codTotal}`;
   if (payUpiAmount) payUpiAmount.textContent = `₹${upiTotal}`;
-  if (payUpiStriked) payUpiStriked.textContent = `₹${codTotal}`;
+  if (payUpiStriked) payUpiStriked.style.display = 'none';
     const officialUpiId = localStorage.getItem('nc_official_upi_id') || '9239413517-1@naviaxis';
   const payeeName = 'Nisha Singh';
   if (upiLink) {
@@ -6616,19 +6634,26 @@ function submitFinalOrder() {
   const orderId = "NC-" + Math.floor(1000 + Math.random() * 9000);
   const rawSubtotal = cart.reduce((sum, item) => sum + (item.price || 0), 0);
   
-  // Platform fee & dynamic pincode delivery fee
-  const platformFee = (rawSubtotal > 0) ? 10 : 0;
+  // Pincode-based delivery fee: 711401 is 0, 711402-711414 is 60, others 90
   const delivInfo = calcPincodeDeliveryCharge(pin);
-  const deliveryCharge = (rawSubtotal > 0) ? delivInfo.fee : 0;
+  // কাস্টমারের জন্য ডেলিভারি ফি সর্বদা ০ (ফ্রি)
+  const customerDelivFee = 0;
+  // অ্যাডমিন ও দোকানদারের মধ্যকার সেন্ট্রাল ডেলিভারি ফি (আমতা ₹৫০, পার্শ্ববর্তী ₹৬০, দূরবর্তী ₹৯০)
+  const internalDeliveryFee = delivInfo.internalFee || 50;
+  const platformFee = 10; // Recorded internally
 
-  const payableBase = Math.max(0, rawSubtotal - (appliedCoinDiscountRupees || 0) + platformFee + deliveryCharge);
+  // কাস্টমার শুধুমাত্র প্রোডাক্টের দাম পরিশোধ করবে (১০০% ফ্রি ডেলিভারি)
+  const payableBase = Math.max(0, rawSubtotal - (appliedCoinDiscountRupees || 0));
 
   const isUpi = (selectedPayMethod === 'UPI');
-  const finalTotal = isUpi ? Math.max(0, payableBase - 38) : payableBase;
-  const onlineSavings = isUpi ? 38 : 0;
-  const totalSavings = onlineSavings + (appliedCoinDiscountRupees || 0);
+  const finalTotal = payableBase;
+  const onlineSavings = 0;
+  const totalSavings = (appliedCoinDiscountRupees || 0);
 
   const dateStr = new Date().toLocaleDateString('bn-IN') + ", " + new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+
+  // দোকানদারের নেট প্রাপ্য = কাস্টমার সেলস - সেন্ট্রাল ডেলিভারি ফি - প্ল্যাটফর্ম ফি
+  const sellerPayout = Math.max(0, finalTotal - internalDeliveryFee - platformFee);
 
   const newOrder = {
     id: orderId,
@@ -6643,10 +6668,12 @@ function submitFinalOrder() {
     pincode: pin,
     items: [...cart],
     platformFee: platformFee,
-    deliveryCharge: deliveryCharge,
+    deliveryCharge: internalDeliveryFee, // B2B internal delivery charge (দোকানদারের থেকে কাটা হবে)
+    customerDeliveryFee: 0,             // Customer sees 0
     rawSubtotal: rawSubtotal,
-    total: finalTotal,
+    total: finalTotal,                  // Customer Total (Exact product price)
     totalAmount: finalTotal,
+    sellerPayout: sellerPayout,         // দোকানদারের প্রাপ্য
     coinsUsed: appliedCoinsCount || 0,
     coinDiscount: appliedCoinDiscountRupees || 0,
     savings: totalSavings,
@@ -6983,9 +7010,13 @@ function selectPaymentMethod(method) {
   const confirmBtnLbl = document.getElementById('finalConfirmBtnLabel');
 
   const rawSubtotal = cart.reduce((sum, item) => sum + (item.price || 0), 0);
-  const payableBase = Math.max(0, rawSubtotal - (appliedCoinDiscountRupees || 0));
+  const currentPin = (document.getElementById('cust_pincode')?.value || localStorage.getItem('nc_cust_pincode') || '711401').trim();
+  const delivInfo = calcPincodeDeliveryCharge(currentPin);
+  const deliveryCharge = (rawSubtotal > 0) ? delivInfo.fee : 0;
+  const payableBase = Math.max(0, rawSubtotal - (appliedCoinDiscountRupees || 0) + deliveryCharge);
+  
   const codTotal = payableBase;
-  const upiTotal = Math.max(0, payableBase - 38);
+  const upiTotal = payableBase;
 
   const payCodAmount = document.getElementById('payCodFinalAmount');
   const payUpiAmount = document.getElementById('payUpiFinalAmount');
@@ -6993,7 +7024,8 @@ function selectPaymentMethod(method) {
 
   if (payCodAmount) payCodAmount.textContent = `₹${codTotal}`;
   if (payUpiAmount) payUpiAmount.textContent = `₹${upiTotal}`;
-  if (payUpiStriked) payUpiStriked.textContent = `₹${codTotal}`;
+  if (payUpiStriked) payUpiStriked.style.display = 'none';
+  if (savingsContainer) savingsContainer.style.display = 'none';
 
   if (method === 'COD') {
     selectedPayMethod = 'COD';

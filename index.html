@@ -746,7 +746,7 @@
 
     <!-- 6. Coupons & Offers Card (ছবি 1 হুবহু) -->
     <div class="nc-section-title" id="t-ncCouponsTitle">Coupons & Offers</div>
-    <div class="nc-coupons-card" onclick="alert(currentLang === 'en' ? 'Special Discount Coupons:\n1. PUJA50 (Flat ₹50 OFF)\n2. SAVE38 (Extra ₹38 OFF on UPI)\n3. BOUTIQUE100 (₹100 Mega Savings)' : 'স্পেশাল অফার কুপন:\n1. PUJA50 (ফ্ল্যাট ₹50 ছাড়)\n2. SAVE38 (অনলাইন ইউপিআই পেমেন্টে ₹38 ছাড়)\n3. BOUTIQUE100 (₹100 মেগা ছাড়)')">
+    <div class="nc-coupons-card" onclick="alert(currentLang === 'en' ? 'Special Discount Coupons:\n1. PUJA50 (Flat ₹50 OFF)\n2. AMTAFREE (আমতা লোকাল ফ্রি ডেলিভারি)\n3. BOUTIQUE100 (₹100 Mega Savings)' : 'স্পেশাল অফার কুপন:\n1. PUJA50 (ফ্ল্যাট ₹50 ছাড়)\n2. AMTAFREE (আমতা লোকাল ফ্রি ডেলিভারি)\n3. BOUTIQUE100 (₹100 মেগা ছাড়)')">
       <div class="nc-coupon-icon-circle">
         <i class="fa-solid fa-percent"></i>
       </div>
@@ -980,7 +980,7 @@
 <!-- Top Wave Offer Ribbon (Nisha Special) -->
 <div class="top-offer-wave-ribbon" style="display:flex; justify-content:space-between; align-items:center; background:linear-gradient(135deg, #15803d, #16a34a); color:#fff; padding:8px 14px; border-radius:10px; margin-bottom:12px; font-size:0.78rem;">
   <span style="display:flex; align-items:center; gap:6px; font-weight:800;">
-    <i class="fa-solid fa-bolt" style="color:#fde047;"></i> <span id="t-cartOfferRibbonMain">অনলাইন পেমেন্টে ₹38 ছাড়</span>
+    <i class="fa-solid fa-bolt" style="color:#fde047;"></i> <span id="t-cartOfferRibbonMain">এক্সপ্রেস হোম ডেলিভারি</span>
   </span>
   <span id="t-cartOfferRibbonSub" style="font-size:0.72rem; opacity:0.95; font-weight:700;">UPI / GPay / PhonePe প্রযোজ্য</span>
 </div>
@@ -1084,10 +1084,7 @@
 <span id="t-lblReturnDiscount">স্মার্ট রিটার্ন ছাড় (Wrong/Defective):</span>
 <span id="billReturnDiscountVal">-₹10</span>
 </div>
-<div style="display:flex; justify-content:space-between; font-size:0.78rem; color:#475569; margin-bottom:4px;">
-<span id="t-lblPlatformFee">প্ল্যাটফর্ম সার্ভিস চার্জ (Platform Fee):</span>
-<span style="font-weight:800; color:var(--primary);">+₹10</span>
-</div>
+
 <div style="display:flex; justify-content:space-between; font-size:0.78rem; color:#16a34a; margin-bottom:4px;">
 <span id="t-lblDeliveryFee">ডেলিভারি চার্জ (পিন কোড ভিত্তিক):</span>
 <span id="billDeliveryChargeVal" style="font-weight:800;">~~₹৬০~~ FREE (ফ্রি)</span>
@@ -1115,7 +1112,7 @@
 <div>
 <div style="display:flex; align-items:center;">
 <span id="t-cartUpiTitle" style="font-size:0.88rem; font-weight:800; color:#0f172a;">অনলাইন পেমেন্ট (UPI)</span>
-<span class="upi-instant-save-badge">Save ₹38</span>
+<span class="upi-instant-save-badge" style="background:#dcfce7; color:#15803d; border-color:#86efac;">১০০% সুরক্ষিত</span>
 </div>
 <div style="font-size:0.72rem; color:#16a34a; font-weight:700; margin-top:2px;">
                   PhonePe / Google Pay / Paytm / QR Code
@@ -1180,7 +1177,7 @@
 <!-- Savings Guarantee Banner -->
 <div style="background:#f0fdf4; border:1px solid #bbf7d0; border-radius:8px; padding:10px; font-size:0.75rem; color:#15803d; margin-bottom:14px; display:flex; align-items:center; gap:8px;">
 <i class="fa-solid fa-shield-halved" style="font-size:1.2rem;"></i>
-<span id="paymentSavingsBannerText">অনলাইনে পেমেন্ট করে আপনি মোট <strong>₹38 অতিরিক্ত সাশ্রয়</strong> করছেন!</span>
+<span id="paymentSavingsBannerText" style="display:none;"></span>
 </div>
 <!-- Final Order Confirmation Button -->
 <button onclick="submitFinalOrder()" style="width:100%; background:linear-gradient(135deg, #16a34a, #15803d); color:#fff; border:none; padding:14px; border-radius:12px; font-weight:800; font-size:1rem; cursor:pointer; box-shadow:0 4px 14px rgba(22,163,74,0.35); display:flex; align-items:center; justify-content:center; gap:8px;" type="button">

@@ -1142,6 +1142,8 @@
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
   <script src="firebase-config.js?v=20260919_v1"></script>
   <script src="products.js?v=20260919_v2"></script>
+  <!-- HTML5 QR Code & Barcode Scanner -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html5-qrcode/2.3.8/html5-qrcode.min.js"></script>
 </head>
 <body>
 
@@ -1454,6 +1456,63 @@
           <button type="button" class="btn-fast-action" id="btnFilterPayUpi" onclick="filterAdminByPayment('UPI', this)" style="background:#1e293b; border:1px solid #334155; color:#34d399; font-size:0.75rem; padding:6px 10px;">
             📲 শুধুমাত্র UPI
           </button>
+        </div>
+      </div>
+
+      
+      <!-- ================= ⚡ ADMIN SUPERFAST 1-CLICK PRINT & SCAN HUB ================= -->
+      <div style="background:linear-gradient(135deg, #090d16, #1e293b); border:1.5px solid #3b82f6; border-radius:14px; padding:14px 16px; margin-bottom:16px; box-shadow:0 8px 20px rgba(0,0,0,0.15); color:#fff;">
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
+          <div>
+            <div style="font-weight:900; font-size:1.02rem; display:flex; align-items:center; gap:8px;">
+              <span style="background:linear-gradient(135deg, #059669, #10b981); color:#fff; width:30px; height:30px; border-radius:8px; display:inline-flex; align-items:center; justify-content:center; font-size:0.95rem; box-shadow:0 2px 6px rgba(16,185,129,0.3);">⚡</span>
+              <span>ওনার ১-ক্লিক ফাস্ট প্রিন্ট ও অটো-স্ক্যানার হাব</span>
+            </div>
+            <div style="font-size:0.75rem; color:#94a3b8; margin-top:2px;">
+              বিল প্রিন্ট করতে আর সময় নষ্ট নয় • ১-ক্লিকে যেকোনো বিল প্রিন্ট করুন অথবা স্ক্যান করলেই সাথে সাথে বিল প্রিন্ট
+            </div>
+          </div>
+
+          <div style="display:flex; gap:8px; flex-wrap:wrap; align-items:center;">
+            <button type="button" onclick="toggleInstantScannerDockAdmin()" id="btnToggleInstantScanAdmin" style="background:linear-gradient(135deg, #059669, #10b981); color:#fff; border:none; padding:10px 18px; border-radius:10px; font-weight:800; font-size:0.85rem; cursor:pointer; display:inline-flex; align-items:center; gap:6px; box-shadow:0 4px 12px rgba(5,150,105,0.3); transition:all 0.2s;">
+              <i class="fa-solid fa-camera"></i> <span>📷 ১-ক্লিক স্ক্যান ও প্রিন্ট</span>
+            </button>
+
+            <button type="button" onclick="fastBatchPrintAllPendingAdmin()" style="background:#4338ca; color:#fff; border:none; padding:10px 16px; border-radius:10px; font-weight:800; font-size:0.85rem; cursor:pointer; display:inline-flex; align-items:center; gap:6px; box-shadow:0 4px 12px rgba(67,56,202,0.3);">
+              <i class="fa-solid fa-print"></i> <span>🖨️ সব নতুন বিল একসাথে</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- COLLAPSIBLE HIGH-SPEED SCANNER DOCK -->
+        <div id="instantScannerDockAdmin" style="display:none; margin-top:14px; background:#0f172a; border:1px solid #334155; border-radius:12px; padding:14px; animation:slideInDown 0.25s ease-out;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+            <div style="font-size:0.82rem; font-weight:800; color:#38bdf8; display:flex; align-items:center; gap:6px;">
+              <i class="fa-solid fa-bolt"></i> স্ক্যানার ক্যামেরা অন • কিউআর বা বারকোড সামনে আনুন
+            </div>
+            <div style="display:flex; align-items:center; gap:8px;">
+              <label style="font-size:0.75rem; color:#cbd5e1; display:flex; align-items:center; gap:5px; cursor:pointer;">
+                <input type="checkbox" id="chkAutoPrintImmediateAdmin" checked style="accent-color:#10b981;">
+                <span>⚡ স্ক্যান হলেই অটো-প্রিন্ট</span>
+              </label>
+              <button type="button" onclick="toggleInstantScannerDockAdmin()" style="background:#334155; color:#fff; border:none; width:26px; height:26px; border-radius:50%; font-size:0.8rem; cursor:pointer;">✕</button>
+            </div>
+          </div>
+
+          <!-- Camera Viewport -->
+          <div id="instantScanCameraWrapperAdmin" style="display:none; margin-bottom:12px; text-align:center;">
+            <div id="instant-qr-reader-admin" style="max-width:340px; margin:0 auto; border-radius:12px; overflow:hidden; border:2px solid #10b981;"></div>
+          </div>
+
+          <!-- Manual / Barcode Gun Fast Input Box -->
+          <div style="display:flex; gap:8px;">
+            <input type="text" id="instantScanInputAdmin" class="form-input" placeholder="অর্ডার আইডি লিখুন বা স্ক্যানার গান দিয়ে স্ক্যান করুন (যেমন: NC-1001 বা 1001)..." style="flex:1; background:#111827; border:1.5px solid #475569; color:#fff; padding:10px 14px; border-radius:10px; font-size:0.88rem;" onkeypress="if(event.key==='Enter') handleManualInstantScanAdmin()">
+            <button type="button" onclick="handleManualInstantScanAdmin()" style="background:#059669; color:#fff; border:none; padding:10px 18px; border-radius:10px; font-weight:800; font-size:0.85rem; cursor:pointer; display:inline-flex; align-items:center; gap:6px; white-space:nowrap;">
+              <i class="fa-solid fa-print"></i> খুঁজুন ও প্রিন্ট
+            </button>
+          </div>
+
+          <div id="instantScanFeedbackToastAdmin" style="display:none; margin-top:10px; padding:10px 14px; border-radius:10px; font-size:0.82rem; font-weight:800;"></div>
         </div>
       </div>
 
@@ -2125,10 +2184,26 @@
             </div>
 
             <div>
-              <label style="font-size:0.78rem; font-weight:700; color:#cbd5e1; display:block; margin-bottom:4px;">ব্যানারের মডেল / শাড়ির ছবি</label>
-              <input type="text" id="bannerInpImage" placeholder="ছবির অনলাইন লিংক পেস্ট করুন" oninput="updateAdminBannerPreview()" style="width:100%; padding:9px 12px; background:#0f172a; border:1px solid var(--border); border-radius:8px; color:#fff; font-size:0.85rem; margin-bottom:6px;">
-              <div style="font-size:0.72rem; color:#94a3b8; margin-bottom:6px;">অথবা মোবাইল গ্যালারি থেকে ছবি আপলোড করুন:</div>
-              <input type="file" id="bannerFileInput" accept="image/*" onchange="handleBannerFileUpload(this)" style="font-size:0.75rem; color:#cbd5e1;">
+              <label style="font-size:0.78rem; font-weight:700; color:#cbd5e1; display:block; margin-bottom:4px;">📸 ব্যানারের মডেল বা শাড়ির ছবি</label>
+              <input type="text" id="bannerInpImage" placeholder="ছবির অনলাইন লিংক পেস্ট করুন (বা নিচে ফাইল আপলোড করুন)" oninput="updateAdminBannerPreview()" style="width:100%; padding:9px 12px; background:#0f172a; border:1px solid var(--border); border-radius:8px; color:#fff; font-size:0.85rem; margin-bottom:6px;">
+              
+              <div style="background:#1e293b; border:1px dashed #475569; border-radius:10px; padding:10px; margin-bottom:8px;">
+                <div style="font-size:0.74rem; color:#cbd5e1; font-weight:700; margin-bottom:4px;">📁 মোবাইল গ্যালারি / ক্যামেরা থেকে ছবি বাছুন:</div>
+                <input type="file" id="bannerFileInput" accept="image/*" onchange="handleBannerFileUpload(this)" style="font-size:0.75rem; color:#cbd5e1; width:100%;">
+                <div id="bannerUploadStatusLbl" style="display:none; font-size:0.72rem; font-weight:800; margin-top:4px;"></div>
+              </div>
+
+              <!-- Ready-to-use Gorgeous Fashion Model Presets -->
+              <div style="margin-top:6px; margin-bottom:8px;">
+                <div style="font-size:0.72rem; color:#94a3b8; margin-bottom:4px;">বা ১-ক্লিকে রেডিমেড শাড়ির ছবি বাছুন:</div>
+                <div style="display:flex; gap:6px; overflow-x:auto; padding-bottom:4px;">
+                  <button type="button" onclick="selectBannerPhotoPreset('https://images.unsplash.com/photo-1610030469983-98e550d6193c?w=600&auto=format&fit=crop&q=80')" style="background:#0f172a; border:1px solid #334155; color:#cbd5e1; border-radius:6px; padding:4px 8px; font-size:0.7rem; cursor:pointer; white-space:nowrap;">🥻 লাল জামদানি</button>
+                  <button type="button" onclick="selectBannerPhotoPreset('https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?w=600&auto=format&fit=crop&q=80')" style="background:#0f172a; border:1px solid #334155; color:#cbd5e1; border-radius:6px; padding:4px 8px; font-size:0.7rem; cursor:pointer; white-space:nowrap;">✨ সফট সিল্ক</button>
+                  <button type="button" onclick="selectBannerPhotoPreset('https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?w=600&auto=format&fit=crop&q=80')" style="background:#0f172a; border:1px solid #334155; color:#cbd5e1; border-radius:6px; padding:4px 8px; font-size:0.7rem; cursor:pointer; white-space:nowrap;">🌿 সুতি তাঁত</button>
+                  <button type="button" onclick="selectBannerPhotoPreset('https://images.unsplash.com/photo-1572804013309-59a88b7e92f1?w=600&auto=format&fit=crop&q=80')" style="background:#0f172a; border:1px solid #334155; color:#cbd5e1; border-radius:6px; padding:4px 8px; font-size:0.7rem; cursor:pointer; white-space:nowrap;">👗 ডিজাইনার কুর্তি</button>
+                  <button type="button" onclick="selectBannerPhotoPreset('https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=600&auto=format&fit=crop&q=80')" style="background:#0f172a; border:1px solid #334155; color:#cbd5e1; border-radius:6px; padding:4px 8px; font-size:0.7rem; cursor:pointer; white-space:nowrap;">💎 জুয়েলারি</button>
+                </div>
+              </div>
             </div>
 
             <!-- Real-time Mobile Preview -->
@@ -2735,14 +2810,24 @@
         adminBanners.unshift(newBanner);
       }
 
-            localStorage.setItem('nc_banners', JSON.stringify(adminBanners));
+      try {
+        localStorage.setItem('nc_banners', JSON.stringify(adminBanners));
+      } catch(err) {
+        console.warn("Storage quota exceeded, removing oldest banner image...", err);
+        // If quota exceeded, compress images or trim oldest
+        if (adminBanners.length > 6) {
+          adminBanners = adminBanners.slice(0, 6);
+        }
+        try { localStorage.setItem('nc_banners', JSON.stringify(adminBanners)); } catch(e2){}
+      }
       try {
         const bc = new BroadcastChannel('nc_banner_sync');
         bc.postMessage({ type: 'BANNER_UPDATED' });
       } catch(e) {}
+      window.dispatchEvent(new Event('storage'));
       renderAdminBanners();
       openAddBannerForm();
-      alert("🎉 ব্যানার সফলভাবে সেভ করা হয়েছে এবং লাইভ শপে আপডেট হয়েছে!");
+      alert("🎉 ব্যানার সফলভাবে সেভ ও পাবলিশ করা হয়েছে! হোমপেজে গ্রাহকদের জন্য ব্যানারটি সাথে সাথে লাইভ হয়ে গেছে।");
     }
 
     function deleteAdminBanner(id) {
@@ -2820,19 +2905,77 @@
       if (pTitle) pTitle.textContent = title;
       if (pBadge) pBadge.textContent = badge;
       if (pSub) pSub.textContent = subtitle;
-      if (pImg) pImg.src = image;
+      if (pImg) {
+        pImg.src = image || 'https://images.unsplash.com/photo-1610030469983-98e550d6193c?w=600&auto=format&fit=crop&q=80';
+        pImg.style.display = 'block';
+      }
     }
 
+    // Automatic High-Quality Compression for Banner Uploads (Max 800x450 ~45KB)
     function handleBannerFileUpload(input) {
-      if (input.files && input.files[0]) {
-        const file = input.files[0];
-        const reader = new FileReader();
-        reader.onload = function(e) {
-          const imgUrl = e.target.result;
-          document.getElementById('bannerInpImage').value = imgUrl;
+      if (!input.files || !input.files[0]) return;
+      const file = input.files[0];
+      
+      const statusLbl = document.getElementById('bannerUploadStatusLbl');
+      if (statusLbl) {
+        statusLbl.style.display = 'block';
+        statusLbl.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> ছবি কমপ্রেস হচ্ছে...';
+        statusLbl.style.color = '#38bdf8';
+      }
+
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const img = new Image();
+        img.onload = function() {
+          const canvas = document.createElement('canvas');
+          let width = img.width;
+          let height = img.height;
+          const maxW = 900;
+          const maxH = 600;
+
+          if (width > maxW || height > maxH) {
+            if (width / height > maxW / maxH) {
+              height = Math.round((height * maxW) / width);
+              width = maxW;
+            } else {
+              width = Math.round((width * maxH) / height);
+              height = maxH;
+            }
+          }
+
+          canvas.width = width;
+          canvas.height = height;
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0, width, height);
+
+          // Highly optimized JPEG data URL
+          const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.82);
+          const inp = document.getElementById('bannerInpImage');
+          if (inp) inp.value = compressedDataUrl;
+          
+          if (statusLbl) {
+            statusLbl.innerHTML = '✓ ছবি সফলভাবে যুক্ত হয়েছে!';
+            statusLbl.style.color = '#34d399';
+            setTimeout(() => { statusLbl.style.display = 'none'; }, 3000);
+          }
           updateAdminBannerPreview();
         };
-        reader.readAsDataURL(file);
+        img.src = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+
+    // Quick Fashion Preset Photos for 1-Click Selection
+    function selectBannerPhotoPreset(url) {
+      const inp = document.getElementById('bannerInpImage');
+      if (inp) inp.value = url;
+      updateAdminBannerPreview();
+      const statusLbl = document.getElementById('bannerUploadStatusLbl');
+      if (statusLbl) {
+        statusLbl.style.display = 'block';
+        statusLbl.innerHTML = '✓ মডেল ফটো সিলেক্ট হয়েছে!';
+        statusLbl.style.color = '#34d399';
+        setTimeout(() => { statusLbl.style.display = 'none'; }, 2500);
       }
     }
 
@@ -4405,15 +4548,16 @@ function closeAdminBarcodeStickerModal() {
           ${itemsHtml}
 
           <!-- Financial breakdown badge for owner & settlement -->
-          <div style="background:#0f172a; border:1px solid #334155; border-radius:8px; padding:6px 10px; margin-top:8px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:6px; font-size:0.75rem;">
-            <span style="color:#94a3b8;">
-              দোকানদারের প্রাপ্য: <strong style="color:#38bdf8;">₹${ord.rawSubtotal || (ord.total - (ord.platformFee !== undefined ? ord.platformFee : 10) - (ord.deliveryCharge || 0))}</strong> |
-              প্ল্যাটফর্ম লাভ: <strong style="color:#10b981;">+₹${ord.platformFee !== undefined ? ord.platformFee : 10}</strong> |
-              ডেলিভারি ফি: <strong style="color:#f59e0b;">${ord.deliveryCharge ? '₹' + ord.deliveryCharge : 'ফ্রি (আমতা লোকাল)'}</strong>
-            </span>
-            <span style="color:#a7f3d0; font-weight:800;">
+          <div style="background:#0f172a; border:1px solid #334155; border-radius:8px; padding:8px 12px; margin-top:8px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; font-size:0.75rem; line-height:1.4;">
+            <div style="color:#94a3b8;">
+              কাস্টমার সেলস: <strong style="color:#fff;">₹${ord.total}</strong> <span style="color:#34d399; font-weight:700;">(কাস্টমারের জন্য ডেলিভারি ১০০% ফ্রি)</span><br>
+              সেন্ট্রাল ডেলিভারি ফি (অ্যাডমিনের নিজস্ব আয়): <strong style="color:#f59e0b;">₹${ord.deliveryCharge || (ord.pincode === '711401' ? 50 : (ord.pincode >= 711402 && ord.pincode <= 711414 ? 60 : 90))}</strong> |
+              প্ল্যাটফর্ম ফি: <strong style="color:#10b981;">₹${ord.platformFee !== undefined ? ord.platformFee : 10}</strong> |
+              দোকানদারকে প্রদেয় (Settlement): <strong style="color:#38bdf8; font-size:0.82rem;">₹${ord.sellerPayout || (ord.total - (ord.deliveryCharge || (ord.pincode === '711401' ? 50 : (ord.pincode >= 711402 && ord.pincode <= 711414 ? 60 : 90))) - (ord.platformFee !== undefined ? ord.platformFee : 10))}</strong>
+            </div>
+            <div style="color:#a7f3d0; font-weight:800;">
               পিন কোড: ${ord.pincode || '711401'}
-            </span>
+            </div>
           </div>
 
           <!-- Amazon Worker & Trolley Accountability Badge -->
@@ -4490,6 +4634,10 @@ function closeAdminBarcodeStickerModal() {
               <a href="https://wa.me/?text=${encodeURIComponent('*🛵 নতুন ডেলিভারি অ্যাসাইনমেন্ট - নিশা ক্রিয়েশনস (আমতা)*\n━━━━━━━━━━━━━━━━━\n🧾 অর্ডার নং: #' + ord.id + '\n👤 কাস্টমার: ' + customerDisplayName + '\n📞 কাস্টমার ফোন: ' + phoneClean + '\n📍 ডেলিভারি ঠিকানা: ' + ord.address + '\n💰 সংগ্রহযোগ্য ক্যাশ: ₹' + ord.total + ' (' + (ord.paymentMode === 'COD' ? 'ক্যাশ অন ডেলিভারি' : 'অনলাইন পেইড') + ')\n\n📦 ডেলিভারি পোর্টালে টাস্ক খুলুন:\n' + window.location.href.replace('admin.html', 'delivery.html?orderId=' + ord.id))}" target="_blank" class="btn-hdr-pill" style="background:#25d366; color:#fff; border:none; font-weight:800; text-decoration:none; display:inline-flex; align-items:center; gap:4px;" title="ডেলিভারি বয়কে হোয়াটসঅ্যাপে অর্ডার পাঠান">
                 <i class="fa-brands fa-whatsapp"></i> 🛵 রাইডারকে পাঠান
               </a>
+              <button type="button" class="btn-hdr-pill" onclick="fastDirectPrint('${ord.id}')" style="background:linear-gradient(135deg, #059669, #10b981); color:#fff; border:none; font-weight:900; padding:6px 14px; font-size:0.8rem; box-shadow:0 2px 6px rgba(5,150,105,0.3); display:inline-flex; align-items:center; gap:4px;" title="১ ক্লিকে সরাসরি প্রিন্ট">
+                <i class="fa-solid fa-bolt"></i> 🖨️ ১-ক্লিকে প্রিন্ট
+              </button>
+
               <button type="button" class="btn-hdr-pill" onclick="openAdminProperBillModal('${ord.id}')" style="background:#059669; color:#fff; border:none; font-weight:800;" title="প্রপার পাকা ট্যাক্স বিল">
                 <i class="fa-solid fa-file-invoice"></i> 🧾 প্রপার বিল
               </button>
@@ -5662,18 +5810,18 @@ function closeAdminBarcodeStickerModal() {
     function printOwnerQrLabel(orderId) {
       const ord = ordersList.find(o => o.id === orderId);
       if (!ord) return;
-      const isEn = (currentAdminLang === 'en');
-      const currentDomain = window.location.origin + window.location.pathname.replace('admin.html', '');
+      const isEn = (currentAdminLang === "en");
+      const currentDomain = window.location.origin + window.location.pathname.replace("admin.html", "");
       const qrVerificationUrl = `${currentDomain}packaging.html?scan=${ord.id}`;
       const qrImgSrc = `https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=${encodeURIComponent(qrVerificationUrl)}`;
 
-      const itemsText = (ord.items || []).map(i => `• ${i.title} (${isEn ? 'Size:' : 'সাইজ:'} ${i.selectedSize || 'Free Size'}) x ${i.qty || 1}`).join('<br>');
+      const itemsText = (ord.items || []).map(i => `• ${i.title} (${isEn ? "Size:" : "সাইজ:"} ${i.selectedSize || "Free Size"}) x ${i.qty || 1}`).join("<br>");
 
       const orderDateFormatted = ord.createdAt 
-        ? new Date(ord.createdAt).toLocaleString(isEn ? 'en-IN' : 'bn-BD', { day:'numeric', month:'short', year:'numeric', hour:'2-digit', minute:'2-digit' })
-        : (ord.date || (isEn ? 'Today' : 'আজ'));
+        ? new Date(ord.createdAt).toLocaleString(isEn ? "en-IN" : "bn-BD", { day:"numeric", month:"short", year:"numeric", hour:"2-digit", minute:"2-digit" })
+        : (ord.date || (isEn ? "Today" : "আজ"));
 
-      const custName = ord.customer || ord.name || (isEn ? 'Valued Customer' : 'সম্মানিত গ্রাহক');
+      const custName = ord.customer || ord.name || (isEn ? "Valued Customer" : "সম্মানিত গ্রাহক");
 
       const labelHtml = `<!DOCTYPE html>
 <html>
@@ -5688,41 +5836,9 @@ function closeAdminBarcodeStickerModal() {
     .qr-img { width: 120px; height: 120px; }
     .info { font-size: 12px; line-height: 1.4; margin-top: 4px; }
     .pay-badge { background: #eee; padding: 6px; font-size: 13px; font-weight: bold; text-align: center; margin-top: 8px; border-radius: 6px; }
-  
-    /* Print Optimization for Admin Proper Bill and Barcode Studio */
-    @media print {
-      body * {
-        visibility: hidden !important;
-      }
-      #adminBillingModal, #adminBillingModal * {
-        visibility: visible !important;
-      }
-      #adminBillingModal {
-        position: absolute !important;
-        left: 0 !important;
-        top: 0 !important;
-        width: 100% !important;
-        height: auto !important;
-        background: #ffffff !important;
-        padding: 0 !important;
-        margin: 0 !important;
-        display: block !important;
-        overflow: visible !important;
-        box-shadow: none !important;
-        border: none !important;
-      }
-      .no-print {
-        display: none !important;
-      }
-      #adminProperPrintArea {
-        padding: 0 !important;
-        background: #ffffff !important;
-      }
-    }
-
-</style>
+  </style>
 </head>
-<body>
+<body onload="window.print()">
   <div class="label-box">
     <div class="brand-hdr">NISHA CREATIONS</div>
     <div class="hub-txt">EXCLUSIVE BOUTIQUE • AMTA, HOWRAH</div>
@@ -5730,323 +5846,27 @@ function closeAdminBarcodeStickerModal() {
     <div class="qr-sec">
       <div>
         <div style="font-size:16px; font-weight:bold;">ORDER #${ord.id}</div>
-        <div style="font-size:11px; color:#555;">${isEn ? 'Date:' : 'তারিখ:'} ${orderDateFormatted}</div>
-        <div style="font-size:12px; margin-top:6px;"><strong>${isEn ? 'Items:' : 'পণ্য:'}</strong><br>${itemsText}</div>
+        <div style="font-size:11px; color:#555;">${isEn ? "Date:" : "তারিখ:"} ${orderDateFormatted}</div>
+        <div style="font-size:12px; margin-top:6px;"><strong>${isEn ? "Items:" : "পণ্য:"}</strong><br>${itemsText}</div>
       </div>
       <img src="${qrImgSrc}" class="qr-img" alt="QR Code">
     </div>
 
     <div class="info">
-      <div><strong>${isEn ? 'Customer:' : 'গ্রাহক:'}</strong> ${custName} (📞 ${ord.phone})</div>
-      <div style="margin-top:2px;"><strong>${isEn ? 'Address:' : 'ঠিকানা:'}</strong> ${ord.address}</div>
+      <div><strong>${isEn ? "Customer:" : "গ্রাহক:"}</strong> ${custName} (📞 ${ord.phone})</div>
+      <div style="margin-top:2px;"><strong>${isEn ? "Address:" : "ঠিকানা:"}</strong> ${ord.address}</div>
     </div>
 
-    <div class="pay-badge" style="color:${ord.paymentMode === 'UPI' ? '#0284c7' : '#15803d'};">
-      ${ord.paymentMode === 'UPI' ? (isEn ? '✅ ONLINE PREPAID (PAID)' : '✅ অনলাইন প্রিপেইড (পেইড)') : (isEn ? `💵 CASH ON DELIVERY: ₹${ord.total}` : `💵 ক্যাশ অন ডেলিভারি (COD): ₹${ord.total}`)}
-    </div>
-  </div>
-  <' + 'script>window.onload = function(){ window.print(); };</' + 'script>
-
-  <!-- INTEGRATED 1D BARCODE & RACK STICKER MODAL IN ADMIN -->
-  <div id="adminProductBarcodeStickerModal" class="modal-overlay" style="display:none; position:fixed; inset:0; z-index:99999; align-items:center; justify-content:center; padding:16px;">
-    <div style="background:#ffffff; border-radius:18px; max-width:380px; width:100%; padding:20px; box-shadow:0 20px 25px -5px rgba(0,0,0,0.15); border:1.5px solid #cbd5e1; text-align:center;">
-      <div style="border-bottom:1.5px solid #0f172a; padding-bottom:8px; margin-bottom:10px;">
-        <div style="font-weight:900; font-size:1.05rem; color:#1e1b4b;">NISHA CREATIONS & PARTNERS</div>
-        <div style="font-size:0.7rem; font-weight:700; color:#475569;">PRODUCT BARCODE & RACK STICKER</div>
-      </div>
-
-      <div style="font-weight:800; font-size:0.98rem; color:#0f172a;" id="admStickerProdTitle">Pure Dhakai Jamdani Saree</div>
-      <div style="font-size:0.75rem; color:#475569; margin:2px 0;" id="admStickerProdId">#NC-101</div>
-      <div style="font-size:0.88rem; font-weight:800; color:#059669; margin-top:2px;" id="admStickerProdPrice">বিক্রি মূল্য: ₹799</div>
-
-      <div style="background:#f1f5f9; border:1px solid #cbd5e1; border-radius:8px; padding:6px; margin:8px 0; font-weight:800; font-size:0.82rem; color:#0f172a;" id="admStickerRackLocation">
-        স্টোরেজ: র‍্যাক A-০১ (জামদানি শাড়ি তাক)
-      </div>
-
-      <!-- Real 1D Barcode Graphic -->
-      <div style="margin:8px auto; display:flex; justify-content:center; align-items:flex-end; gap:2px; height:40px; background:#fff; padding:4px 10px; border-radius:4px; width:fit-content; border:1px solid #cbd5e1;">
-        <div style="width:3px; height:100%; background:#0f172a;"></div>
-        <div style="width:1px; height:100%; background:#0f172a;"></div>
-        <div style="width:4px; height:100%; background:#0f172a;"></div>
-        <div style="width:2px; height:100%; background:#0f172a;"></div>
-        <div style="width:5px; height:100%; background:#0f172a;"></div>
-        <div style="width:2px; height:100%; background:#0f172a;"></div>
-        <div style="width:4px; height:100%; background:#0f172a;"></div>
-        <div style="width:1px; height:100%; background:#0f172a;"></div>
-        <div style="width:3px; height:100%; background:#0f172a;"></div>
-        <div style="width:2px; height:100%; background:#0f172a;"></div>
-        <div style="width:4px; height:100%; background:#0f172a;"></div>
-        <div style="width:1px; height:100%; background:#0f172a;"></div>
-        <div style="width:5px; height:100%; background:#0f172a;"></div>
-      </div>
-      <div style="font-family:'Courier New', monospace; font-size:1.1rem; letter-spacing:4px; font-weight:900; margin-bottom:6px; color:#0f172a;" id="admStickerBarcodeText">
-        * N C - 1 0 1 *
-      </div>
-
-      <img id="admStickerQrImg" src="" style="width:105px; height:105px; border:1px solid #cbd5e1; padding:2px; border-radius:8px; margin:4px auto; display:block;">
-
-      <div style="font-size:0.68rem; color:#64748b; margin-top:6px;">
-        * এই স্টিকারটি প্রিন্ট করে প্রোডাক্টের প্যাকেটের গায়ে বা তাকের ওপর সেঁটে দিন।
-      </div>
-
-      <div style="display:flex; gap:8px; margin-top:14px;">
-        <button type="button" class="btn-fast-action" style="flex:1; justify-content:center; background:#0f172a; color:#fff;" onclick="window.print()">
-          <i class="fa-solid fa-print"></i> প্রিন্ট স্টিকার
-        </button>
-        <button type="button" class="btn-fast-action" style="background:#e2e8f0; color:#0f172a;" onclick="closeAdminBarcodeStickerModal()">
-          বন্ধ করুন
-        </button>
-      </div>
+    <div class="pay-badge" style="color:${ord.paymentMode === "UPI" ? "#0284c7" : "#15803d"};">
+      ${ord.paymentMode === "UPI" ? (isEn ? "✅ ONLINE PREPAID (PAID)" : "✅ অনলাইন প্রিপেইড (পেইড)") : (isEn ? `💵 CASH ON DELIVERY: ₹${ord.total}` : `💵 ক্যাশ অন ডেলিভারি (COD): ₹${ord.total}`)}
     </div>
   </div>
-
-
-    // Listen for cross-tab updates to partner shops
-    window.addEventListener('storage', function(e) {
-      if (e.key === 'nc_partner_shops') {
-        if (typeof renderPartnerShopsList === 'function') {
-          renderPartnerShopsList();
-        }
-      }
-    });
-
-
-  <!-- ================= ADMIN 3-IN-1 PROPER BILL & BARCODE STUDIO MODAL ================= -->
-  <div id="adminBillingModal" style="display:none; position:fixed; inset:0; background:rgba(15,23,42,0.7); backdrop-filter:blur(5px); z-index:999999; align-items:center; justify-content:center; padding:12px; overflow-y:auto;">
-    <div style="background:#fff; border-radius:18px; max-width:680px; width:100%; max-height:92vh; display:flex; flex-direction:column; box-shadow:0 20px 40px rgba(0,0,0,0.25); border:1px solid #cbd5e1; overflow:hidden;">
-      
-      <!-- Modal Navigation Header (No-Print) -->
-      <div class="no-print" style="background:#0f172a; color:#fff; padding:12px 18px; display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #334155;">
-        <div>
-          <div style="font-weight:800; font-size:1rem; display:flex; align-items:center; gap:8px;">
-            <i class="fa-solid fa-print" style="color:#f59e0b;"></i> ওনার প্রিন্ট ও প্রপার বিলিং হাব
-          </div>
-          <div style="font-size:0.72rem; color:#94a3b8;">১. র‍্যাক বারকোড • ২. প্রোডাক্ট বারকোড • ৩. প্রপার পাকা বিল</div>
-        </div>
-        <button type="button" onclick="closeAdminBillingModal()" style="background:#334155; color:#fff; border:none; width:30px; height:30px; border-radius:50%; font-size:1rem; cursor:pointer;">✕</button>
-      </div>
-
-      <!-- 3-Way Tabs (No-Print) -->
-      <div class="no-print" style="display:flex; background:#f1f5f9; padding:6px; gap:6px; border-bottom:1px solid #e2e8f0;">
-        <button type="button" id="admTabBtnBill" class="billing-tab-btn" onclick="switchAdminBillingTab('bill')" style="flex:1; padding:8px 10px; border:none; border-radius:8px; font-weight:800; font-size:0.8rem; cursor:pointer; background:#fff; color:#4338ca; box-shadow:0 1px 3px rgba(0,0,0,0.08);">
-          <i class="fa-solid fa-file-invoice"></i> ৩. প্রপার পাকা বিল
-        </button>
-        <button type="button" id="admTabBtnProdBarcode" class="billing-tab-btn" onclick="switchAdminBillingTab('prod')" style="flex:1; padding:8px 10px; border:none; border-radius:8px; font-weight:700; font-size:0.8rem; cursor:pointer; background:transparent; color:#64748b;">
-          <i class="fa-solid fa-tag"></i> ২. প্রোডাক্ট বারকোড
-        </button>
-        <button type="button" id="admTabBtnRackBarcode" class="billing-tab-btn" onclick="switchAdminBillingTab('rack')" style="flex:1; padding:8px 10px; border:none; border-radius:8px; font-weight:700; font-size:0.8rem; cursor:pointer; background:transparent; color:#64748b;">
-          <i class="fa-solid fa-warehouse"></i> ১. র‍্যাক বারকোড
-        </button>
-      </div>
-
-      <!-- Printable Content Body -->
-      <div style="flex:1; overflow-y:auto; padding:16px; background:#f8fafc;" id="adminProperPrintArea">
-
-        <!-- TAB 3: PROPER TAX INVOICE / CASH MEMO (DEFAULT) -->
-        <div id="admPaneBillPrint" style="display:block; background:#fff; border:1px solid #cbd5e1; border-radius:12px; padding:20px; font-size:0.82rem; color:#0f172a; box-shadow:0 2px 8px rgba(0,0,0,0.04);">
-          <!-- INVOICE HEADER -->
-          <div style="display:flex; justify-content:space-between; align-items:flex-start; border-bottom:2px solid #0f172a; padding-bottom:12px; margin-bottom:12px;">
-            <div>
-              <div style="font-size:1.3rem; font-weight:900; color:#4338ca; letter-spacing:0.5px;">NISHA CREATIONS</div>
-              <div style="font-size:0.75rem; font-weight:700; color:#475569;">বুটিক, শাড়ি ও রেডিমেড কালেকশন হাব</div>
-              <div style="font-size:0.72rem; color:#64748b; margin-top:2px;">আমতা স্টেশন রোড, সিনেমা তলা মোড়, আমতা, হাওড়া - ৭১১৪০১</div>
-              <div style="font-size:0.72rem; color:#64748b;">হোয়াটসঅ্যাপ / হেল্পলাইন: <strong>9239413517</strong></div>
-            </div>
-            <div style="text-align:right;">
-              <span style="background:#0f172a; color:#fff; font-size:0.75rem; font-weight:800; padding:4px 10px; border-radius:6px; display:inline-block; margin-bottom:4px;">
-                TAX INVOICE / CASH MEMO
-              </span>
-              <div style="font-size:0.8rem; font-weight:800; color:#0f172a;" id="admInvNumberDisp">INV-NC-1001</div>
-              <div style="font-size:0.72rem; color:#64748b;" id="admInvDateDisp">তারিখ: ২৬ সেপ্টেম্বর ২০২৬</div>
-              <div style="font-size:0.72rem; font-weight:800; color:#15803d;" id="admInvPayModeDisp">পেমেন্ট: অনলাইন UPI (PAID)</div>
-            </div>
-          </div>
-
-          <!-- CUSTOMER & SHOP DETAILS 2-COLUMN -->
-          <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; background:#f8fafc; border:1px solid #e2e8f0; border-radius:10px; padding:10px 12px; margin-bottom:12px;">
-            <div>
-              <div style="font-size:0.72rem; font-weight:800; color:#4338ca; text-transform:uppercase; margin-bottom:2px;">গ্রাহকের বিবরণ (Customer Info):</div>
-              <div style="font-weight:800; font-size:0.88rem;" id="admInvCustName">কাস্টমার নাম</div>
-              <div style="font-size:0.75rem; color:#475569;" id="admInvCustPhone">📞 মোবাইল নম্বর</div>
-              <div style="font-size:0.75rem; color:#475569; margin-top:2px;" id="admInvCustAddr">📍 ঠিকানা ও ল্যান্ডমার্ক</div>
-              <div style="font-size:0.75rem; font-weight:800; color:#0f172a;" id="admInvCustPin">পিন কোড: 711401 (আমতা লোকাল)</div>
-            </div>
-            <div style="border-left:1px dashed #cbd5e1; padding-left:12px;">
-              <div style="font-size:0.72rem; font-weight:800; color:#4338ca; text-transform:uppercase; margin-bottom:2px;">দোকানদার / ভেন্ডার (Seller Info):</div>
-              <div style="font-weight:800; font-size:0.88rem;" id="admInvShopName">দোকানের নাম</div>
-              <div style="font-size:0.75rem; color:#475569;" id="admInvShopId">শপ কোড: #SHOP-AMTA-101</div>
-              <div style="font-size:0.75rem; color:#475569;" id="admInvShopPhone">📞 ফোন: 9239413517</div>
-              <div style="font-size:0.75rem; color:#64748b;" id="admInvShopRack">📍 সংরক্ষিত তাক: Rack A-01</div>
-            </div>
-          </div>
-
-          <!-- ITEMIZED PRODUCT TABLE -->
-          <table style="width:100%; border-collapse:collapse; margin-bottom:12px; font-size:0.78rem;">
-            <thead>
-              <tr style="background:#f1f5f9; border-top:1px solid #cbd5e1; border-bottom:1.5px solid #0f172a;">
-                <th style="padding:6px; text-align:center; width:30px;">#</th>
-                <th style="padding:6px; text-align:left;">পোশাক ও বিবরণ</th>
-                <th style="padding:6px; text-align:center;">সাইজ/রং</th>
-                <th style="padding:6px; text-align:center;">পরিমাণ</th>
-                <th style="padding:6px; text-align:right;">মূল্য (ট্যাক্স সহ)</th>
-              </tr>
-            </thead>
-            <tbody id="admInvItemsTableBody">
-              <!-- Dynamically populated rows -->
-            </tbody>
-          </table>
-
-          <!-- FINANCIAL CALCULATION BREAKDOWN -->
-          <div style="display:flex; justify-content:flex-end; margin-bottom:12px;">
-            <div style="width:290px; font-size:0.78rem; line-height:1.6;">
-              <div style="display:flex; justify-content:space-between; color:#475569;">
-                <span>পোশাকের উপমোট (Subtotal):</span>
-                <span id="admInvSubtotalVal" style="font-weight:700;">₹0</span>
-              </div>
-              <div style="display:flex; justify-content:space-between; color:#475569;">
-                <span>অন্তর্ভুক্ত জিএসটি (GST 5% Incl.):</span>
-                <span id="admInvGstVal" style="font-weight:700;">₹0</span>
-              </div>
-              <div style="display:flex; justify-content:space-between; color:#4338ca;">
-                <span>প্ল্যাটফর্ম সার্ভিস ফি (Platform Fee):</span>
-                <span style="font-weight:800;">+₹10</span>
-              </div>
-              <div style="display:flex; justify-content:space-between; color:#15803d;">
-                <span id="admInvDelivLabel">ডেলিভারি চার্জ (আমতা লোকাল):</span>
-                <span id="admInvDelivVal" style="font-weight:800;">FREE (ফ্রি)</span>
-              </div>
-              <div style="display:flex; justify-content:space-between; font-size:0.95rem; font-weight:900; color:#0f172a; border-top:2px solid #0f172a; padding-top:4px; margin-top:4px;">
-                <span>মোট প্রদেয় বিল (Net Total):</span>
-                <span id="admInvNetTotalVal" style="color:#059669;">₹0</span>
-              </div>
-              <div style="font-size:0.7rem; color:#64748b; text-align:right; margin-top:2px;" id="admInvInWordsVal">
-                (কথায়: শূন্য টাকা মাত্র)
-              </div>
-            </div>
-          </div>
-
-          <!-- FOOTER DECLARATION & QR -->
-          <div style="display:flex; justify-content:space-between; align-items:flex-end; border-top:1px dashed #cbd5e1; padding-top:10px;">
-            <div style="display:flex; align-items:center; gap:10px;">
-              <img id="admInvQrCodeImg" src="" style="width:65px; height:65px; border:1px solid #cbd5e1; padding:2px; border-radius:6px;">
-              <div style="font-size:0.68rem; color:#64748b; line-height:1.3;">
-                ✓ এটি কম্পিউটার জেনারেটেড ডিজিটাল ইনভয়েস।<br>
-                ✓ কাপড়ে কোনো ডিফেক্ট থাকলে ৩ দিনের মধ্যে এক্সচেঞ্জ প্রযোজ্য।<br>
-                ✓ কিউআর স্ক্যান করে লাইভ ট্র্যাকিং স্ট্যাটাস যাচাই করুন।
-              </div>
-            </div>
-            <div style="text-align:center;">
-              <div style="font-family:'Brush Script MT', cursive; font-size:1.1rem; color:#4338ca;">Nisha Creations</div>
-              <div style="font-size:0.68rem; border-top:1px solid #0f172a; padding-top:2px; font-weight:700;">অথরাইজড সিগনেচার</div>
-            </div>
-          </div>
-        </div>
-
-        <!-- TAB 2: PRODUCT BARCODE STICKER -->
-        <div id="admPaneProdBarcodePrint" style="display:none;">
-          <div style="background:#fff; border:2px dashed #0f172a; border-radius:12px; padding:16px; max-width:340px; margin:0 auto; text-align:center; box-shadow:0 2px 6px rgba(0,0,0,0.05);">
-            <div style="font-size:0.9rem; font-weight:900; color:#4338ca; text-transform:uppercase; letter-spacing:1px;" id="admPBarShopName">NISHA CREATIONS</div>
-            <div style="font-size:0.7rem; color:#64748b; font-weight:700;">PREMIUM BOUTIQUE TAG</div>
-            <div style="margin:8px 0; border-top:1px solid #e2e8f0; border-bottom:1px solid #e2e8f0; padding:6px 0;">
-              <div style="font-weight:800; font-size:0.85rem; color:#0f172a; line-height:1.2;" id="admPBarTitle">পোশাকের নাম</div>
-              <div style="font-size:0.75rem; color:#4338ca; font-weight:800; margin-top:2px;" id="admPBarRackLoc">📍 তাক: RACK A-01</div>
-            </div>
-
-            <div style="display:flex; justify-content:center; gap:8px; font-size:0.75rem; font-weight:700; color:#334155; margin-bottom:6px;">
-              <span id="admPBarSize">সাইজ: Free Size</span> • 
-              <span id="admPBarColor">রং: মূল কালার</span>
-            </div>
-
-            <div style="font-size:0.95rem; font-weight:900; color:#059669;" id="admPBarPrice">
-              সেল রেট: ₹850 <span style="font-size:0.72rem; color:#94a3b8; text-decoration:line-through;" id="admPBarMrp">₹1899</span>
-            </div>
-
-            <!-- 1D Barcode Graphic -->
-            <div style="margin:8px auto; display:flex; justify-content:center; align-items:flex-end; gap:2px; height:36px; background:#fff; padding:3px 8px; border-radius:4px; width:fit-content; border:1px solid #cbd5e1;">
-              <div style="width:3px; height:100%; background:#0f172a;"></div>
-              <div style="width:1px; height:100%; background:#0f172a;"></div>
-              <div style="width:4px; height:100%; background:#0f172a;"></div>
-              <div style="width:2px; height:100%; background:#0f172a;"></div>
-              <div style="width:5px; height:100%; background:#0f172a;"></div>
-              <div style="width:2px; height:100%; background:#0f172a;"></div>
-              <div style="width:4px; height:100%; background:#0f172a;"></div>
-              <div style="width:1px; height:100%; background:#0f172a;"></div>
-              <div style="width:3px; height:100%; background:#0f172a;"></div>
-            </div>
-            <div style="font-family:'Courier New', monospace; font-size:1.1rem; letter-spacing:4px; font-weight:900; color:#0f172a;" id="admPBarCodeText">* NC-101 *</div>
-            <img id="admPBarQrImg" src="" style="width:90px; height:90px; border:1px solid #cbd5e1; padding:2px; border-radius:6px; margin:4px auto; display:block;">
-            <div style="font-size:0.65rem; color:#64748b; margin-top:4px;">কাপড়ের প্যাকেটে সাঁটানোর জন্য প্রপার প্রোডাক্ট স্টিকার</div>
-          </div>
-        </div>
-
-        <!-- TAB 1: RACK / SHELF BARCODE STICKER -->
-        <div id="admPaneRackBarcodePrint" style="display:none;">
-          <div style="background:#fff; border:3px solid #4338ca; border-radius:14px; padding:20px; max-width:380px; margin:0 auto; text-align:center; box-shadow:0 4px 12px rgba(67,56,202,0.1);">
-            <div style="font-size:0.75rem; font-weight:800; color:#4338ca; letter-spacing:1px; text-transform:uppercase;">NISHA CREATIONS SMART WAREHOUSE</div>
-            <div style="font-size:0.7rem; color:#64748b; margin-bottom:8px;">আমতা সেন্ট্রাল ফুলফিলমেন্ট তাক ও শেল্ফ লোকেশন</div>
-            
-            <div style="background:#eef2ff; border:2px dashed #4338ca; border-radius:10px; padding:12px; margin-bottom:10px;">
-              <div style="font-size:0.75rem; color:#475569; font-weight:700;">সংরক্ষিত তাক কোড:</div>
-              <div style="font-size:1.9rem; font-weight:900; color:#4338ca; letter-spacing:2px; font-family:'Plus Jakarta Sans',sans-serif;" id="admRBarRackCode">RACK A-01</div>
-              <div style="font-size:0.8rem; font-weight:800; color:#0f172a; margin-top:2px;" id="admRBarZoneName">জামদানি শাড়ি ও কাতান ব্লক (শেল্ফ ১)</div>
-            </div>
-
-            <!-- Big 1D Barcode for Shelf -->
-            <div style="margin:10px auto; display:flex; justify-content:center; align-items:flex-end; gap:3px; height:44px; background:#fff; padding:4px 10px; border-radius:4px; width:fit-content; border:1.5px solid #0f172a;">
-              <div style="width:4px; height:100%; background:#0f172a;"></div>
-              <div style="width:2px; height:100%; background:#0f172a;"></div>
-              <div style="width:5px; height:100%; background:#0f172a;"></div>
-              <div style="width:2px; height:100%; background:#0f172a;"></div>
-              <div style="width:6px; height:100%; background:#0f172a;"></div>
-              <div style="width:3px; height:100%; background:#0f172a;"></div>
-              <div style="width:4px; height:100%; background:#0f172a;"></div>
-              <div style="width:2px; height:100%; background:#0f172a;"></div>
-              <div style="width:5px; height:100%; background:#0f172a;"></div>
-            </div>
-            <div style="font-family:'Courier New', monospace; font-size:1.2rem; letter-spacing:5px; font-weight:900; color:#0f172a; margin-bottom:8px;" id="admRBarCodeText">* RACK-A01 *</div>
-            <img id="admRBarQrImg" src="" style="width:105px; height:105px; border:1px solid #cbd5e1; padding:2px; border-radius:8px; margin:4px auto; display:block;">
-            <div style="font-size:0.7rem; color:#475569; font-weight:700; margin-top:6px;">তাক বা আলমারির হ্যান্ডেলে সেঁটে দিন (স্ক্যানার উপযোগী)</div>
-          </div>
-        
-        <!-- TAB 4: BATCH RACK BARCODES (পরপর সমস্ত তাকের বারকোড শিট) -->
-        <div id="admPaneBatchRacksPrint" style="display:none;">
-          <div style="text-align:center; margin-bottom:12px;" class="no-print">
-            <h3 style="font-size:1rem; font-weight:800; color:#0f172a;">সেন্ট্রাল ওয়্যারহাউসের সমস্ত তাকের কাটিং বারকোড শিট</h3>
-            <p style="font-size:0.75rem; color:#64748b;">প্রিন্ট করে দাগ বরাবর কেটে প্রতিটি তাকে বা আলমারিতে সেঁটে দিন:</p>
-          </div>
-          <div id="admBatchRacksGridPrintArea" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(240px, 1fr)); gap:12px;"></div>
-        </div>
-
-        <!-- TAB 5: TROLLEY & BASKET BARCODES (ট্রলি ও বাকেটের কিউআর স্টিকার) -->
-        <div id="admPaneTrolleysPrint" style="display:none;">
-          <div style="text-align:center; margin-bottom:12px;" class="no-print">
-            <h3 style="font-size:1rem; font-weight:800; color:#0f172a;">পিকিং ট্রলি ও বাকেটের কিউআর স্টিকার শিট</h3>
-            <p style="font-size:0.75rem; color:#64748b;">প্রিন্ট করে আপনার ওয়্যারহাউসের ট্রলি বা বাকেটের গায়ে লাগিয়ে দিন:</p>
-          </div>
-          <div id="admTrolleysGridPrintArea" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(240px, 1fr)); gap:12px;"></div>
-        </div>
-</div>
-
-      </div>
-
-      <!-- Modal Bottom Actions (No-Print) -->
-      <div class="no-print" style="background:#fff; border-top:1px solid #e2e8f0; padding:12px 18px; display:flex; justify-content:space-between; align-items:center; gap:10px;">
-        <button type="button" onclick="closeAdminBillingModal()" style="background:#f1f5f9; color:#475569; border:1px solid #cbd5e1; padding:10px 18px; border-radius:10px; font-size:0.85rem; font-weight:800; cursor:pointer;">
-          বন্ধ করুন
-        </button>
-        <button type="button" onclick="triggerAdminProperPrint()" style="background:#4338ca; color:#fff; border:none; padding:10px 24px; border-radius:10px; font-size:0.92rem; font-weight:800; cursor:pointer; display:inline-flex; align-items:center; gap:8px; box-shadow:0 4px 12px rgba(67,56,202,0.3);">
-          <i class="fa-solid fa-print"></i> এখনই প্রিন্ট করুন
-        </button>
-      </div>
-
-    </div>
-  </div>
-
 </body>
 </html>`;
 
-      const w = window.open('', '_blank');
+      const w = window.open("", "_blank");
       if (w) {
+        w.document.open();
         w.document.write(labelHtml);
         w.document.close();
       }
@@ -6893,9 +6713,19 @@ function closeAdminBarcodeStickerModal() {
       }).join('');
 
       const gstVal = Math.round(subtotal * 0.05);
-      const platformFee = ord.platformFee !== undefined ? ord.platformFee : 10;
-      const delivFee = ord.deliveryCharge !== undefined ? ord.deliveryCharge : 0;
-      const netTotal = ord.total || (subtotal + platformFee + delivFee);
+      const delivFee = (ord.deliveryCharge !== undefined) ? ord.deliveryCharge : 0;
+      const netTotal = ord.total || subtotal;
+
+      // Prominent Payment Mode Badge (Online Paid vs Cash on Delivery)
+      const isOnlinePaid = (ord.paymentMode === 'UPI' || (ord.paymentMethod && ord.paymentMethod.includes('UPI')));
+      const payEl = document.getElementById('admInvPayModeDisp');
+      if (payEl) {
+        if (isOnlinePaid) {
+          payEl.innerHTML = `<span style="background:#dcfce7; border:1.5px solid #16a34a; color:#15803d; padding:4px 8px; border-radius:6px; font-weight:900; font-size:0.8rem; display:inline-block;">✓ অনলাইন পেইড (ONLINE PAID - ₹${netTotal})<br><small style="font-size:0.68rem; font-weight:700;">টাকা পূর্বে পরিশোধিত • কাস্টমারের থেকে ক্যাশ নেবেন না</small></span>`;
+        } else {
+          payEl.innerHTML = `<span style="background:#fef3c7; border:1.5px solid #d97706; color:#92400e; padding:4px 8px; border-radius:6px; font-weight:900; font-size:0.8rem; display:inline-block;">💵 ক্যাশ অন ডেলিভারি (COD)<br><small style="font-size:0.75rem; font-weight:900; color:#b45309;">কাস্টমারের থেকে সংগ্রহযোগ্য ক্যাশ: ₹${netTotal}</small></span>`;
+        }
+      }
 
       document.getElementById('admInvSubtotalVal').textContent = `₹${subtotal}`;
       document.getElementById('admInvGstVal').textContent = `₹${gstVal} (CGST 2.5% + SGST 2.5%)`;
@@ -6905,7 +6735,7 @@ function closeAdminBarcodeStickerModal() {
         document.getElementById('admInvDelivVal').innerHTML = '<span style="text-decoration:line-through; color:#94a3b8; font-weight:normal; margin-right:4px;">₹৬০</span>FREE (ফ্রি)';
       } else {
         document.getElementById('admInvDelivLabel').textContent = `ডেলিভারি চার্জ (${ord.pincode || 'দূরবর্তী'}):`;
-        document.getElementById('admInvDelivVal').textContent = `₹${delivFee}`;
+        document.getElementById('admInvDelivVal').textContent = `+₹${delivFee}`;
       }
 
       document.getElementById('admInvNetTotalVal').textContent = `₹${netTotal}`;
@@ -7197,333 +7027,78 @@ window.addEventListener('DOMContentLoaded', initAdminDashboard);
     function printGstTaxInvoice(orderId) {
       const ord = ordersList.find(o => o.id === orderId);
       if (!ord) {
-        alert('অর্ডার পাওয়া যায়নি!');
+        alert("অর্ডার পাওয়া যায়নি!");
         return;
       }
-      const printWin = window.open('', '_blank');
+      const printWin = window.open("", "_blank");
       const gstRate = 5;
       const taxable = Math.round(ord.total / (1 + gstRate / 100));
       const gstAmt = ord.total - taxable;
       const cgst = (gstAmt / 2).toFixed(2);
       const sgst = (gstAmt / 2).toFixed(2);
 
-      printWin.document.write(`
-        <!DOCTYPE html>
-        <html>
-        <head>
-          <title>GST Tax Invoice - ${ord.id}</title>
-          <style>
-            body { font-family: sans-serif; padding: 20px; color: #111; }
-            .invoice-box { border: 2px solid #000; padding: 16px; border-radius: 8px; max-width: 600px; margin: 0 auto; }
-            .header { text-align: center; border-bottom: 2px solid #000; padding-bottom: 10px; margin-bottom: 12px; }
-            table { width: 100%; border-collapse: collapse; margin: 14px 0; }
-            th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
-            th { background: #f2f2f2; }
-          
-    /* Print Optimization for Admin Proper Bill and Barcode Studio */
-    @media print {
-      body * {
-        visibility: hidden !important;
-      }
-      #adminBillingModal, #adminBillingModal * {
-        visibility: visible !important;
-      }
-      #adminBillingModal {
-        position: absolute !important;
-        left: 0 !important;
-        top: 0 !important;
-        width: 100% !important;
-        height: auto !important;
-        background: #ffffff !important;
-        padding: 0 !important;
-        margin: 0 !important;
-        display: block !important;
-        overflow: visible !important;
-        box-shadow: none !important;
-        border: none !important;
-      }
-      .no-print {
-        display: none !important;
-      }
-      #adminProperPrintArea {
-        padding: 0 !important;
-        background: #ffffff !important;
-      }
-    }
-
-</style>
-        </head>
-        <body onload="window.print()">
-          <div class="invoice-box">
-            <div class="header">
-              <h2 style="margin:0;">নিশা ক্রিয়েশনস (Nisha Creations)</h2>
-              <p style="margin:4px 0; font-size:12px;">আমতা, হাওড়া, পশ্চিমবঙ্গ | GSTIN: 19ABCDE1234F1Z5</p>
-              <h3 style="margin:6px 0;">ট্যাক্স ইনভয়েস / ক্যাশ মেমো (TAX INVOICE)</h3>
-            </div>
-            <p><strong>ইনভয়েস নম্বর:</strong> INV-${ord.id}</p>
-            <p><strong>তারিখ:</strong> ${new Date(ord.createdAt || Date.now()).toLocaleDateString('bn-IN')}</p>
-            <p><strong>ক্রেতার নাম:</strong> ${ord.name || 'সম্মানিত ক্রেতা'}</p>
-            <p><strong>ঠিকানা:</strong> ${ord.address || 'আমতা, হাওড়া'}</p>
-            <p><strong>ফোন:</strong> ${ord.phone || 'N/A'}</p>
-
-            <table>
-              <thead>
-                <tr>
-                  <th>আইটেম বিবরণ</th>
-                  <th>পরিমাণ</th>
-                  <th>দাম</th>
-                  <th>মোট</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>${ord.productTitle || 'শাড়ি / পোশাক'}</td>
-                  <td>1</td>
-                  <td>₹${taxable}</td>
-                  <td>₹${taxable}</td>
-                </tr>
-              </tbody>
-            </table>
-
-            <div style="text-align:right; font-size:14px; line-height:1.6;">
-              <p>ট্যাক্সেবল মূল্য: <strong>₹${taxable}</strong></p>
-              <p>CGST (2.5%): <strong>₹${cgst}</strong></p>
-              <p>SGST (2.5%): <strong>₹${sgst}</strong></p>
-              <h3 style="margin:8px 0; color:#b91c1c;">সর্বমোট প্রদেয়: ₹${ord.total}</h3>
-              <p style="font-size:11px; color:#666;">পেমেন্ট মোড: ${ord.paymentMethod || 'ক্যাশ অন ডেলিভারি (COD)'}</p>
-            </div>
-            <div style="border-top:1px dashed #666; margin-top:20px; padding-top:10px; text-align:center; font-size:11px;">
-              এটি একটি কম্পিউটার জেনারেটেড ডিজিটাল ইনভয়েস। নিশা ক্রিয়েশনস থেকে কেনাকাটার জন্য ধন্যবাদ!
-            </div>
-          </div>
-
-    // Listen for cross-tab updates to partner shops
-    window.addEventListener('storage', function(e) {
-      if (e.key === 'nc_partner_shops') {
-        if (typeof renderPartnerShopsList === 'function') {
-          renderPartnerShopsList();
-        }
-      }
-    });
-
-
-  <!-- ================= ADMIN 3-IN-1 PROPER BILL & BARCODE STUDIO MODAL ================= -->
-  <div id="adminBillingModal" style="display:none; position:fixed; inset:0; background:rgba(15,23,42,0.7); backdrop-filter:blur(5px); z-index:999999; align-items:center; justify-content:center; padding:12px; overflow-y:auto;">
-    <div style="background:#fff; border-radius:18px; max-width:680px; width:100%; max-height:92vh; display:flex; flex-direction:column; box-shadow:0 20px 40px rgba(0,0,0,0.25); border:1px solid #cbd5e1; overflow:hidden;">
-      
-      <!-- Modal Navigation Header (No-Print) -->
-      <div class="no-print" style="background:#0f172a; color:#fff; padding:12px 18px; display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #334155;">
-        <div>
-          <div style="font-weight:800; font-size:1rem; display:flex; align-items:center; gap:8px;">
-            <i class="fa-solid fa-print" style="color:#f59e0b;"></i> ওনার প্রিন্ট ও প্রপার বিলিং হাব
-          </div>
-          <div style="font-size:0.72rem; color:#94a3b8;">১. র‍্যাক বারকোড • ২. প্রোডাক্ট বারকোড • ৩. প্রপার পাকা বিল</div>
-        </div>
-        <button type="button" onclick="closeAdminBillingModal()" style="background:#334155; color:#fff; border:none; width:30px; height:30px; border-radius:50%; font-size:1rem; cursor:pointer;">✕</button>
-      </div>
-
-      <!-- 3-Way Tabs (No-Print) -->
-      <div class="no-print" style="display:flex; background:#f1f5f9; padding:6px; gap:6px; border-bottom:1px solid #e2e8f0;">
-        <button type="button" id="admTabBtnBill" class="billing-tab-btn" onclick="switchAdminBillingTab('bill')" style="flex:1; padding:8px 10px; border:none; border-radius:8px; font-weight:800; font-size:0.8rem; cursor:pointer; background:#fff; color:#4338ca; box-shadow:0 1px 3px rgba(0,0,0,0.08);">
-          <i class="fa-solid fa-file-invoice"></i> ৩. প্রপার পাকা বিল
-        </button>
-        <button type="button" id="admTabBtnProdBarcode" class="billing-tab-btn" onclick="switchAdminBillingTab('prod')" style="flex:1; padding:8px 10px; border:none; border-radius:8px; font-weight:700; font-size:0.8rem; cursor:pointer; background:transparent; color:#64748b;">
-          <i class="fa-solid fa-tag"></i> ২. প্রোডাক্ট বারকোড
-        </button>
-        <button type="button" id="admTabBtnRackBarcode" class="billing-tab-btn" onclick="switchAdminBillingTab('rack')" style="flex:1; padding:8px 10px; border:none; border-radius:8px; font-weight:700; font-size:0.8rem; cursor:pointer; background:transparent; color:#64748b;">
-          <i class="fa-solid fa-warehouse"></i> ১. র‍্যাক বারকোড
-        </button>
-      </div>
-
-      <!-- Printable Content Body -->
-      <div style="flex:1; overflow-y:auto; padding:16px; background:#f8fafc;" id="adminProperPrintArea">
-
-        <!-- TAB 3: PROPER TAX INVOICE / CASH MEMO (DEFAULT) -->
-        <div id="admPaneBillPrint" style="display:block; background:#fff; border:1px solid #cbd5e1; border-radius:12px; padding:20px; font-size:0.82rem; color:#0f172a; box-shadow:0 2px 8px rgba(0,0,0,0.04);">
-          <!-- INVOICE HEADER -->
-          <div style="display:flex; justify-content:space-between; align-items:flex-start; border-bottom:2px solid #0f172a; padding-bottom:12px; margin-bottom:12px;">
-            <div>
-              <div style="font-size:1.3rem; font-weight:900; color:#4338ca; letter-spacing:0.5px;">NISHA CREATIONS</div>
-              <div style="font-size:0.75rem; font-weight:700; color:#475569;">বুটিক, শাড়ি ও রেডিমেড কালেকশন হাব</div>
-              <div style="font-size:0.72rem; color:#64748b; margin-top:2px;">আমতা স্টেশন রোড, সিনেমা তলা মোড়, আমতা, হাওড়া - ৭১১৪০১</div>
-              <div style="font-size:0.72rem; color:#64748b;">হোয়াটসঅ্যাপ / হেল্পলাইন: <strong>9239413517</strong></div>
-            </div>
-            <div style="text-align:right;">
-              <span style="background:#0f172a; color:#fff; font-size:0.75rem; font-weight:800; padding:4px 10px; border-radius:6px; display:inline-block; margin-bottom:4px;">
-                TAX INVOICE / CASH MEMO
-              </span>
-              <div style="font-size:0.8rem; font-weight:800; color:#0f172a;" id="admInvNumberDisp">INV-NC-1001</div>
-              <div style="font-size:0.72rem; color:#64748b;" id="admInvDateDisp">তারিখ: ২৬ সেপ্টেম্বর ২০২৬</div>
-              <div style="font-size:0.72rem; font-weight:800; color:#15803d;" id="admInvPayModeDisp">পেমেন্ট: অনলাইন UPI (PAID)</div>
-            </div>
-          </div>
-
-          <!-- CUSTOMER & SHOP DETAILS 2-COLUMN -->
-          <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; background:#f8fafc; border:1px solid #e2e8f0; border-radius:10px; padding:10px 12px; margin-bottom:12px;">
-            <div>
-              <div style="font-size:0.72rem; font-weight:800; color:#4338ca; text-transform:uppercase; margin-bottom:2px;">গ্রাহকের বিবরণ (Customer Info):</div>
-              <div style="font-weight:800; font-size:0.88rem;" id="admInvCustName">কাস্টমার নাম</div>
-              <div style="font-size:0.75rem; color:#475569;" id="admInvCustPhone">📞 মোবাইল নম্বর</div>
-              <div style="font-size:0.75rem; color:#475569; margin-top:2px;" id="admInvCustAddr">📍 ঠিকানা ও ল্যান্ডমার্ক</div>
-              <div style="font-size:0.75rem; font-weight:800; color:#0f172a;" id="admInvCustPin">পিন কোড: 711401 (আমতা লোকাল)</div>
-            </div>
-            <div style="border-left:1px dashed #cbd5e1; padding-left:12px;">
-              <div style="font-size:0.72rem; font-weight:800; color:#4338ca; text-transform:uppercase; margin-bottom:2px;">দোকানদার / ভেন্ডার (Seller Info):</div>
-              <div style="font-weight:800; font-size:0.88rem;" id="admInvShopName">দোকানের নাম</div>
-              <div style="font-size:0.75rem; color:#475569;" id="admInvShopId">শপ কোড: #SHOP-AMTA-101</div>
-              <div style="font-size:0.75rem; color:#475569;" id="admInvShopPhone">📞 ফোন: 9239413517</div>
-              <div style="font-size:0.75rem; color:#64748b;" id="admInvShopRack">📍 সংরক্ষিত তাক: Rack A-01</div>
-            </div>
-          </div>
-
-          <!-- ITEMIZED PRODUCT TABLE -->
-          <table style="width:100%; border-collapse:collapse; margin-bottom:12px; font-size:0.78rem;">
-            <thead>
-              <tr style="background:#f1f5f9; border-top:1px solid #cbd5e1; border-bottom:1.5px solid #0f172a;">
-                <th style="padding:6px; text-align:center; width:30px;">#</th>
-                <th style="padding:6px; text-align:left;">পোশাক ও বিবরণ</th>
-                <th style="padding:6px; text-align:center;">সাইজ/রং</th>
-                <th style="padding:6px; text-align:center;">পরিমাণ</th>
-                <th style="padding:6px; text-align:right;">মূল্য (ট্যাক্স সহ)</th>
-              </tr>
-            </thead>
-            <tbody id="admInvItemsTableBody">
-              <!-- Dynamically populated rows -->
-            </tbody>
-          </table>
-
-          <!-- FINANCIAL CALCULATION BREAKDOWN -->
-          <div style="display:flex; justify-content:flex-end; margin-bottom:12px;">
-            <div style="width:290px; font-size:0.78rem; line-height:1.6;">
-              <div style="display:flex; justify-content:space-between; color:#475569;">
-                <span>পোশাকের উপমোট (Subtotal):</span>
-                <span id="admInvSubtotalVal" style="font-weight:700;">₹0</span>
-              </div>
-              <div style="display:flex; justify-content:space-between; color:#475569;">
-                <span>অন্তর্ভুক্ত জিএসটি (GST 5% Incl.):</span>
-                <span id="admInvGstVal" style="font-weight:700;">₹0</span>
-              </div>
-              <div style="display:flex; justify-content:space-between; color:#4338ca;">
-                <span>প্ল্যাটফর্ম সার্ভিস ফি (Platform Fee):</span>
-                <span style="font-weight:800;">+₹10</span>
-              </div>
-              <div style="display:flex; justify-content:space-between; color:#15803d;">
-                <span id="admInvDelivLabel">ডেলিভারি চার্জ (আমতা লোকাল):</span>
-                <span id="admInvDelivVal" style="font-weight:800;">FREE (ফ্রি)</span>
-              </div>
-              <div style="display:flex; justify-content:space-between; font-size:0.95rem; font-weight:900; color:#0f172a; border-top:2px solid #0f172a; padding-top:4px; margin-top:4px;">
-                <span>মোট প্রদেয় বিল (Net Total):</span>
-                <span id="admInvNetTotalVal" style="color:#059669;">₹0</span>
-              </div>
-              <div style="font-size:0.7rem; color:#64748b; text-align:right; margin-top:2px;" id="admInvInWordsVal">
-                (কথায়: শূন্য টাকা মাত্র)
-              </div>
-            </div>
-          </div>
-
-          <!-- FOOTER DECLARATION & QR -->
-          <div style="display:flex; justify-content:space-between; align-items:flex-end; border-top:1px dashed #cbd5e1; padding-top:10px;">
-            <div style="display:flex; align-items:center; gap:10px;">
-              <img id="admInvQrCodeImg" src="" style="width:65px; height:65px; border:1px solid #cbd5e1; padding:2px; border-radius:6px;">
-              <div style="font-size:0.68rem; color:#64748b; line-height:1.3;">
-                ✓ এটি কম্পিউটার জেনারেটেড ডিজিটাল ইনভয়েস।<br>
-                ✓ কাপড়ে কোনো ডিফেক্ট থাকলে ৩ দিনের মধ্যে এক্সচেঞ্জ প্রযোজ্য।<br>
-                ✓ কিউআর স্ক্যান করে লাইভ ট্র্যাকিং স্ট্যাটাস যাচাই করুন।
-              </div>
-            </div>
-            <div style="text-align:center;">
-              <div style="font-family:'Brush Script MT', cursive; font-size:1.1rem; color:#4338ca;">Nisha Creations</div>
-              <div style="font-size:0.68rem; border-top:1px solid #0f172a; padding-top:2px; font-weight:700;">অথরাইজড সিগনেচার</div>
-            </div>
-          </div>
-        </div>
-
-        <!-- TAB 2: PRODUCT BARCODE STICKER -->
-        <div id="admPaneProdBarcodePrint" style="display:none;">
-          <div style="background:#fff; border:2px dashed #0f172a; border-radius:12px; padding:16px; max-width:340px; margin:0 auto; text-align:center; box-shadow:0 2px 6px rgba(0,0,0,0.05);">
-            <div style="font-size:0.9rem; font-weight:900; color:#4338ca; text-transform:uppercase; letter-spacing:1px;" id="admPBarShopName">NISHA CREATIONS</div>
-            <div style="font-size:0.7rem; color:#64748b; font-weight:700;">PREMIUM BOUTIQUE TAG</div>
-            <div style="margin:8px 0; border-top:1px solid #e2e8f0; border-bottom:1px solid #e2e8f0; padding:6px 0;">
-              <div style="font-weight:800; font-size:0.85rem; color:#0f172a; line-height:1.2;" id="admPBarTitle">পোশাকের নাম</div>
-              <div style="font-size:0.75rem; color:#4338ca; font-weight:800; margin-top:2px;" id="admPBarRackLoc">📍 তাক: RACK A-01</div>
-            </div>
-
-            <div style="display:flex; justify-content:center; gap:8px; font-size:0.75rem; font-weight:700; color:#334155; margin-bottom:6px;">
-              <span id="admPBarSize">সাইজ: Free Size</span> • 
-              <span id="admPBarColor">রং: মূল কালার</span>
-            </div>
-
-            <div style="font-size:0.95rem; font-weight:900; color:#059669;" id="admPBarPrice">
-              সেল রেট: ₹850 <span style="font-size:0.72rem; color:#94a3b8; text-decoration:line-through;" id="admPBarMrp">₹1899</span>
-            </div>
-
-            <!-- 1D Barcode Graphic -->
-            <div style="margin:8px auto; display:flex; justify-content:center; align-items:flex-end; gap:2px; height:36px; background:#fff; padding:3px 8px; border-radius:4px; width:fit-content; border:1px solid #cbd5e1;">
-              <div style="width:3px; height:100%; background:#0f172a;"></div>
-              <div style="width:1px; height:100%; background:#0f172a;"></div>
-              <div style="width:4px; height:100%; background:#0f172a;"></div>
-              <div style="width:2px; height:100%; background:#0f172a;"></div>
-              <div style="width:5px; height:100%; background:#0f172a;"></div>
-              <div style="width:2px; height:100%; background:#0f172a;"></div>
-              <div style="width:4px; height:100%; background:#0f172a;"></div>
-              <div style="width:1px; height:100%; background:#0f172a;"></div>
-              <div style="width:3px; height:100%; background:#0f172a;"></div>
-            </div>
-            <div style="font-family:'Courier New', monospace; font-size:1.1rem; letter-spacing:4px; font-weight:900; color:#0f172a;" id="admPBarCodeText">* NC-101 *</div>
-            <img id="admPBarQrImg" src="" style="width:90px; height:90px; border:1px solid #cbd5e1; padding:2px; border-radius:6px; margin:4px auto; display:block;">
-            <div style="font-size:0.65rem; color:#64748b; margin-top:4px;">কাপড়ের প্যাকেটে সাঁটানোর জন্য প্রপার প্রোডাক্ট স্টিকার</div>
-          </div>
-        </div>
-
-        <!-- TAB 1: RACK / SHELF BARCODE STICKER -->
-        <div id="admPaneRackBarcodePrint" style="display:none;">
-          <div style="background:#fff; border:3px solid #4338ca; border-radius:14px; padding:20px; max-width:380px; margin:0 auto; text-align:center; box-shadow:0 4px 12px rgba(67,56,202,0.1);">
-            <div style="font-size:0.75rem; font-weight:800; color:#4338ca; letter-spacing:1px; text-transform:uppercase;">NISHA CREATIONS SMART WAREHOUSE</div>
-            <div style="font-size:0.7rem; color:#64748b; margin-bottom:8px;">আমতা সেন্ট্রাল ফুলফিলমেন্ট তাক ও শেল্ফ লোকেশন</div>
-            
-            <div style="background:#eef2ff; border:2px dashed #4338ca; border-radius:10px; padding:12px; margin-bottom:10px;">
-              <div style="font-size:0.75rem; color:#475569; font-weight:700;">সংরক্ষিত তাক কোড:</div>
-              <div style="font-size:1.9rem; font-weight:900; color:#4338ca; letter-spacing:2px; font-family:'Plus Jakarta Sans',sans-serif;" id="admRBarRackCode">RACK A-01</div>
-              <div style="font-size:0.8rem; font-weight:800; color:#0f172a; margin-top:2px;" id="admRBarZoneName">জামদানি শাড়ি ও কাতান ব্লক (শেল্ফ ১)</div>
-            </div>
-
-            <!-- Big 1D Barcode for Shelf -->
-            <div style="margin:10px auto; display:flex; justify-content:center; align-items:flex-end; gap:3px; height:44px; background:#fff; padding:4px 10px; border-radius:4px; width:fit-content; border:1.5px solid #0f172a;">
-              <div style="width:4px; height:100%; background:#0f172a;"></div>
-              <div style="width:2px; height:100%; background:#0f172a;"></div>
-              <div style="width:5px; height:100%; background:#0f172a;"></div>
-              <div style="width:2px; height:100%; background:#0f172a;"></div>
-              <div style="width:6px; height:100%; background:#0f172a;"></div>
-              <div style="width:3px; height:100%; background:#0f172a;"></div>
-              <div style="width:4px; height:100%; background:#0f172a;"></div>
-              <div style="width:2px; height:100%; background:#0f172a;"></div>
-              <div style="width:5px; height:100%; background:#0f172a;"></div>
-            </div>
-            <div style="font-family:'Courier New', monospace; font-size:1.2rem; letter-spacing:5px; font-weight:900; color:#0f172a; margin-bottom:8px;" id="admRBarCodeText">* RACK-A01 *</div>
-            <img id="admRBarQrImg" src="" style="width:105px; height:105px; border:1px solid #cbd5e1; padding:2px; border-radius:8px; margin:4px auto; display:block;">
-            <div style="font-size:0.7rem; color:#475569; font-weight:700; margin-top:6px;">তাক বা আলমারির হ্যান্ডেলে সেঁটে দিন (স্ক্যানার উপযোগী)</div>
-          </div>
-        </div>
-
-      </div>
-
-      <!-- Modal Bottom Actions (No-Print) -->
-      <div class="no-print" style="background:#fff; border-top:1px solid #e2e8f0; padding:12px 18px; display:flex; justify-content:space-between; align-items:center; gap:10px;">
-        <button type="button" onclick="closeAdminBillingModal()" style="background:#f1f5f9; color:#475569; border:1px solid #cbd5e1; padding:10px 18px; border-radius:10px; font-size:0.85rem; font-weight:800; cursor:pointer;">
-          বন্ধ করুন
-        </button>
-        <button type="button" onclick="triggerAdminProperPrint()" style="background:#4338ca; color:#fff; border:none; padding:10px 24px; border-radius:10px; font-size:0.92rem; font-weight:800; cursor:pointer; display:inline-flex; align-items:center; gap:8px; box-shadow:0 4px 12px rgba(67,56,202,0.3);">
-          <i class="fa-solid fa-print"></i> এখনই প্রিন্ট করুন
-        </button>
-      </div>
-
+      const gstHtml = `<!DOCTYPE html>
+<html>
+<head>
+  <title>GST Tax Invoice - ${ord.id}</title>
+  <style>
+    body { font-family: sans-serif; padding: 20px; color: #111; }
+    .invoice-box { border: 2px solid #000; padding: 16px; border-radius: 8px; max-width: 600px; margin: 0 auto; }
+    .header { text-align: center; border-bottom: 2px solid #000; padding-bottom: 10px; margin-bottom: 12px; }
+    table { width: 100%; border-collapse: collapse; margin: 14px 0; }
+    th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
+    th { background: #f2f2f2; }
+  </style>
+</head>
+<body onload="window.print()">
+  <div class="invoice-box">
+    <div class="header">
+      <h2 style="margin:0;">নিশা ক্রিয়েশনস (Nisha Creations)</h2>
+      <p style="margin:4px 0; font-size:12px;">আমতা, হাওড়া, পশ্চিমবঙ্গ | GSTIN: 19ABCDE1234F1Z5</p>
+      <h3 style="margin:6px 0;">ট্যাক্স ইনভয়েস / ক্যাশ মেমো (TAX INVOICE)</h3>
+    </div>
+    <p><strong>ইনভয়েস নম্বর:</strong> INV-${ord.id}</p>
+    <p><strong>তারিখ:</strong> ${new Date(ord.createdAt || Date.now()).toLocaleDateString("bn-IN")}</p>
+    <p><strong>ক্রেতার নাম:</strong> ${ord.name || ord.customerName || "সম্মানিত ক্রেতা"}</p>
+    <p><strong>ঠিকানা:</strong> ${ord.address || "আমতা, হাওড়া"}</p>
+    <table>
+      <thead>
+        <tr>
+          <th>বিবরণ</th>
+          <th>পরিমাণ</th>
+          <th>দর</th>
+          <th>মোট</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${(ord.items || []).map(i => `
+          <tr>
+            <td>${i.title} (${i.selectedSize || "Free Size"})</td>
+            <td>${i.qty || 1}</td>
+            <td>₹${i.price}</td>
+            <td>₹${(i.price || 0) * (i.qty || 1)}</td>
+          </tr>
+        `).join("")}
+      </tbody>
+    </table>
+    <div style="text-align:right; line-height:1.6;">
+      <p style="margin:2px 0;">ট্যাক্সেবল মূল্য: ₹${taxable}</p>
+      <p style="margin:2px 0;">CGST (2.5%): ₹${cgst} | SGST (2.5%): ₹${sgst}</p>
+      <h3 style="margin:8px 0; color:#b91c1c;">সর্বমোট প্রদেয়: ₹${ord.total}</h3>
+      <p style="font-size:11px; color:#666;">পেমেন্ট মোড: ${ord.paymentMethod || "ক্যাশ অন ডেলিভারি (COD)"}</p>
+    </div>
+    <div style="border-top:1px dashed #666; margin-top:20px; padding-top:10px; text-align:center; font-size:11px;">
+      এটি একটি কম্পিউটার জেনারেটেড ডিজিটাল ইনভয়েস। নিশা ক্রিয়েশনস থেকে কেনাকাটার জন্য ধন্যবাদ!
     </div>
   </div>
-
 </body>
-        </html>
-      `);
-      printWin.document.close();
+</html>`;
+
+      if (printWin) {
+        printWin.document.open();
+        printWin.document.write(gstHtml);
+        printWin.document.close();
+      }
     }
 
     // ============================================================
@@ -8045,6 +7620,447 @@ window.addEventListener('DOMContentLoaded', initAdminDashboard);
       alert(`⚡ ${p.title} এর সমস্ত ডেটা (টাইটেল, রেট ₹${p.price}, কালার, সাইজ ও SKU) ১-ক্লিকে পূরণ হয়েছে!\nএখন শুধু মোবাইল ক্যামেরা দিয়ে ছবি তুলুন ও সেভ করুন।`);
     }
 
+
+
+    // =========================================================================
+    // ⚡ ADMIN 1-CLICK INSTANT PRINT & AUTO-SCANNER ENGINE
+    // =========================================================================
+    function playScanBeep(freq = 950, duration = 0.15) {
+      try {
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+        gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start();
+        osc.stop(audioCtx.currentTime + duration);
+      } catch(e){}
+    }
+
+    function getInvoiceContentHtml(ord, seller) {
+      const sName = seller ? seller.shopName : 'নিশা ক্রিয়েশনস বুটিক শপ (হেডকোয়ার্টার)';
+      const sId = seller ? seller.shopId : 'SHOP-AMTA-101';
+      const sPhone = seller ? seller.phone : '9239413517';
+
+      const firstItem = (ord.items && ord.items[0]) ? ord.items[0] : {};
+      const rackVal = firstItem.binLocation || 'Rack A-01 (মেইন তাক)';
+      const items = (ord.items && ord.items.length > 0) ? ord.items : [firstItem];
+
+      let subtotal = 0;
+      const itemsRowsHtml = items.map((it, idx) => {
+        const qty = it.qty || 1;
+        const lineTotal = (it.price || 850) * qty;
+        subtotal += lineTotal;
+        return `
+          <tr style="border-bottom:1px solid #e2e8f0;">
+            <td style="padding:6px; text-align:center; font-weight:700;">${idx + 1}</td>
+            <td style="padding:6px;">
+              <strong style="color:#0f172a;">${it.title || 'পোশাক'}</strong>
+              <div style="font-size:10px; color:#64748b;">কোড: #${it.id || 'NC-101'} • সংরক্ষিত তাক: ${it.binLocation || rackVal}</div>
+            </td>
+            <td style="padding:6px; text-align:center;">
+              <span style="background:#eef2ff; color:#4338ca; padding:2px 6px; border-radius:4px; font-weight:700;">${it.selectedSize || 'Free'}</span>
+              <div style="font-size:10px; color:#64748b;">${it.selectedColor || 'মূল কালার'}</div>
+            </td>
+            <td style="padding:6px; text-align:center; font-weight:800;">${qty}</td>
+            <td style="padding:6px; text-align:right; font-weight:800; color:#0f172a;">₹${lineTotal}</td>
+          </tr>
+        `;
+      }).join('');
+
+      const gstVal = Math.round(subtotal * 0.05);
+      const netTotal = ord.total || subtotal;
+
+      const isOnlinePaid = (ord.paymentMode === 'UPI' || (ord.paymentMethod && ord.paymentMethod.includes('UPI')));
+      const paymentBadgeHtml = isOnlinePaid
+        ? `<div style="background:#dcfce7; border:2px solid #16a34a; color:#15803d; padding:8px 12px; border-radius:8px; font-weight:900; font-size:13px; text-align:center; margin-top:8px;">
+             ✓ অনলাইন পেইড (ONLINE PAID - ₹${netTotal})<br>
+             <span style="font-size:11px; font-weight:700; color:#166534;">[টাকা পূর্বে পরিশোধিত • কাস্টমারের থেকে ক্যাশ নেবেন না]</span>
+           </div>`
+        : `<div style="background:#fef3c7; border:2px solid #d97706; color:#92400e; padding:8px 12px; border-radius:8px; font-weight:900; font-size:13px; text-align:center; margin-top:8px;">
+             💵 ক্যাশ অন ডেলিভারি (CASH ON DELIVERY - COD)<br>
+             <span style="font-size:12px; font-weight:900; color:#b45309;">[কাস্টমারের থেকে সংগ্রহযোগ্য ক্যাশ: ₹${netTotal}]</span>
+           </div>`;
+
+      const pinText = (ord.pincode === '711401' || !ord.pincode)
+        ? '711401 (আমতা লোকাল • ফ্রি ডেলিভারি)'
+        : `${ord.pincode} (দূরবর্তী এলাকা)`;
+
+      const verifyUrl = `${window.location.origin}/packaging.html?orderId=${ord.id}`;
+      const qrImgUrl = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(verifyUrl)}`;
+
+      return `
+        <div class="bill-container" style="max-width:650px; margin:0 auto; background:#fff; border:2px solid #0f172a; border-radius:10px; padding:18px; font-size:12px; color:#0f172a;">
+          <!-- INVOICE HEADER -->
+          <div style="display:flex; justify-content:space-between; align-items:flex-start; border-bottom:2px solid #0f172a; padding-bottom:10px; margin-bottom:12px;">
+            <div>
+              <div style="font-size:20px; font-weight:900; color:#4338ca; letter-spacing:0.5px;">NISHA CREATIONS</div>
+              <div style="font-size:11px; font-weight:700; color:#475569;">বুটিক, শাড়ি ও রেডিমেড কালেকশন হাব</div>
+              <div style="font-size:10.5px; color:#64748b; margin-top:2px;">আমতা স্টেশন রোড, সিনেমা তলা মোড়, আমতা, হাওড়া - ৭১১৪০১</div>
+              <div style="font-size:10.5px; color:#64748b;">হোয়াটসঅ্যাপ / হেল্পলাইন: <strong>9239413517</strong></div>
+            </div>
+            <div style="text-align:right;">
+              <span style="background:#0f172a; color:#fff; font-size:11px; font-weight:800; padding:4px 10px; border-radius:6px; display:inline-block; margin-bottom:4px;">
+                TAX INVOICE / CASH MEMO
+              </span>
+              <div style="font-size:13px; font-weight:900; color:#0f172a;">INV-${ord.id}</div>
+              <div style="font-size:11px; color:#64748b;">তারিখ: ${ord.date || new Date().toLocaleDateString('bn-IN')}</div>
+            </div>
+          </div>
+
+          <!-- PROMINENT PAYMENT BADGE -->
+          <div style="margin-bottom:12px;">
+            ${paymentBadgeHtml}
+          </div>
+
+          <!-- CUSTOMER & SHOP DETAILS 2-COLUMN -->
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; background:#f8fafc; border:1px solid #cbd5e1; border-radius:8px; padding:10px 12px; margin-bottom:12px;">
+            <div>
+              <div style="font-size:10.5px; font-weight:800; color:#4338ca; text-transform:uppercase; margin-bottom:2px;">গ্রাহকের বিবরণ (Customer Info):</div>
+              <div style="font-weight:900; font-size:13px; color:#0f172a;">${ord.name || ord.customerName || 'সম্মানিত গ্রাহক'}</div>
+              <div style="font-size:11px; color:#334155; margin-top:1px;">📞 ফোন: <strong>${ord.phone || ord.customerPhone || '9239413517'}</strong></div>
+              <div style="font-size:11px; color:#334155; margin-top:2px; line-height:1.3;">📍 ঠিকানা: ${ord.address || 'আমতা, হাওড়া'}</div>
+              <div style="font-size:11px; font-weight:800; color:#0f172a; margin-top:2px;">পিন কোড: ${pinText}</div>
+            </div>
+            <div style="border-left:1px dashed #cbd5e1; padding-left:12px;">
+              <div style="font-size:10.5px; font-weight:800; color:#4338ca; text-transform:uppercase; margin-bottom:2px;">দোকানদার / ভেন্ডার (Seller Info):</div>
+              <div style="font-weight:800; font-size:13px; color:#0f172a;">${sName}</div>
+              <div style="font-size:11px; color:#475569;">শপ কোড: #${sId}</div>
+              <div style="font-size:11px; color:#475569;">📞 হেল্পলাইন: ${sPhone}</div>
+              <div style="font-size:11px; color:#4338ca; font-weight:700; margin-top:2px;">📍 সংরক্ষিত তাক: ${rackVal}</div>
+            </div>
+          </div>
+
+          <!-- ITEMIZED PRODUCT TABLE -->
+          <table style="width:100%; border-collapse:collapse; margin-bottom:12px; font-size:11.5px;">
+            <thead>
+              <tr style="background:#f1f5f9; border-top:1px solid #cbd5e1; border-bottom:1.5px solid #0f172a;">
+                <th style="padding:6px; text-align:center; width:30px; border:1px solid #cbd5e1;">#</th>
+                <th style="padding:6px; text-align:left; border:1px solid #cbd5e1;">পোশাক ও বিবরণ</th>
+                <th style="padding:6px; text-align:center; border:1px solid #cbd5e1;">সাইজ/রং</th>
+                <th style="padding:6px; text-align:center; border:1px solid #cbd5e1;">পরিমাণ</th>
+                <th style="padding:6px; text-align:right; border:1px solid #cbd5e1;">মূল্য (ট্যাক্স সহ)</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${itemsRowsHtml}
+            </tbody>
+          </table>
+
+          <!-- FINANCIAL CALCULATION BREAKDOWN -->
+          <div style="display:flex; justify-content:flex-end; margin-bottom:12px;">
+            <div style="width:290px; font-size:11.5px; line-height:1.6;">
+              <div style="display:flex; justify-content:space-between; color:#475569;">
+                <span>পোশাকের উপমোট (Subtotal):</span>
+                <span style="font-weight:700; color:#0f172a;">₹${subtotal}</span>
+              </div>
+              <div style="display:flex; justify-content:space-between; color:#475569;">
+                <span>অন্তর্ভুক্ত জিএসটি (GST 5% Incl.):</span>
+                <span style="font-weight:700; color:#0f172a;">₹${gstVal} (CGST 2.5% + SGST 2.5%)</span>
+              </div>
+              <div style="display:flex; justify-content:space-between; color:#15803d;">
+                <span>ডেলিভারি চার্জ (হোম ডেলিভারি):</span>
+                <span><span style="text-decoration:line-through; color:#94a3b8; font-weight:normal; margin-right:4px;">₹৬০</span><strong style="color:#15803d;">FREE (১০০% ফ্রি হোম ডেলিভারি)</strong></span>
+              </div>
+              <div style="display:flex; justify-content:space-between; font-size:14px; font-weight:900; color:#0f172a; border-top:2px solid #0f172a; padding-top:4px; margin-top:4px;">
+                <span>মোট প্রদেয় বিল (Net Total):</span>
+                <span style="color:#059669;">₹${netTotal}</span>
+              </div>
+              <div style="font-size:10px; color:#64748b; text-align:right; margin-top:2px;">
+                (কথায়: ${netTotal} টাকা মাত্র)
+              </div>
+            </div>
+          </div>
+
+          <!-- FOOTER DECLARATION & QR -->
+          <div style="display:flex; justify-content:space-between; align-items:flex-end; border-top:1px dashed #cbd5e1; padding-top:10px;">
+            <div style="display:flex; align-items:center; gap:10px;">
+              <img src="${qrImgUrl}" style="width:65px; height:65px; border:1px solid #cbd5e1; padding:2px; border-radius:6px;">
+              <div style="font-size:10px; color:#64748b; line-height:1.3;">
+                ✓ এটি কম্পিউটার জেনারেটেড ডিজিটাল ইনভয়েস।<br>
+                ✓ কাপড়ে কোনো ডিফেক্ট থাকলে ৩ দিনের মধ্যে এক্সচেঞ্জ প্রযোজ্য।<br>
+                ✓ কিউআর স্ক্যান করে লাইভ ট্র্যাকিং স্ট্যাটাস যাচাই করুন।
+              </div>
+            </div>
+            <div style="text-align:center;">
+              <div style="font-family:'Brush Script MT', cursive; font-size:18px; color:#4338ca;">Nisha Creations</div>
+              <div style="font-size:10px; border-top:1px solid #0f172a; padding-top:2px; font-weight:700;">অথরাইজড সিগনেচার</div>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function fastDirectPrint(orderId) {
+      let orders = ordersList || [];
+      if (orders.length === 0) {
+        try { orders = JSON.parse(localStorage.getItem('nc_orders') || '[]'); } catch(e){}
+      }
+      const ord = orders.find(o => String(o.id).toLowerCase() === String(orderId).toLowerCase());
+      if (!ord) {
+        alert('অর্ডার পাওয়া যায়নি!');
+        return;
+      }
+
+      const content = getInvoiceContentHtml(ord, { shopName: 'নিশা ক্রিয়েশনস বুটিক শপ (হেডকোয়ার্টার)', shopId: 'SHOP-AMTA-101', phone: '9239413517' });
+      const fullHtml = `<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Invoice #${ord.id} - Nisha Creations</title>
+  <style>
+    @page { size: auto; margin: 8mm 10mm; }
+    * { box-sizing: border-box; }
+    body { margin: 0; padding: 10px; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #fff; }
+    @media print {
+      body { padding: 0; }
+    }
+  </style>
+</head>
+<body onload="window.print()">
+  ${content}
+</body>
+</html>`;
+
+      let iframe = document.getElementById('ncFastPrintFrameAdmin');
+      if (!iframe) {
+        iframe = document.createElement('iframe');
+        iframe.id = 'ncFastPrintFrameAdmin';
+        iframe.style.position = 'fixed';
+        iframe.style.right = '0';
+        iframe.style.bottom = '0';
+        iframe.style.width = '0';
+        iframe.style.height = '0';
+        iframe.style.border = '0';
+        document.body.appendChild(iframe);
+      }
+
+      try {
+        const doc = iframe.contentWindow.document;
+        doc.open();
+        doc.write(fullHtml);
+        doc.close();
+        setTimeout(() => {
+          try {
+            iframe.contentWindow.focus();
+            iframe.contentWindow.print();
+          } catch(err) {
+            const pWin = window.open('', '_blank', 'width=750,height=950');
+            if (pWin) {
+              pWin.document.open();
+              pWin.document.write(fullHtml);
+              pWin.document.close();
+            }
+          }
+        }, 150);
+      } catch(e) {
+        const pWin = window.open('', '_blank', 'width=750,height=950');
+        if (pWin) {
+          pWin.document.open();
+          pWin.document.write(fullHtml);
+          pWin.document.close();
+        }
+      }
+    }
+
+    function fastBatchPrintAllPendingAdmin() {
+      let orders = ordersList || [];
+      if (orders.length === 0) {
+        try { orders = JSON.parse(localStorage.getItem('nc_orders') || '[]'); } catch(e){}
+      }
+      
+      const pendingOrders = orders.filter(o => o.status === 'Order Placed' || o.status === 'Ordered' || o.status === 'Pending' || o.status === 'Pending Packing');
+
+      if (pendingOrders.length === 0) {
+        alert('কোনো নতুন বা পেন্ডিং অর্ডার নেই!');
+        return;
+      }
+
+      const allBillsHtml = pendingOrders.map((ord, idx) => {
+        const isLast = idx === pendingOrders.length - 1;
+        return `
+          <div style="margin-bottom:20px; ${!isLast ? 'page-break-after:always; break-after:page;' : ''}">
+            ${getInvoiceContentHtml(ord, { shopName: 'নিশা ক্রিয়েশনস বুটিক শপ (হেডকোয়ার্টার)', shopId: 'SHOP-AMTA-101', phone: '9239413517' })}
+          </div>
+        `;
+      }).join('');
+
+      const fullHtml = `<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Batch Invoices (${pendingOrders.length}) - Nisha Creations</title>
+  <style>
+    @page { size: auto; margin: 8mm 10mm; }
+    * { box-sizing: border-box; }
+    body { margin: 0; padding: 10px; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #fff; }
+    @media print {
+      body { padding: 0; }
+    }
+  </style>
+</head>
+<body onload="window.print()">
+  ${allBillsHtml}
+</body>
+</html>`;
+
+      const pWin = window.open('', '_blank', 'width=750,height=950');
+      if (pWin) {
+        pWin.document.open();
+        pWin.document.write(fullHtml);
+        pWin.document.close();
+      }
+    }
+
+    let instantHtml5QrScannerAdmin = null;
+    let isInstantScannerOpenAdmin = false;
+    let isInstantScanCoolingDownAdmin = false;
+
+    function toggleInstantScannerDockAdmin() {
+      const dock = document.getElementById('instantScannerDockAdmin');
+      const camWrapper = document.getElementById('instantScanCameraWrapperAdmin');
+      const inp = document.getElementById('instantScanInputAdmin');
+      if (!dock) return;
+
+      isInstantScannerOpenAdmin = !isInstantScannerOpenAdmin;
+      dock.style.display = isInstantScannerOpenAdmin ? 'block' : 'none';
+
+      if (isInstantScannerOpenAdmin) {
+        if (inp) {
+          inp.focus();
+          inp.select();
+        }
+        startInstantQrCameraAdmin();
+      } else {
+        stopInstantQrCameraAdmin();
+      }
+    }
+
+    function startInstantQrCameraAdmin() {
+      const camWrapper = document.getElementById('instantScanCameraWrapperAdmin');
+      if (camWrapper) camWrapper.style.display = 'block';
+
+      if (typeof Html5Qrcode === 'undefined') {
+        showInstantScanToastAdmin('ক্যামেরা লাইব্রেরি লোড হচ্ছে... অনুগ্রহ করে ম্যানুয়াল ইনপুট ব্যবহার করুন বা আবার চেষ্টা করুন।', 'amber');
+        return;
+      }
+
+      if (!instantHtml5QrScannerAdmin) {
+        instantHtml5QrScannerAdmin = new Html5Qrcode("instant-qr-reader-admin");
+      }
+
+      instantHtml5QrScannerAdmin.start(
+        { facingMode: "environment" },
+        {
+          fps: 15,
+          qrbox: { width: 240, height: 240 }
+        },
+        (decodedText) => {
+          handleInstantScanDataAdmin(decodedText);
+        },
+        (errorMessage) => {
+          // ignore frame errors
+        }
+      ).catch(err => {
+        console.warn("Camera start error:", err);
+        showInstantScanToastAdmin('ক্যামেরা চালু করতে সমস্যা হয়েছে। অনুগ্রহ করে ব্রাউজার ক্যামেরা পারমিশন চেক করুন অথবা বারকোড গান / টাইপ করে অর্ডার আইডি দিন।', 'amber');
+      });
+    }
+
+    function stopInstantQrCameraAdmin() {
+      if (instantHtml5QrScannerAdmin) {
+        instantHtml5QrScannerAdmin.stop().then(() => {
+          const camWrapper = document.getElementById('instantScanCameraWrapperAdmin');
+          if (camWrapper) camWrapper.style.display = 'none';
+        }).catch(err => {
+          console.warn("Camera stop error:", err);
+        });
+      }
+    }
+
+    function handleManualInstantScanAdmin() {
+      const inp = document.getElementById('instantScanInputAdmin');
+      const val = inp ? inp.value.trim() : '';
+      if (!val) {
+        showInstantScanToastAdmin('অনুগ্রহ করে অর্ডার নম্বর বা বারকোড দিন (যেমন: NC-1001)', 'amber');
+        return;
+      }
+      handleInstantScanDataAdmin(val);
+      if (inp) inp.value = '';
+    }
+
+    function handleInstantScanDataAdmin(rawStr) {
+      if (!rawStr || isInstantScanCoolingDownAdmin) return;
+      isInstantScanCoolingDownAdmin = true;
+      setTimeout(() => { isInstantScanCoolingDownAdmin = false; }, 2200);
+
+      let clean = String(rawStr).trim();
+      if (clean.includes('scan=')) clean = clean.split('scan=')[1].split('&')[0];
+      if (clean.includes('orderId=')) clean = clean.split('orderId=')[1].split('&')[0];
+      clean = clean.replace('#', '').trim();
+
+      let orders = ordersList || [];
+      if (orders.length === 0) {
+        try { orders = JSON.parse(localStorage.getItem('nc_orders') || '[]'); } catch(e){}
+      }
+
+      let matchedOrder = orders.find(o => String(o.id).toLowerCase() === clean.toLowerCase());
+      if (!matchedOrder) {
+        const altId = clean.toLowerCase().startsWith('nc-') ? clean.substring(3) : ('nc-' + clean);
+        matchedOrder = orders.find(o => String(o.id).toLowerCase() === altId.toLowerCase());
+      }
+      if (!matchedOrder) {
+        matchedOrder = orders.find(o => {
+          const items = Array.isArray(o.items) ? o.items : [];
+          return items.some(it => (it.id && String(it.id).toLowerCase() === clean.toLowerCase()) || (it.sku && String(it.sku).toLowerCase() === clean.toLowerCase()));
+        });
+      }
+
+      if (!matchedOrder) {
+        playScanBeep(400, 0.25);
+        showInstantScanToastAdmin(`❌ কোনো অর্ডার পাওয়া যায়নি: "${clean}"`, 'red');
+        return;
+      }
+
+      playScanBeep(980, 0.18);
+      showInstantScanToastAdmin(`✅ অর্ডার #${matchedOrder.id} স্ক্যান সফল! স্বয়ংক্রিয়ভাবে বিল প্রিন্ট হচ্ছে...`, 'green');
+
+      const chkAuto = document.getElementById('chkAutoPrintImmediateAdmin');
+      const shouldAutoPrint = chkAuto ? chkAuto.checked : true;
+
+      if (shouldAutoPrint) {
+        fastDirectPrint(matchedOrder.id);
+      } else {
+        openAdminProperBillModal(matchedOrder.id);
+      }
+    }
+
+    function showInstantScanToastAdmin(msg, color) {
+      const toast = document.getElementById('instantScanFeedbackToastAdmin');
+      if (!toast) return;
+      toast.style.display = 'block';
+      if (color === 'green') {
+        toast.style.background = '#065f46';
+        toast.style.color = '#fff';
+        toast.style.border = '1.5px solid #34d399';
+      } else if (color === 'red') {
+        toast.style.background = '#7f1d1d';
+        toast.style.color = '#fff';
+        toast.style.border = '1.5px solid #ef4444';
+      } else {
+        toast.style.background = '#78350f';
+        toast.style.color = '#fff';
+        toast.style.border = '1.5px solid #f59e0b';
+      }
+      toast.innerHTML = msg;
+      setTimeout(() => {
+        if (toast) toast.style.display = 'none';
+      }, 3500);
+    }
+
 </script>
 
   <!-- ================= EDIT FULL PRODUCT MODAL (প্রোডাক্ট এডিট) ================= -->
@@ -8377,7 +8393,9 @@ window.addEventListener('DOMContentLoaded', initAdminDashboard);
               </span>
               <div style="font-size:0.8rem; font-weight:800; color:#0f172a;" id="admInvNumberDisp">INV-NC-1001</div>
               <div style="font-size:0.72rem; color:#64748b;" id="admInvDateDisp">তারিখ: ২৬ সেপ্টেম্বর ২০২৬</div>
-              <div style="font-size:0.72rem; font-weight:800; color:#15803d;" id="admInvPayModeDisp">পেমেন্ট: অনলাইন UPI (PAID)</div>
+              <div id="admInvPayModeBadgeContainer" style="margin-top:4px;">
+                <div style="font-size:0.78rem; font-weight:900; padding:4px 8px; border-radius:6px; display:inline-block;" id="admInvPayModeDisp">পেমেন্ট স্ট্যাটাস</div>
+              </div>
             </div>
           </div>
 
@@ -8426,10 +8444,7 @@ window.addEventListener('DOMContentLoaded', initAdminDashboard);
                 <span>অন্তর্ভুক্ত জিএসটি (GST 5% Incl.):</span>
                 <span id="admInvGstVal" style="font-weight:700;">₹0</span>
               </div>
-              <div style="display:flex; justify-content:space-between; color:#4338ca;">
-                <span>প্ল্যাটফর্ম সার্ভিস ফি (Platform Fee):</span>
-                <span style="font-weight:800;">+₹10</span>
-              </div>
+
               <div style="display:flex; justify-content:space-between; color:#15803d;">
                 <span id="admInvDelivLabel">ডেলিভারি চার্জ (আমতা লোকাল):</span>
                 <span id="admInvDelivVal" style="font-weight:800;">FREE (ফ্রি)</span>
