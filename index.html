@@ -1011,6 +1011,17 @@
 <input id="cust_name" placeholder="আপনার পুরো নাম লিখুন *" style="width:100%; padding:8px 10px; margin-bottom:6px; border:1px solid #cbd5e1; border-radius:6px; font-size:0.82rem;" type="text" value=""/>
 <input id="cust_phone" maxlength="10" placeholder="১০ ডিজিটের মোবাইল নম্বর *" style="width:100%; padding:8px 10px; margin-bottom:6px; border:1px solid #cbd5e1; border-radius:6px; font-size:0.82rem;" type="tel" value=""/>
 <textarea id="cust_addr" placeholder="আমতা ও সংলগ্ন এলাকার ঠিকানা ও ল্যান্ডমার্ক *" rows="2" style="width:100%; padding:8px 10px; margin-bottom:6px; border:1px solid #cbd5e1; border-radius:6px; font-size:0.82rem;"></textarea>
+<div style="display:grid; grid-template-columns:1fr 1fr; gap:6px; margin-bottom:6px;">
+  <div>
+    <label style="font-size:0.7rem; font-weight:700; color:#64748b; display:block; margin-bottom:2px;">পিন কোড (Pincode) *</label>
+    <input type="tel" id="cust_pincode" maxlength="6" placeholder="711401" value="711401" oninput="handleCheckoutPincodeChange(this.value)" style="width:100%; padding:8px 10px; border:1px solid #cbd5e1; border-radius:6px; font-size:0.82rem; font-weight:800; background:#f8fafc;">
+  </div>
+  <div style="display:flex; flex-direction:column; justify-content:flex-end;">
+    <div id="pincodeDeliveryStatusBadge" style="display:flex; align-items:center; justify-content:center; font-size:0.72rem; font-weight:800; border-radius:6px; background:#dcfce7; color:#15803d; border:1px solid #86efac; padding:7px 6px; text-align:center;">
+      ✓ আমতা লোকাল (ফ্রি ডেলিভারি)
+    </div>
+  </div>
+</div>
 <button id="t-btnSaveAddrInline" onclick="saveAddressInline()" style="background:var(--primary); color:#fff; border:none; padding:6px 14px; border-radius:6px; font-size:0.75rem; font-weight:800; cursor:pointer;" type="button">
                 ঠিকানা সংরক্ষণ করুন
               </button>
@@ -1073,9 +1084,13 @@
 <span id="t-lblReturnDiscount">স্মার্ট রিটার্ন ছাড় (Wrong/Defective):</span>
 <span id="billReturnDiscountVal">-₹10</span>
 </div>
+<div style="display:flex; justify-content:space-between; font-size:0.78rem; color:#475569; margin-bottom:4px;">
+<span id="t-lblPlatformFee">প্ল্যাটফর্ম সার্ভিস চার্জ (Platform Fee):</span>
+<span style="font-weight:800; color:var(--primary);">+₹10</span>
+</div>
 <div style="display:flex; justify-content:space-between; font-size:0.78rem; color:#16a34a; margin-bottom:4px;">
-<span id="t-lblDeliveryFee">ডেলিভারি চার্জ (Delivery):</span>
-<span style="font-weight:800;">FREE (ফ্রি)</span>
+<span id="t-lblDeliveryFee">ডেলিভারি চার্জ (পিন কোড ভিত্তিক):</span>
+<span id="billDeliveryChargeVal" style="font-weight:800;">~~₹৬০~~ FREE (ফ্রি)</span>
 </div>
 <div style="display:flex; justify-content:space-between; font-size:0.95rem; font-weight:800; color:#0f172a; border-top:1px dashed #cbd5e1; padding-top:6px; margin-top:6px;">
 <span id="t-lblTotalPayable">মোট পেয়িং অ্যামাউন্ট:</span>

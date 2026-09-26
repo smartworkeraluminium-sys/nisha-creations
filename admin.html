@@ -4372,6 +4372,18 @@ function closeAdminBarcodeStickerModal() {
           <!-- Items list -->
           ${itemsHtml}
 
+          <!-- Financial breakdown badge for owner & settlement -->
+          <div style="background:#0f172a; border:1px solid #334155; border-radius:8px; padding:6px 10px; margin-top:8px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:6px; font-size:0.75rem;">
+            <span style="color:#94a3b8;">
+              দোকানদারের প্রাপ্য: <strong style="color:#38bdf8;">₹${ord.rawSubtotal || (ord.total - (ord.platformFee !== undefined ? ord.platformFee : 10) - (ord.deliveryCharge || 0))}</strong> |
+              প্ল্যাটফর্ম লাভ: <strong style="color:#10b981;">+₹${ord.platformFee !== undefined ? ord.platformFee : 10}</strong> |
+              ডেলিভারি ফি: <strong style="color:#f59e0b;">${ord.deliveryCharge ? '₹' + ord.deliveryCharge : 'ফ্রি (আমতা লোকাল)'}</strong>
+            </span>
+            <span style="color:#a7f3d0; font-weight:800;">
+              পিন কোড: ${ord.pincode || '711401'}
+            </span>
+          </div>
+
           <!-- Amazon Worker & Trolley Accountability Badge -->
           ${ord.packedBy ? `
             <div style="margin-top:8px; padding:6px 10px; background:#0b0f19; border:1.5px solid #10b981; border-radius:8px; font-size:0.75rem; color:#a7f3d0; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:6px;">

@@ -6243,6 +6243,60 @@ var selectedPayMethod = 'UPI';
 
 
 // =========================================================================
+
+// =========================================================================
+// DYNAMIC PINCODE DELIVERY & PLATFORM CHARGE ENGINE
+// 711401 (আমতা সদর) = FREE (~~₹60~~ ফ্রি)
+// 711402 - 711414 (পার্শ্ববর্তী এলাকা) = ₹60
+// Other Pincodes (দূরবর্তী এলাকা) = ₹90
+// Platform Fee = ফিক্সড ₹10
+// =========================================================================
+function calcPincodeDeliveryCharge(pin) {
+  const cleanPin = String(pin || '').trim();
+  if (cleanPin === '711401' || cleanPin === '') {
+    return {
+      fee: 0,
+      label: '<span style="color:#15803d; font-weight:800;"><span style="text-decoration:line-through; color:#94a3b8; font-weight:normal; margin-right:4px;">₹৬০</span>FREE (ফ্রি)</span>',
+      badge: '✓ আমতা লোকাল (ফ্রি ডেলিভারি)',
+      badgeColor: '#dcfce7',
+      badgeText: '#15803d',
+      border: '#86efac'
+    };
+  }
+  const num = parseInt(cleanPin, 10);
+  if (!isNaN(num) && num >= 711402 && num <= 711414) {
+    return {
+      fee: 60,
+      label: '<span style="color:#b45309; font-weight:800;">+₹60</span>',
+      badge: '🚚 পার্শ্ববর্তী এলাকা (+₹৬০)',
+      badgeColor: '#fef3c7',
+      badgeText: '#92400e',
+      border: '#fcd34d'
+    };
+  }
+  return {
+    fee: 90,
+    label: '<span style="color:#dc2626; font-weight:800;">+₹90</span>',
+    badge: '🚀 দূরবর্তী এলাকা (+₹৯০)',
+    badgeColor: '#fee2e2',
+    badgeText: '#b91c1c',
+    border: '#fca5a5'
+  };
+}
+
+function handleCheckoutPincodeChange(pin) {
+  localStorage.setItem('nc_cust_pincode', pin);
+  const info = calcPincodeDeliveryCharge(pin);
+  const badge = document.getElementById('pincodeDeliveryStatusBadge');
+  if (badge) {
+    badge.innerHTML = info.badge;
+    badge.style.background = info.badgeColor;
+    badge.style.color = info.badgeText;
+    badge.style.borderColor = info.border;
+  }
+  updateCheckoutPriceDetails();
+}
+
 // UNIFIED CHECKOUT PRICE & BILL DETAILS CALCULATOR (নিখুঁত হিসাব ও ডিসকাউন্ট)
 // =========================================================================
 function updateCheckoutPriceDetails() {
@@ -6275,7 +6329,28 @@ function updateCheckoutPriceDetails() {
     returnDiscount = 10;
   }
 
-  const finalPayable = Math.max(0, rawSubtotal - coinDiscount - returnDiscount);
+  // 1. Platform Fee (ফিক্সড ₹10)
+  const platformFee = (rawSubtotal > 0) ? 10 : 0;
+
+  // 2. Dynamic Pincode Delivery Fee
+  const currentPin = (document.getElementById('cust_pincode')?.value || localStorage.getItem('nc_cust_pincode') || '711401').trim();
+  const delivInfo = calcPincodeDeliveryCharge(currentPin);
+  const deliveryCharge = (rawSubtotal > 0) ? delivInfo.fee : 0;
+
+  const elDelivVal = document.getElementById('billDeliveryChargeVal');
+  if (elDelivVal) {
+    elDelivVal.innerHTML = (rawSubtotal > 0) ? delivInfo.label : 'FREE (ফ্রি)';
+  }
+
+  const badge = document.getElementById('pincodeDeliveryStatusBadge');
+  if (badge) {
+    badge.innerHTML = delivInfo.badge;
+    badge.style.background = delivInfo.badgeColor;
+    badge.style.color = delivInfo.badgeText;
+    badge.style.borderColor = delivInfo.border;
+  }
+
+  const finalPayable = Math.max(0, rawSubtotal - coinDiscount - returnDiscount + platformFee + deliveryCharge);
 
   // Update DOM elements in Price Details table
   const elTotalMrp = document.getElementById('billTotalMrp');
@@ -6540,7 +6615,13 @@ function submitFinalOrder() {
 
   const orderId = "NC-" + Math.floor(1000 + Math.random() * 9000);
   const rawSubtotal = cart.reduce((sum, item) => sum + (item.price || 0), 0);
-  const payableBase = Math.max(0, rawSubtotal - (appliedCoinDiscountRupees || 0));
+  
+  // Platform fee & dynamic pincode delivery fee
+  const platformFee = (rawSubtotal > 0) ? 10 : 0;
+  const delivInfo = calcPincodeDeliveryCharge(pin);
+  const deliveryCharge = (rawSubtotal > 0) ? delivInfo.fee : 0;
+
+  const payableBase = Math.max(0, rawSubtotal - (appliedCoinDiscountRupees || 0) + platformFee + deliveryCharge);
 
   const isUpi = (selectedPayMethod === 'UPI');
   const finalTotal = isUpi ? Math.max(0, payableBase - 38) : payableBase;
@@ -6561,9 +6642,11 @@ function submitFinalOrder() {
     address: `${addr}, আমতা - ${pin}`,
     pincode: pin,
     items: [...cart],
+    platformFee: platformFee,
+    deliveryCharge: deliveryCharge,
+    rawSubtotal: rawSubtotal,
     total: finalTotal,
     totalAmount: finalTotal,
-    rawSubtotal: rawSubtotal,
     coinsUsed: appliedCoinsCount || 0,
     coinDiscount: appliedCoinDiscountRupees || 0,
     savings: totalSavings,

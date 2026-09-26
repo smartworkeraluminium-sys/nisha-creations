@@ -892,11 +892,19 @@
               📍 <strong>ডেলিভারি ঠিকানা:</strong> ${ord.address}
             </div>
 
-            <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; padding:8px 10px; margin-bottom:10px; display:flex; justify-content:space-between; align-items:center;">
-              <div style="font-size:0.8rem; font-weight:700;">
-                ${(ord.items || []).map(i => `${i.title} (${i.selectedSize || 'Free Size'}) x ${i.qty || 1}`).join(', ')}
+            <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; padding:8px 10px; margin-bottom:10px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+              <div>
+                <div style="font-size:0.8rem; font-weight:700;">
+                  ${(ord.items || []).map(i => `${i.title} (${i.selectedSize || 'Free Size'}) x ${i.qty || 1}`).join(', ')}
+                </div>
+                <div style="font-size:0.72rem; color:#64748b; margin-top:2px;">
+                  দোকানদারের প্রাপ্য: <strong style="color:var(--brand);">₹${ord.rawSubtotal || (ord.total - (ord.platformFee !== undefined ? ord.platformFee : 10) - (ord.deliveryCharge || 0))}</strong> • প্ল্যাটফর্ম ফি: <strong>₹${ord.platformFee !== undefined ? ord.platformFee : 10}</strong> • ডেলিভারি: <strong>${ord.deliveryCharge ? '₹' + ord.deliveryCharge : 'ফ্রি (আমতা)'}</strong>
+                </div>
               </div>
-              <div style="font-size:0.9rem; font-weight:800; color:var(--emerald);">₹${ord.total}</div>
+              <div style="text-align:right;">
+                <div style="font-size:0.95rem; font-weight:800; color:var(--emerald);">কাস্টমার বিল: ₹${ord.total}</div>
+                <div style="font-size:0.72rem; color:var(--brand); font-weight:800;">আপনার প্রাপ্য: ₹${ord.rawSubtotal || (ord.total - (ord.platformFee !== undefined ? ord.platformFee : 10) - (ord.deliveryCharge || 0))}</div>
+              </div>
             </div>
 
             <div style="display:flex; gap:8px; flex-wrap:wrap;">
