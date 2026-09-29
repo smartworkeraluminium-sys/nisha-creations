@@ -2264,6 +2264,178 @@ function clearSearchInput() {
   }
 }
 
+// =========================================================================
+// 📸 VISUAL PHOTO / IMAGE SEARCH ENGINE (ক্যামেরা ও গ্যালারি থেকে ছবি দিয়ে সার্চ)
+// =========================================================================
+function triggerImageSearchUpload() {
+  const inp = document.getElementById('imageSearchFileInput');
+  if (inp) {
+    inp.value = '';
+    inp.click();
+  }
+}
+
+function closeImageSearchModal() {
+  const modal = document.getElementById('imageSearchModal');
+  if (modal) modal.style.display = 'none';
+}
+
+function handleImageSearchFile(event) {
+  const file = event.target.files && event.target.files[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    const dataUrl = e.target.result;
+    openImageSearchWithData(dataUrl);
+  };
+  reader.readAsDataURL(file);
+}
+
+function openImageSearchWithData(dataUrl) {
+  const modal = document.getElementById('imageSearchModal');
+  const previewImg = document.getElementById('imageSearchPreviewImg');
+  const statusText = document.getElementById('imageSearchStatusText');
+  const colorTag = document.getElementById('imageSearchColorTag');
+  const colorBadge = document.getElementById('imageSearchColorBadge');
+  const matchCount = document.getElementById('imageSearchMatchCount');
+  const matchedGrid = document.getElementById('imageSearchMatchedGrid');
+  const waBtn = document.getElementById('imageSearchWhatsAppBtn');
+
+  if (!modal || !previewImg) return;
+
+  previewImg.src = dataUrl;
+  modal.style.display = 'flex';
+  statusText.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> শাড়ির ছবি বিশ্লেষণ করা হচ্ছে...';
+  colorTag.style.display = 'none';
+  if (matchedGrid) matchedGrid.innerHTML = '';
+  if (matchCount) matchCount.textContent = '';
+
+  // WhatsApp Enquiry Link with polite inquiry
+  const shopPhone = '9641405426';
+  const waMsg = encodeURIComponent("নমস্কার নিশা ক্রিয়েশনস, আমি এই ডিজাইনের শাড়িটি খুঁজছি। আপনাদের আমতা শোরুমে বা স্টকে এই ধরণের শাড়ি পাওয়া যাবে কি?");
+  if (waBtn) waBtn.href = `https://wa.me/91${shopPhone}?text=${waMsg}`;
+
+  // Analyze Image dominant color & pattern using an off-screen HTML5 Canvas
+  const img = new Image();
+  img.crossOrigin = 'Anonymous';
+  img.onload = function() {
+    try {
+      const canvas = document.createElement('canvas');
+      canvas.width = 50;
+      canvas.height = 50;
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(img, 0, 0, 50, 50);
+      const imgData = ctx.getImageData(5, 5, 40, 40).data;
+
+      let rTotal = 0, gTotal = 0, bTotal = 0, count = 0;
+      for (let i = 0; i < imgData.length; i += 4) {
+        const r = imgData[i], g = imgData[i+1], b = imgData[i+2];
+        // Filter out extreme glare and dark corners
+        if ((r > 245 && g > 245 && b > 245) || (r < 15 && g < 15 && b < 15)) continue;
+        rTotal += r;
+        gTotal += g;
+        bTotal += b;
+        count++;
+      }
+      if (count === 0) count = 1;
+      const avgR = Math.round(rTotal / count);
+      const avgG = Math.round(gTotal / count);
+      const avgB = Math.round(bTotal / count);
+
+      let detectedColorName = "রঙিন / আকর্ষণীয়";
+      let filterKey = "";
+
+      if (avgR > 160 && avgG < 110 && avgB < 110) {
+        detectedColorName = "লাল (Red)";
+        filterKey = "লাল";
+      } else if (avgR > 175 && avgB > 125 && avgG < 150) {
+        detectedColorName = "গোলাপি / পিঙ্ক (Pink)";
+        filterKey = "গোলাপি";
+      } else if (avgB > 125 && avgB > avgR && avgB > avgG) {
+        detectedColorName = "নীল (Blue)";
+        filterKey = "নীল";
+      } else if (avgG > 120 && avgG > avgR && avgG > avgB) {
+        detectedColorName = "সবুজ (Green)";
+        filterKey = "সবুজ";
+      } else if (avgR > 175 && avgG > 155 && avgB < 125) {
+        detectedColorName = "হলুদ (Yellow)";
+        filterKey = "হলুদ";
+      } else if (avgR > 115 && avgB > 115 && avgG < 110) {
+        detectedColorName = "বেগুনি (Purple/Violet)";
+        filterKey = "বেগুনি";
+      } else if (avgR < 75 && avgG < 75 && avgB < 75) {
+        detectedColorName = "কালো (Black)";
+        filterKey = "কালো";
+      } else if (avgR > 200 && avgG > 200 && avgB > 200) {
+        detectedColorName = "সাদা / হালকা (White)";
+        filterKey = "সাদা";
+      } else {
+        detectedColorName = "ডিজাইনার মাল্টিকালার";
+        filterKey = "";
+      }
+
+      colorBadge.textContent = `চিহ্নিত রঙ: ${detectedColorName}`;
+      colorTag.style.display = 'block';
+      statusText.innerHTML = `✓ শাড়ির রঙ সনাক্ত করা হয়েছে: <strong>${detectedColorName}</strong>`;
+
+      // Match products in catalog by color or category
+      let matches = [];
+      if (filterKey) {
+        matches = products.filter(p => {
+          const desc = (p.desc || '').toLowerCase();
+          const title = (p.title || '').toLowerCase();
+          const cat = (p.category || '').toLowerCase();
+          return desc.includes(filterKey) || title.includes(filterKey) || cat.includes(filterKey);
+        });
+      }
+      if (matches.length < 2) {
+        matches = products.filter(p => p.type === 'saree').slice(0, 6);
+      } else {
+        matches = matches.slice(0, 6);
+      }
+
+      if (matchCount) matchCount.textContent = `(${matches.length}টি শাড়ি পাওয়া গেছে)`;
+      if (matchedGrid) {
+        matchedGrid.innerHTML = '';
+        matches.forEach(prod => {
+          matchedGrid.innerHTML += `
+            <div onclick="closeImageSearchModal(); openPdp('${prod.id}')" style="background:#fff; border:1px solid #e2e8f0; border-radius:12px; overflow:hidden; cursor:pointer; box-shadow:0 2px 6px rgba(0,0,0,0.06); text-align:left;">
+              <img src="${prod.img}" alt="${prod.title}" style="width:100%; height:130px; object-fit:cover;">
+              <div style="padding:8px;">
+                <div style="font-size:0.75rem; font-weight:800; color:#1e293b; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${prod.title}</div>
+                <div style="font-size:0.8rem; font-weight:800; color:var(--primary); margin-top:2px;">₹${prod.price} <span style="font-size:0.65rem; color:#94a3b8; text-decoration:line-through;">₹${prod.mrp}</span></div>
+                <button type="button" style="width:100%; background:var(--primary); color:#fff; border:none; padding:4px 0; border-radius:6px; font-size:0.7rem; font-weight:800; margin-top:6px; cursor:pointer;">দেখুন ও কিনুন</button>
+              </div>
+            </div>
+          `;
+        });
+      }
+    } catch(err) {
+      console.warn("Image color analysis fallback:", err);
+      statusText.innerHTML = "✓ শাড়ির কালেকশন পাওয়া গেছে";
+      const fallbacks = products.filter(p => p.type === 'saree').slice(0, 6);
+      if (matchCount) matchCount.textContent = `(${fallbacks.length}টি শাড়ি পাওয়া গেছে)`;
+      if (matchedGrid) {
+        matchedGrid.innerHTML = '';
+        fallbacks.forEach(prod => {
+          matchedGrid.innerHTML += `
+            <div onclick="closeImageSearchModal(); openPdp('${prod.id}')" style="background:#fff; border:1px solid #e2e8f0; border-radius:12px; overflow:hidden; cursor:pointer; box-shadow:0 2px 6px rgba(0,0,0,0.06); text-align:left;">
+              <img src="${prod.img}" alt="${prod.title}" style="width:100%; height:130px; object-fit:cover;">
+              <div style="padding:8px;">
+                <div style="font-size:0.75rem; font-weight:800; color:#1e293b; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${prod.title}</div>
+                <div style="font-size:0.8rem; font-weight:800; color:var(--primary); margin-top:2px;">₹${prod.price}</div>
+              </div>
+            </div>
+          `;
+        });
+      }
+    }
+  };
+  img.src = dataUrl;
+}
+
+
 function filterByUnifiedCat(catKey, element) {
   currentActiveCategoryKey = catKey;
   document.querySelectorAll('.unified-cat-item').forEach(el => el.classList.remove('active'));

@@ -146,11 +146,18 @@
     <!-- Search Box -->
           <!-- Search Box (Direct Typing & Voice Search Enabled) -->
       <div class="search-box-wrap">
-        <div class="search-input-box" style="cursor:text; position:relative;">
+        <div class="search-input-box" style="cursor:text; position:relative; display:flex; align-items:center;">
           <i class="fa-solid fa-magnifying-glass" style="color:var(--primary); cursor:pointer;" onclick="submitSearchInput()" title="অনুসন্ধান"></i>
-          <input type="text" id="searchInput" placeholder="শাড়ির নাম, জামদানি বা গহনা খুঁজুন..." autocomplete="off" oninput="handleSearchInputChange(this.value)" onkeydown="if(event.key==='Enter'){event.preventDefault(); submitSearchInput();}" style="cursor:text; width:100%; padding-right:60px;">
-          <button type="button" id="searchClearBtn" onclick="clearSearchInput()" style="display:none; position:absolute; right:36px; background:transparent; border:none; color:#94a3b8; font-size:1rem; cursor:pointer; padding:2px 6px;" title="মুছুন">✕</button>
-          <button type="button" onclick="event.stopPropagation(); triggerDirectVoiceSearch()" style="position:absolute; right:8px; background:transparent; border:none; color:var(--primary); font-size:1.05rem; cursor:pointer; padding:2px 6px;" title="মুখে বলে খুঁজুন">
+          <input type="search" id="searchInput" name="boutique_search_keyword" placeholder="শাড়ির নাম, জামদানি বা গহনা খুঁজুন..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" enterkeyhint="search" data-lpignore="true" data-form-type="other" oninput="handleSearchInputChange(this.value)" onkeydown="if(event.key==='Enter'){event.preventDefault(); submitSearchInput();}" style="cursor:text; width:100%; padding-right:88px;">
+          <button type="button" id="searchClearBtn" onclick="clearSearchInput()" style="display:none; position:absolute; right:64px; background:transparent; border:none; color:#94a3b8; font-size:1rem; cursor:pointer; padding:2px 6px;" title="মুছুন">✕</button>
+          <!-- Camera / Photo Search Button (ছবি দিয়ে অনুসন্ধান) -->
+          <button type="button" onclick="event.stopPropagation(); triggerImageSearchUpload()" style="position:absolute; right:34px; background:transparent; border:none; color:var(--primary); font-size:1.05rem; cursor:pointer; padding:2px 6px;" title="ছবি দিয়ে শাড়ি খুঁজুন">
+            <i class="fa-solid fa-camera"></i>
+          </button>
+          <!-- Hidden File Input for Photo Search -->
+          <input type="file" id="imageSearchFileInput" accept="image/*" style="display:none;" onchange="handleImageSearchFile(event)">
+          <!-- Voice Search Button -->
+          <button type="button" onclick="event.stopPropagation(); triggerDirectVoiceSearch()" style="position:absolute; right:6px; background:transparent; border:none; color:var(--primary); font-size:1.05rem; cursor:pointer; padding:2px 6px;" title="মুখে বলে খুঁজুন">
             <i class="fa-solid fa-microphone"></i>
           </button>
         </div>
@@ -2140,7 +2147,7 @@
       <h3 style="font-size:1.05rem; font-weight:800; color:#fff; margin-bottom:4px;">গোপন অ্যাডমিন ও পোর্টাল</h3>
       <p style="font-size:0.75rem; color:#94a3b8; margin-bottom:14px;">মালিকের সিক্রেট পিন কোড দিন (ডিফল্ট: 1234):</p>
       
-      <input type="password" id="secretOwnerPinInput" maxlength="6" placeholder="PIN কোড" style="width:100%; padding:10px; background:#0f172a; border:1.5px solid #334155; border-radius:10px; color:#fde047; font-size:1.2rem; font-weight:800; text-align:center; letter-spacing:4px; margin-bottom:14px;">
+      <input type="tel" inputmode="numeric" id="secretOwnerPinInput" maxlength="6" autocomplete="off" placeholder="PIN কোড" style="width:100%; padding:10px; background:#0f172a; border:1.5px solid #334155; border-radius:10px; color:#fde047; font-size:1.2rem; font-weight:800; text-align:center; letter-spacing:4px; margin-bottom:14px; -webkit-text-security:disc;">
       
       <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:10px;">
         <button type="button" onclick="verifySecretPinAndGo('seller.html')" style="background:#4338ca; color:#fff; border:none; padding:10px; border-radius:10px; font-weight:800; font-size:0.8rem; cursor:pointer;">
@@ -2243,6 +2250,55 @@
         <a id="zoomModalMoreProdsLink" href="#" target="_blank" style="flex:1.4; background:#1e293b; border:1px solid #334155; color:#a7f3d0; padding:8px 10px; border-radius:8px; font-size:0.75rem; font-weight:800; text-decoration:none; text-align:center; display:flex; align-items:center; justify-content:center; gap:6px;">
           <i class="fa-brands fa-whatsapp"></i> <span>আরও কালেকশন দেখতে চাই</span>
         </a>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ================= 📸 VISUAL PHOTO / IMAGE SEARCH MODAL ================= -->
+  <div id="imageSearchModal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.85); backdrop-filter:blur(6px); z-index:999999; align-items:center; justify-content:center; padding:14px; animation:fadeIn 0.2s ease-out;">
+    <div style="background:#ffffff; border-radius:20px; max-width:440px; width:100%; max-height:90vh; overflow-y:auto; padding:20px; box-shadow:0 12px 40px rgba(0,0,0,0.35); position:relative;">
+      <!-- Close Button -->
+      <button type="button" onclick="closeImageSearchModal()" style="position:absolute; top:14px; right:14px; background:#f1f5f9; border:none; width:34px; height:34px; border-radius:50%; font-size:1.1rem; color:#475569; cursor:pointer; display:flex; align-items:center; justify-content:center;">✕</button>
+      
+      <!-- Modal Header -->
+      <div style="display:flex; align-items:center; gap:12px; margin-bottom:16px;">
+        <div style="width:42px; height:42px; border-radius:12px; background:linear-gradient(135deg, #9333ea, #c026d3); color:#fff; display:flex; align-items:center; justify-content:center; font-size:1.25rem; box-shadow:0 3px 10px rgba(147,51,234,0.3);">
+          <i class="fa-solid fa-camera"></i>
+        </div>
+        <div>
+          <h3 style="font-size:1.05rem; font-weight:900; color:#1e293b; margin:0;">ছবি দিয়ে শাড়ি ও ড্রেস খুঁজুন</h3>
+          <p style="font-size:0.75rem; color:#64748b; margin:2px 0 0 0;">গ্যালারি বা ক্যামেরা থেকে ফটো দিয়ে অনুসন্ধান</p>
+        </div>
+      </div>
+
+      <!-- Uploaded Image Preview & Scanning Box -->
+      <div style="background:#f8fafc; border:1.5px dashed #cbd5e1; border-radius:14px; padding:12px; text-align:center; margin-bottom:14px;">
+        <img id="imageSearchPreviewImg" src="" alt="Uploaded Photo" style="max-height:170px; max-width:100%; border-radius:10px; object-fit:contain; box-shadow:0 2px 8px rgba(0,0,0,0.12); margin-bottom:10px;">
+        <div id="imageSearchStatusText" style="font-size:0.82rem; font-weight:700; color:#7e22ce;">
+          <i class="fa-solid fa-spinner fa-spin"></i> শাড়ির ছবি বিশ্লেষণ করা হচ্ছে...
+        </div>
+        <div id="imageSearchColorTag" style="display:none; margin-top:8px;">
+          <span style="background:#f3e8ff; color:#7e22ce; padding:5px 12px; border-radius:20px; font-size:0.78rem; font-weight:800; border:1px solid #d8b4fe;" id="imageSearchColorBadge">রঙ: গোলাপি</span>
+        </div>
+      </div>
+
+      <!-- Quick Action: WhatsApp Enquiry with this Photo -->
+      <div style="margin-bottom:16px;">
+        <a id="imageSearchWhatsAppBtn" href="#" target="_blank" style="background:linear-gradient(135deg, #25D366, #16a34a); color:#fff; text-decoration:none; padding:11px 14px; border-radius:12px; font-weight:900; font-size:0.82rem; display:flex; align-items:center; justify-content:center; gap:8px; box-shadow:0 3px 10px rgba(37,211,102,0.35);">
+          <i class="fa-brands fa-whatsapp" style="font-size:1.15rem;"></i> <span>এই ছবির শাড়ি শোরুমে আছে কি জানতে হোয়াটসঅ্যাপে পাঠান</span>
+        </a>
+      </div>
+
+      <!-- Matched Products from Nisha Creations -->
+      <div>
+        <div style="font-size:0.88rem; font-weight:900; color:#0f172a; margin-bottom:10px; display:flex; align-items:center; justify-content:space-between;">
+          <span>🛍️ আমাদের স্টকে কাছাকাছি ডিজাইনের শাড়ি:</span>
+          <span id="imageSearchMatchCount" style="font-size:0.75rem; color:#7e22ce; font-weight:700;"></span>
+        </div>
+        <div id="imageSearchMatchedGrid" style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+          <!-- Dynamically populated matched products -->
+        </div>
       </div>
     </div>
   </div>
