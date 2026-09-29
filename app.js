@@ -6979,16 +6979,46 @@ function submitFinalOrder() {
     launchCelebrationFireworks();
   } catch(e) {}
 
-  if (sWa) {
-    const waText = encodeURIComponent(`নমস্কার নিশা ক্রিয়েশনস, আমি একটি নতুন অর্ডার করেছি:
+  const shopPhone = '9239413517';
+  let waText = '';
+  if (isUpi) {
+    waText = encodeURIComponent(`নমস্কার নিশা ক্রিয়েশনস,
+আমি অনলাইনে পেমেন্ট সম্পন্ন করে অর্ডার বুক করেছি!
+
+📋 অর্ডার আইডি: #${orderId}
+💰 মোট প্রদেয় বিল: ₹${finalTotal} (অনলাইন UPI পেইড)
+👤 গ্রাহকের নাম: ${name}
+📞 মোবাইল: ${phone}
+📍 ডেলিভারি ঠিকানা: ${newOrder.address}
+
+📸 👉 আমার সফল পেমেন্টের স্ক্রিনশট নিচে এটাচ করে পাঠাচ্ছি, দয়া করে চেক করে অর্ডারটি কনফার্ম করুন।`);
+  } else {
+    waText = encodeURIComponent(`নমস্কার নিশা ক্রিয়েশনস, আমি একটি নতুন অর্ডার করেছি:
 অর্ডার আইডি: #${orderId}
-মোট প্রদেয় বিল: ₹${finalTotal} (${selectedPayMethod})
+মোট প্রদেয় বিল: ₹${finalTotal} (ক্যাশ অন ডেলিভারি)
 নাম: ${name}
 ফোন: ${phone}
-ঠিকানা: ${addr} - ${pin}
+ঠিকানা: ${newOrder.address}
 
 দয়া করে অর্ডারটি কনফার্ম করুন।`);
-    sWa.href = `https://wa.me/919239413517?text=${waText}`;
+  }
+
+  const promptCard = document.getElementById('upiScreenshotPromptCard');
+  const upiWaBtn = document.getElementById('upiSendScreenshotWaBtn');
+  if (isUpi) {
+    if (promptCard) promptCard.style.display = 'block';
+    if (upiWaBtn) upiWaBtn.href = `https://wa.me/91${shopPhone}?text=${waText}`;
+    if (sWa) sWa.href = `https://wa.me/91${shopPhone}?text=${waText}`;
+
+    // Automatically prompt/open WhatsApp so the customer can send payment screenshot with 1-click
+    setTimeout(() => {
+      try {
+        window.open(`https://wa.me/91${shopPhone}?text=${waText}`, '_blank');
+      } catch(e) {}
+    }, 900);
+  } else {
+    if (promptCard) promptCard.style.display = 'none';
+    if (sWa) sWa.href = `https://wa.me/91${shopPhone}?text=${waText}`;
   }
 
   if (successModal) successModal.style.display = 'flex';
@@ -7318,10 +7348,26 @@ function updateAllSuperCoinsDisplays() {
 function copyUpiIdToClipboard() {
   const upiId = localStorage.getItem('nc_official_upi_id') || '9239413517-1@naviaxis';
   navigator.clipboard.writeText(upiId).then(() => {
-    alert(`✅ UPI ID (${upiId}) সফলভাবে কপি হয়েছে! PhonePe বা GPay অ্যাপে গিয়ে পেস্ট করুন।`);
+    alert(`✅ অফিসিয়াল UPI ID (${upiId}) কপি হয়েছে! PhonePe, GPay বা Paytm অ্যাপে গিয়ে পেস্ট করুন।`);
   }).catch(() => {
     prompt("নিচের UPI ID-টি কপি করে নিন:", upiId);
   });
+}
+
+function copyUpiNumberToClipboard() {
+  const num = '9239413517';
+  navigator.clipboard.writeText(num).then(() => {
+    alert(`✅ PhonePe / GPay নম্বর (${num}) কপি হয়েছে! এই নম্বরে পেমেন্ট করুন।`);
+  }).catch(() => {
+    prompt("নিচের নম্বরটি কপি করে নিন:", num);
+  });
+}
+
+function toggleUpiQrDisplay() {
+  const box = document.getElementById('upiQrToggleBox');
+  if (box) {
+    box.style.display = (box.style.display === 'none' || !box.style.display) ? 'block' : 'none';
+  }
 }
 
 // =========================================================================

@@ -1138,37 +1138,70 @@
 <div id="payUpiStrikedAmount" style="font-size:0.68rem; color:#94a3b8; text-decoration:line-through;">₹466</div>
 </div>
 </div>
-<!-- Inline UPI Payment Box -->
-<div id="upiPaymentActionBox" style="background:#faf5ff; border:1px solid #c084fc; border-radius:14px; padding:14px; margin-bottom:14px; text-align:center;">
-  <div style="display:inline-flex; align-items:center; gap:6px; background:#dcfce7; border:1px solid #86efac; color:#15803d; padding:4px 10px; border-radius:20px; font-size:0.75rem; font-weight:800; margin-bottom:8px;">
+<!-- Inline UPI Payment Box (No broken QR, Clean UPI ID & Number + Screenshot instructions) -->
+<div id="upiPaymentActionBox" style="background:#faf5ff; border:1.5px solid #c084fc; border-radius:16px; padding:16px 14px; margin-bottom:14px; text-align:center; box-shadow:0 4px 14px rgba(147,51,234,0.08);">
+  <!-- Bank & Payee Badge -->
+  <div style="display:inline-flex; align-items:center; gap:6px; background:#dcfce7; border:1px solid #86efac; color:#15803d; padding:5px 12px; border-radius:20px; font-size:0.76rem; font-weight:800; margin-bottom:10px;">
     <i class="fa-solid fa-circle-check"></i> পাঞ্জাব অ্যান্ড সিন্ধ ব্যাংক • নিশা সিং (Nisha Singh)
   </div>
-  
-  <div id="t-cartUpiInstructions" style="font-size:0.85rem; font-weight:800; color:#6b21a8; margin-bottom:6px;">
-    📲 Navi / PhonePe / Google Pay / Paytm দিয়ে পেমেন্ট করুন
+
+  <!-- Clear Official Payment Details Card -->
+  <div style="background:#fff; border:1.5px solid #e9d5ff; border-radius:14px; padding:12px 14px; margin:6px auto 12px auto; text-align:left; max-width:340px; box-shadow:0 2px 8px rgba(126,34,206,0.08);">
+    <!-- UPI ID Field -->
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; padding-bottom:8px; border-bottom:1px dashed #f3e8ff;">
+      <div>
+        <div style="font-size:0.7rem; color:#64748b; font-weight:700;">অফিসিয়াল UPI ID:</div>
+        <div style="font-size:0.92rem; font-weight:900; color:#7e22ce; letter-spacing:0.3px;" id="activeUpiIdDisplay">9239413517-1@naviaxis</div>
+      </div>
+      <button type="button" onclick="copyUpiIdToClipboard()" style="background:#f3e8ff; color:#7e22ce; border:1px solid #c084fc; padding:5px 10px; border-radius:8px; font-size:0.74rem; font-weight:800; cursor:pointer; display:flex; align-items:center; gap:4px;">
+        <i class="fa-regular fa-copy"></i> কপি
+      </button>
+    </div>
+
+    <!-- PhonePe / GPay Number Field -->
+    <div style="display:flex; justify-content:space-between; align-items:center;">
+      <div>
+        <div style="font-size:0.7rem; color:#64748b; font-weight:700;">PhonePe / GPay / Paytm নম্বর:</div>
+        <div style="font-size:0.95rem; font-weight:900; color:#0f172a; letter-spacing:0.5px;">9239413517</div>
+      </div>
+      <button type="button" onclick="copyUpiNumberToClipboard()" style="background:#f1f5f9; color:#334155; border:1px solid #cbd5e1; padding:5px 10px; border-radius:8px; font-size:0.74rem; font-weight:800; cursor:pointer; display:flex; align-items:center; gap:4px;">
+        <i class="fa-regular fa-copy"></i> কপি
+      </button>
+    </div>
   </div>
 
-  <!-- Realtime Dynamic UPI QR Code -->
-  <div style="background:#fff; border:2px solid #e9d5ff; border-radius:12px; padding:10px; width:190px; margin:8px auto; box-shadow:0 4px 12px rgba(126,34,206,0.1);">
-    <img id="cartDynamicUpiQrImg" src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=upi%3A%2F%2Fpay%3Fpa%3D9239413517-1%40naviaxis%26pn%3DNisha%2520Singh%26cu%3DINR" alt="Nisha Creations UPI QR" style="width:170px; height:170px; display:block; margin:0 auto; border-radius:8px;">
-    <div style="font-size:0.68rem; color:#64748b; font-weight:700; margin-top:4px;">ক্যামেরা দিয়ে স্ক্যান করে পে করুন</div>
+  <!-- Clear 3-Step Payment & Screenshot Instruction Box -->
+  <div style="background:#eff6ff; border:1.5px solid #bfdbfe; border-radius:14px; padding:11px 13px; margin:10px auto; max-width:340px; text-align:left; box-shadow:0 2px 6px rgba(37,99,235,0.06);">
+    <div style="font-size:0.82rem; font-weight:900; color:#1e40af; margin-bottom:5px; display:flex; align-items:center; gap:6px;">
+      <i class="fa-solid fa-circle-info" style="color:#2563eb; font-size:0.95rem;"></i> <span>পেমেন্ট সম্পন্ন করার সহজ ৩টি ধাপ:</span>
+    </div>
+    <div style="font-size:0.74rem; color:#1e3a8a; line-height:1.5;">
+      <strong>১.</strong> নিচের বেগুনি বোতামে চাপুন অথবা <strong>UPI ID / নম্বর</strong> কপি করে পে করুন।<br>
+      <strong>২.</strong> পেমেন্ট সফল (Success) হলে স্ক্রিনের একটি <strong>স্ক্রিনশট (Screenshot)</strong> তুলুন।<br>
+      <strong>৩.</strong> নিচের সবুজ বোতাম চাপুন — <strong>এক ক্লিকেই হোয়াটসঅ্যাপে স্ক্রিনশট পাঠাতে পারবেন!</strong>
+    </div>
   </div>
 
-  <div id="t-cartUpiOfficialText" style="font-size:0.75rem; color:#475569; margin:6px 0;">
-    অফিসিয়াল UPI ID: <strong style="color:#7e22ce; font-size:0.85rem;" id="activeUpiIdDisplay">9239413517-1@naviaxis</strong>
-    <button type="button" onclick="copyUpiIdToClipboard()" style="background:#ede9fe; color:#7e22ce; border:1px solid #c4b5fd; padding:3px 8px; border-radius:6px; font-size:0.7rem; font-weight:800; cursor:pointer; margin-left:6px;">
-      <i class="fa-regular fa-copy"></i> কপি
+  <!-- Optional Toggle for Customers who want to scan QR from another phone -->
+  <div style="margin:6px 0 10px 0;">
+    <button type="button" onclick="toggleUpiQrDisplay()" style="background:transparent; border:none; color:#7e22ce; font-size:0.73rem; font-weight:800; cursor:pointer; text-decoration:underline;">
+      📷 অন্য মোবাইল দিয়ে QR কোড স্ক্যান করতে চান? এখানে ট্যাপ করুন
     </button>
+    <div id="upiQrToggleBox" style="display:none; background:#fff; border:2px solid #e9d5ff; border-radius:12px; padding:10px; width:190px; margin:8px auto; box-shadow:0 4px 12px rgba(126,34,206,0.1);">
+      <img id="cartDynamicUpiQrImg" src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=upi%3A%2F%2Fpay%3Fpa%3D9239413517-1%40naviaxis%26pn%3DNisha%2520Singh%26cu%3DINR" alt="Nisha Creations UPI QR" style="width:170px; height:170px; display:block; margin:0 auto; border-radius:8px;">
+      <div style="font-size:0.68rem; color:#64748b; font-weight:700; margin-top:4px;">অন্য ফোনের ক্যামেরা দিয়ে স্ক্যান করুন</div>
+    </div>
   </div>
 
-  <div style="margin-top:10px; display:flex; flex-direction:column; gap:8px; align-items:center;">
-    <a href="#" id="upiDirectPayLink" onclick="handleUpiAppPayClick()" style="display:inline-flex; align-items:center; justify-content:center; gap:8px; width:100%; max-width:320px; background:linear-gradient(135deg, #7e22ce, #9333ea); color:#fff; text-decoration:none; padding:12px 18px; border-radius:12px; font-size:0.9rem; font-weight:800; box-shadow:0 4px 14px rgba(126,34,206,0.35);">
-      <i class="fa-solid fa-mobile-screen"></i> <span id="t-cartUpiOpenBtn">📲 PhonePe / GPay তে পেমেন্ট করুন</span>
+  <!-- Action Buttons -->
+  <div style="margin-top:8px; display:flex; flex-direction:column; gap:9px; align-items:center;">
+    <a href="#" id="upiDirectPayLink" onclick="handleUpiAppPayClick()" style="display:inline-flex; align-items:center; justify-content:center; gap:8px; width:100%; max-width:320px; background:linear-gradient(135deg, #7e22ce, #9333ea); color:#fff; text-decoration:none; padding:12px 18px; border-radius:12px; font-size:0.9rem; font-weight:900; box-shadow:0 4px 14px rgba(126,34,206,0.35);">
+      <i class="fa-solid fa-mobile-screen"></i> <span id="t-cartUpiOpenBtn">📲 PhonePe / GPay সরাসরি খুলুন</span>
     </a>
     
-    <!-- Instant Booking Button right inside UPI box so user never has to scroll down! -->
-    <button type="button" onclick="submitFinalOrder()" style="display:inline-flex; align-items:center; justify-content:center; gap:8px; width:100%; max-width:320px; background:linear-gradient(135deg, #16a34a, #15803d); color:#fff; border:none; padding:12px 18px; border-radius:12px; font-size:0.88rem; font-weight:800; cursor:pointer; box-shadow:0 4px 14px rgba(22,163,74,0.3);">
-      <i class="fa-solid fa-circle-check"></i> <span>পেমেন্ট করেছি - অর্ডার বুক করুন</span>
+    <!-- Instant Booking Button with Screenshot Dispatch to WhatsApp -->
+    <button type="button" onclick="submitFinalOrder()" style="display:inline-flex; align-items:center; justify-content:center; gap:8px; width:100%; max-width:320px; background:linear-gradient(135deg, #16a34a, #15803d); color:#fff; border:none; padding:13px 18px; border-radius:12px; font-size:0.9rem; font-weight:900; cursor:pointer; box-shadow:0 4px 14px rgba(22,163,74,0.35);">
+      <i class="fa-brands fa-whatsapp" style="font-size:1.2rem;"></i> <span>পেমেন্ট করেছি — স্ক্রিনশট পাঠান ও বুক করুন</span>
     </button>
   </div>
 </div>
@@ -1444,6 +1477,18 @@
     </div>
 
     <div style="padding:18px 20px; max-height:80vh; overflow-y:auto;">
+
+      <!-- UPI PAYMENT SCREENSHOT DISPATCH CARD (অনলাইন পেমেন্ট হলে হোয়াটসঅ্যাপে স্ক্রিনশট পাঠানোর বিশেষ কার্ড) -->
+      <div id="upiScreenshotPromptCard" style="display:none; background:linear-gradient(135deg, #f0fdf4, #dcfce7); border:2px dashed #16a34a; border-radius:16px; padding:14px; margin-bottom:14px; text-align:center; box-shadow:0 4px 12px rgba(22,163,74,0.15);">
+        <div style="font-size:1.6rem; margin-bottom:2px;">📸 📲</div>
+        <div style="font-size:1.02rem; font-weight:900; color:#15803d;">পেমেন্টের স্ক্রিনশট হোয়াটসঅ্যাপে পাঠান</div>
+        <div style="font-size:0.76rem; color:#166534; margin:4px 0 12px 0; line-height:1.45;">
+          অনলাইন পেমেন্ট ভেরিফাই করে পার্সেল দ্রুত ছাড়ার জন্য অনুগ্রহ করে সফল পেমেন্টের স্ক্রিনশটটি আমাদের হোয়াটসঅ্যাপে পাঠিয়ে দিন:
+        </div>
+        <a id="upiSendScreenshotWaBtn" href="#" target="_blank" style="background:#25D366; color:#fff; text-decoration:none; padding:13px 18px; border-radius:12px; font-weight:900; font-size:0.92rem; display:inline-flex; align-items:center; justify-content:center; gap:8px; width:100%; box-shadow:0 4px 14px rgba(37,211,102,0.4);">
+          <i class="fa-brands fa-whatsapp" style="font-size:1.3rem;"></i> <span>এক ক্লিকে হোয়াটসঅ্যাপে স্ক্রিনশট পাঠান</span>
+        </a>
+      </div>
 
       <!-- SAVINGS BADGE (ক টাকা সেভ করেছে সেটার বড় ডিসপ্লে) -->
       <div id="successSavingsCard" style="background:linear-gradient(135deg, #fefce8, #fef08a); border:2px solid #eab308; border-radius:14px; padding:12px; margin-bottom:14px; text-align:center; box-shadow:0 4px 14px rgba(234,179,8,0.25);">
