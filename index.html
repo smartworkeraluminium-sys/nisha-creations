@@ -273,6 +273,31 @@
       </div>
     </div>
 
+    <!-- 🌟 Customer's Recently Viewed Strip on Home Screen -->
+    <div id="homeRecentlyViewedSection" style="display:none; margin:10px 0; padding:0 12px;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+        <div style="font-size:0.88rem; font-weight:900; color:#1e293b; display:flex; align-items:center; gap:6px;">
+          <span>👀 সম্প্রতি আপনি যা দেখেছেন</span>
+        </div>
+        <button type="button" onclick="clearRecentlyViewed()" style="background:transparent; border:none; color:#94a3b8; font-size:0.72rem; font-weight:700; cursor:pointer;">মুছুন</button>
+      </div>
+      <div id="homeRecentScrollStrip" style="display:flex; gap:10px; overflow-x:auto; padding-bottom:6px; scrollbar-width:none;"></div>
+    </div>
+
+    <!-- 🎯 24-Hour Smart Browsing Recommendation ("বেশি যা দেখছে/খুঁজছে তা বারবার দেখানো") -->
+    <div id="homeRecommendedForYouSection" style="display:none; margin:10px 12px; background:linear-gradient(135deg, #fdf4ff, #fae8ff); border:1.5px solid #f0abfc; border-radius:16px; padding:12px 14px; box-shadow:0 3px 12px rgba(217,70,239,0.08);">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+        <div>
+          <div style="font-size:0.86rem; font-weight:900; color:#86198f; display:flex; align-items:center; gap:6px;">
+            <span>✨ আপনার আগ্রহ অনুযায়ী বিশেষ কালেকশন</span>
+          </div>
+          <div id="homeRecommendationTagline" style="font-size:0.7rem; color:#a21caf; font-weight:700; margin-top:2px;">আপনার বেশি দেখা পছন্দের শাড়ি</div>
+        </div>
+        <span style="background:#f5d0fe; color:#701a75; font-size:0.65rem; font-weight:800; padding:3px 8px; border-radius:12px;">বাছাইকৃত</span>
+      </div>
+      <div id="homeRecommendationGrid" style="display:grid; grid-template-columns:1fr 1fr; gap:10px;"></div>
+    </div>
+
     <!-- Filter & Sort Strip -->
     <div class="filter-bar">
       <button class="filter-btn" id="btnSortModalTrigger" onclick="openSortModal()">
@@ -733,29 +758,13 @@
       </div>
     </div>
 
-    <!-- 5. সম্প্রতি দেখা কালেকশন (Recently Viewed Collections - ছবি 1 হুবহু) -->
-    <div class="nc-section-title" id="t-ncRecentTitle">সম্প্রতি দেখা কালেকশন</div>
-    <div class="nc-recent-stores-strip">
-      <div class="nc-recent-store-item" onclick="filterByUnifiedCat('saree')">
-        <img src="https://images.unsplash.com/photo-1610030469983-98e550d6193c?w=200&auto=format&fit=crop&q=75" class="nc-recent-store-thumb" alt="শাড়ি" onerror="this.onerror=null; this.src='logo.png';">
-        <div class="nc-recent-store-label" id="t-ncRecent1">মহিলাদের শাড়ি</div>
-      </div>
-      <div class="nc-recent-store-item" onclick="filterByUnifiedCat('kurti')">
-        <img src="https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?w=200&auto=format&fit=crop&q=75" class="nc-recent-store-thumb" alt="কুর্তি" onerror="this.onerror=null; this.src='logo.png';">
-        <div class="nc-recent-store-label" id="t-ncRecent2">কুর্তি ও সেট</div>
-      </div>
-      <div class="nc-recent-store-item" onclick="filterByUnifiedCat('girls')">
-        <img src="https://images.unsplash.com/photo-1622290291468-a28f7a7dc6a8?w=200&auto=format&fit=crop&q=75" class="nc-recent-store-thumb" alt="ফ্রক" onerror="this.onerror=null; this.src='logo.png';">
-        <div class="nc-recent-store-label" id="t-ncRecent3">মেয়েদের ফ্রক</div>
-      </div>
-      <div class="nc-recent-store-item" onclick="filterByUnifiedCat('jewel')">
-        <img src="https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=200&auto=format&fit=crop&q=75" class="nc-recent-store-thumb" alt="গহনা" onerror="this.onerror=null; this.src='logo.png';">
-        <div class="nc-recent-store-label" id="t-ncRecent4">গহনা ও চোকার</div>
-      </div>
-      <div class="nc-recent-store-item" onclick="filterByUnifiedCat('tant')">
-        <img src="https://images.unsplash.com/photo-1609357605129-26f69add5d6e?w=200&auto=format&fit=crop&q=75" class="nc-recent-store-thumb" alt="তাঁত" onerror="this.onerror=null; this.src='logo.png';">
-        <div class="nc-recent-store-label" id="t-ncRecent5">সুতি তাঁত</div>
-      </div>
+    <!-- 5. সম্প্রতি দেখা কালেকশন (Recently Viewed Products - Live Dynamic) -->
+    <div style="display:flex; justify-content:space-between; align-items:center; margin:14px 14px 6px 14px;">
+      <div class="nc-section-title" id="t-ncRecentTitle" style="margin:0;">সম্প্রতি দেখা কালেকশন</div>
+      <span id="accRecentCountBadge" style="font-size:0.72rem; color:#7e22ce; font-weight:800;"></span>
+    </div>
+    <div class="nc-recent-stores-strip" id="ncRecentStoresStripDynamic">
+      <!-- Populated dynamically with real products viewed by customer -->
     </div>
 
     <!-- 6. Coupons & Offers Card (ছবি 1 হুবহু) -->

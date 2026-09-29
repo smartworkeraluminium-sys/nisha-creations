@@ -3393,6 +3393,7 @@ function selectPdpSize(sz) {
       const p = products.find(x => x.id === id);
       if (!p) return;
       currentPdpProduct = p;
+      try { recordProductView(p); } catch(e){}
 
       document.getElementById('pdpMainImg').src = p.img;
       document.getElementById('pdpCategory').textContent = p.category.toUpperCase();
@@ -5393,7 +5394,8 @@ function selectPdpSize(sz) {
       if (screenId === 'orders') {
         loadAndRenderOrdersSafe();
       }
-      if (screenId === 'customer-settings') { loadCustomerAccountHub();
+      if (screenId === 'customer-settings') {
+        try { renderRecentlyViewedSections(); } catch(e){} loadCustomerAccountHub();
       syncCheckoutWithProfile(); }
       if (screenId === 'search-results') {
         const cartBadge = document.getElementById('ncResultsCartBadge');
@@ -7478,3 +7480,165 @@ function launchCelebrationFireworks() {
 
 
     
+
+
+// =========================================================================
+// 🌟 SMART BROWSING ANALYTICS & RECENTLY VIEWED ENGINE
+// কাস্টমার যেসব প্রোডাক্ট বেশি দেখছে তা ২৪ ঘণ্টা অ্যানালাইজ করে হোম ও অ্যাকাউন্টে প্রদর্শন
+// =========================================================================
+function recordProductView(prod) {
+  if (!prod || !prod.id) return;
+
+  // 1. Save to Recently Viewed List
+  let recent = [];
+  try {
+    recent = JSON.parse(localStorage.getItem('nc_recently_viewed') || '[]');
+  } catch(e) { recent = []; }
+
+  recent = recent.filter(p => p.id !== prod.id);
+  recent.unshift({
+    id: prod.id,
+    title: prod.title,
+    price: prod.price,
+    mrp: prod.mrp,
+    img: prod.img,
+    category: (prod.category || 'saree').toLowerCase(),
+    type: (prod.type || 'saree').toLowerCase(),
+    viewedAt: Date.now()
+  });
+
+  if (recent.length > 20) recent = recent.slice(0, 20);
+  try {
+    localStorage.setItem('nc_recently_viewed', JSON.stringify(recent));
+  } catch(e) {}
+
+  // 2. Track 24-Hour Category Frequency ("বেশি কি দেখছে বা খুঁজছে")
+  let analytics = {};
+  try {
+    analytics = JSON.parse(localStorage.getItem('nc_view_analytics') || '{}');
+  } catch(e) { analytics = {}; }
+
+  const cat = (prod.category || prod.type || 'saree').toLowerCase();
+  analytics[cat] = (analytics[cat] || 0) + 1;
+
+  const titleLower = (prod.title || '').toLowerCase();
+  ['jamdani', 'silk', 'tant', 'kurti', 'frock', 'jewel'].forEach(k => {
+    if (titleLower.includes(k)) {
+      analytics[k] = (analytics[k] || 0) + 1;
+    }
+  });
+
+  try {
+    localStorage.setItem('nc_view_analytics', JSON.stringify(analytics));
+  } catch(e) {}
+
+  renderRecentlyViewedSections();
+}
+
+function clearRecentlyViewed() {
+  localStorage.removeItem('nc_recently_viewed');
+  renderRecentlyViewedSections();
+}
+
+function renderRecentlyViewedSections() {
+  let recent = [];
+  try {
+    recent = JSON.parse(localStorage.getItem('nc_recently_viewed') || '[]');
+  } catch(e) { recent = []; }
+
+  // 1. Render in Account Screen
+  const accStrip = document.getElementById('ncRecentStoresStripDynamic');
+  const accCountBadge = document.getElementById('accRecentCountBadge');
+  if (accStrip) {
+    accStrip.innerHTML = '';
+    const displayList = (recent.length > 0) ? recent.slice(0, 10) : (typeof products !== 'undefined' ? products.slice(0, 5) : []);
+    if (accCountBadge) accCountBadge.textContent = recent.length > 0 ? `(${recent.length}টি দেখা হয়েছে)` : '';
+
+    displayList.forEach(item => {
+      accStrip.innerHTML += `
+        <div class="nc-recent-store-item" onclick="openPdp('${item.id}')" style="cursor:pointer; text-align:center; min-width:70px;">
+          <img src="${item.img}" class="nc-recent-store-thumb" alt="${item.title}" style="width:65px; height:65px; object-fit:cover; border-radius:12px; border:1.5px solid var(--primary); box-shadow:0 2px 6px rgba(0,0,0,0.08);" onerror="this.onerror=null; this.src='logo.png';">
+          <div class="nc-recent-store-label" style="font-size:0.72rem; font-weight:800; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:72px; margin-top:4px;">${item.title}</div>
+          <div style="font-size:0.7rem; color:var(--primary); font-weight:900;">₹${item.price}</div>
+        </div>
+      `;
+    });
+  }
+
+  // 2. Render in Home Screen: Recently Viewed Strip
+  const homeSec = document.getElementById('homeRecentlyViewedSection');
+  const homeStrip = document.getElementById('homeRecentScrollStrip');
+  if (homeSec && homeStrip) {
+    if (recent.length > 0) {
+      homeSec.style.display = 'block';
+      homeStrip.innerHTML = '';
+      recent.slice(0, 10).forEach(item => {
+        homeStrip.innerHTML += `
+          <div onclick="openPdp('${item.id}')" style="min-width:130px; max-width:130px; background:#fff; border:1px solid #e2e8f0; border-radius:12px; overflow:hidden; cursor:pointer; box-shadow:0 2px 6px rgba(0,0,0,0.06); flex-shrink:0;">
+            <img src="${item.img}" alt="${item.title}" style="width:100%; height:110px; object-fit:cover;" onerror="this.onerror=null; this.src='logo.png';">
+            <div style="padding:6px 8px;">
+              <div style="font-size:0.72rem; font-weight:800; color:#1e293b; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${item.title}</div>
+              <div style="font-size:0.78rem; font-weight:900; color:var(--primary); margin-top:2px;">₹${item.price}</div>
+            </div>
+          </div>
+        `;
+      });
+    } else {
+      homeSec.style.display = 'none';
+    }
+  }
+
+  // 3. Render in Home Screen: 24-Hour Smart Recommendation
+  const recSec = document.getElementById('homeRecommendedForYouSection');
+  const recGrid = document.getElementById('homeRecommendationGrid');
+  const recTagline = document.getElementById('homeRecommendationTagline');
+  if (recSec && recGrid && typeof products !== 'undefined' && products.length > 0) {
+    let analytics = {};
+    try {
+      analytics = JSON.parse(localStorage.getItem('nc_view_analytics') || '{}');
+    } catch(e) { analytics = {}; }
+
+    // Find the category with maximum views
+    let topCat = '';
+    let maxViews = 0;
+    for (let k in analytics) {
+      if (analytics[k] > maxViews) {
+        maxViews = analytics[k];
+        topCat = k;
+      }
+    }
+
+    if (maxViews > 0 && topCat) {
+      const recProducts = products.filter(p => {
+        const cat = (p.category || '').toLowerCase();
+        const type = (p.type || '').toLowerCase();
+        const title = (p.title || '').toLowerCase();
+        return cat.includes(topCat) || type.includes(topCat) || title.includes(topCat);
+      }).slice(0, 4);
+
+      if (recProducts.length > 0) {
+        recSec.style.display = 'block';
+        if (recTagline) recTagline.textContent = `আপনি এই ধরনের শাড়ি বেশি পছন্দ করছেন (${topCat.toUpperCase()})`;
+        recGrid.innerHTML = '';
+        recProducts.forEach(prod => {
+          recGrid.innerHTML += `
+            <div onclick="openPdp('${prod.id}')" style="background:#fff; border:1px solid #f5d0fe; border-radius:12px; overflow:hidden; cursor:pointer; box-shadow:0 2px 6px rgba(0,0,0,0.06); text-align:left;">
+              <img src="${prod.img}" alt="${prod.title}" style="width:100%; height:120px; object-fit:cover;" onerror="this.onerror=null; this.src='logo.png';">
+              <div style="padding:8px;">
+                <div style="font-size:0.75rem; font-weight:800; color:#1e293b; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${prod.title}</div>
+                <div style="font-size:0.8rem; font-weight:900; color:var(--primary); margin-top:2px;">₹${prod.price} <span style="font-size:0.65rem; color:#94a3b8; text-decoration:line-through;">₹${prod.mrp}</span></div>
+                <button type="button" style="width:100%; background:var(--primary); color:#fff; border:none; padding:4px 0; border-radius:6px; font-size:0.7rem; font-weight:800; margin-top:6px; cursor:pointer;">দেখুন ও কিনুন</button>
+              </div>
+            </div>
+          `;
+        });
+      } else {
+        recSec.style.display = 'none';
+      }
+    } else {
+      recSec.style.display = 'none';
+    }
+  }
+}
+
+document.addEventListener("DOMContentLoaded", () => { setTimeout(renderRecentlyViewedSections, 300); });
