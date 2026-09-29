@@ -2267,12 +2267,36 @@ function clearSearchInput() {
 // =========================================================================
 // 📸 VISUAL PHOTO / IMAGE SEARCH ENGINE (ক্যামেরা ও গ্যালারি থেকে ছবি দিয়ে সার্চ)
 // =========================================================================
-function triggerImageSearchUpload() {
-  const inp = document.getElementById('imageSearchFileInput');
+function openPhotoSearchOptions() {
+  const modal = document.getElementById('photoSearchOptionsModal');
+  if (modal) modal.style.display = 'flex';
+}
+
+function closePhotoSearchOptions() {
+  const modal = document.getElementById('photoSearchOptionsModal');
+  if (modal) modal.style.display = 'none';
+}
+
+function selectPhotoFromGallery() {
+  closePhotoSearchOptions();
+  const inp = document.getElementById('imageSearchGalleryInput');
   if (inp) {
     inp.value = '';
     inp.click();
   }
+}
+
+function takePhotoWithCamera() {
+  closePhotoSearchOptions();
+  const inp = document.getElementById('imageSearchCameraInput');
+  if (inp) {
+    inp.value = '';
+    inp.click();
+  }
+}
+
+function triggerImageSearchUpload() {
+  openPhotoSearchOptions();
 }
 
 function closeImageSearchModal() {
