@@ -1,7 +1,8 @@
 {
-  "name": "Nisha Creations",
-  "short_name": "Nisha",
-  "id": "nisha-creations-boutique",
+  "name": "Nisha Creations (নিশা ক্রিয়েশনস)",
+  "short_name": "Nisha Boutique",
+  "id": "nisha-creations-boutique-v3",
+  "description": "আমতা, হাওড়া - এক্সক্লুসিভ শাড়ি, পোশাক ও জুয়েলারি বুটিক",
   "start_url": "index.html",
   "scope": "./",
   "display": "standalone",
@@ -10,28 +11,34 @@
   "theme_color": "#9c27b0",
   "icons": [
     {
-      "src": "logo.png",
+      "src": "icon-192.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "logo.png",
+      "src": "icon-192.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "maskable"
     },
     {
-      "src": "logo.png",
+      "src": "icon-512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "logo.png",
+      "src": "icon-512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "maskable"
+    },
+    {
+      "src": "logo.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
     }
   ]
 }

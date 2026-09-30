@@ -1144,6 +1144,17 @@
   <script src="products.js?v=20260919_v2"></script>
   <!-- HTML5 QR Code & Barcode Scanner -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html5-qrcode/2.3.8/html5-qrcode.min.js"></script>
+
+  <!-- PWA & Mobile App Native Experience -->
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Nisha Admin">
+  <meta name="theme-color" content="#0b1120">
+  <link rel="manifest" href="manifest.json?v=3">
+  <link rel="icon" type="image/png" href="logo.png">
+  <link rel="apple-touch-icon" href="logo.png">
+
 </head>
 <body>
 
@@ -1222,6 +1233,9 @@
 
       <!-- 3-Lines Hamburger Menu (ভাষা ও লিংক ড্রয়ারের ভেতরে সুরক্ষিত) -->
       <div class="header-quick-links" style="display:flex; align-items:center; gap:8px;">
+        <button type="button" id="adminInstallAppBtn" onclick="triggerAdminAppInstall()" style="background:linear-gradient(135deg, #4f46e5, #7c3aed); color:#fff; border:1px solid #a78bfa; padding:6px 12px; border-radius:20px; font-size:0.75rem; font-weight:800; cursor:pointer; display:inline-flex; align-items:center; gap:6px; box-shadow:0 2px 8px rgba(124,58,237,0.3);">
+          <i class="fa-solid fa-mobile-screen"></i> <span>অ্যাপ ইনস্টল</span>
+        </button>
         <button type="button" class="btn-menu-trigger" onclick="toggleAdminNavDrawer()" aria-label="Menu" title="মেনু ও ভাষা নির্বাচন">
           <i class="fa-solid fa-bars"></i>
         </button>
@@ -5889,6 +5903,17 @@ function closeAdminBarcodeStickerModal() {
     .info { font-size: 12px; line-height: 1.4; margin-top: 4px; }
     .pay-badge { background: #eee; padding: 6px; font-size: 13px; font-weight: bold; text-align: center; margin-top: 8px; border-radius: 6px; }
   </style>
+
+  <!-- PWA & Mobile App Native Experience -->
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Nisha Admin">
+  <meta name="theme-color" content="#0b1120">
+  <link rel="manifest" href="manifest.json?v=3">
+  <link rel="icon" type="image/png" href="logo.png">
+  <link rel="apple-touch-icon" href="logo.png">
+
 </head>
 <body onload="window.print()">
   <div class="label-box">
@@ -7136,6 +7161,17 @@ window.addEventListener('DOMContentLoaded', initAdminDashboard);
     th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
     th { background: #f2f2f2; }
   </style>
+
+  <!-- PWA & Mobile App Native Experience -->
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Nisha Admin">
+  <meta name="theme-color" content="#0b1120">
+  <link rel="manifest" href="manifest.json?v=3">
+  <link rel="icon" type="image/png" href="logo.png">
+  <link rel="apple-touch-icon" href="logo.png">
+
 </head>
 <body onload="window.print()">
   <div class="invoice-box">
@@ -7960,6 +7996,17 @@ window.addEventListener('DOMContentLoaded', initAdminDashboard);
       body { padding: 0; }
     }
   </style>
+
+  <!-- PWA & Mobile App Native Experience -->
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Nisha Admin">
+  <meta name="theme-color" content="#0b1120">
+  <link rel="manifest" href="manifest.json?v=3">
+  <link rel="icon" type="image/png" href="logo.png">
+  <link rel="apple-touch-icon" href="logo.png">
+
 </head>
 <body onload="window.print()">
   ${content}
@@ -8077,6 +8124,17 @@ window.addEventListener('DOMContentLoaded', initAdminDashboard);
       body { padding: 0; }
     }
   </style>
+
+  <!-- PWA & Mobile App Native Experience -->
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Nisha Admin">
+  <meta name="theme-color" content="#0b1120">
+  <link rel="manifest" href="manifest.json?v=3">
+  <link rel="icon" type="image/png" href="logo.png">
+  <link rel="apple-touch-icon" href="logo.png">
+
 </head>
 <body onload="window.print()">
   ${allBillsHtml}
@@ -8547,14 +8605,7 @@ window.addEventListener('DOMContentLoaded', initAdminDashboard);
   </div>
 
 
-    // Listen for cross-tab updates to partner shops
-    window.addEventListener('storage', function(e) {
-      if (e.key === 'nc_partner_shops') {
-        if (typeof renderPartnerShopsList === 'function') {
-          renderPartnerShopsList();
-        }
-      }
-    });
+
 
 
   <!-- ================= ADMIN 3-IN-1 PROPER BILL & BARCODE STUDIO MODAL ================= -->
@@ -8804,11 +8855,56 @@ window.addEventListener('DOMContentLoaded', initAdminDashboard);
     </div>
   </div>
 
-</body>
-</html>
+  <script>
+    // Listen for cross-tab updates to partner shops
+    window.addEventListener('storage', function(e) {
+      if (e.key === 'nc_partner_shops') {
+        if (typeof renderPartnerShopsList === 'function') {
+          renderPartnerShopsList();
+        }
+      }
+    });
 
 
-    // =========================================================================
+    // Service Worker Registration for Admin PWA
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('sw.js?v=20260930').then(reg => {
+          console.log('Admin ServiceWorker registered:', reg.scope);
+        }).catch(err => {
+          console.warn('Admin ServiceWorker failed:', err);
+        });
+      });
+    }
+
+    let adminDeferredPrompt = null;
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      adminDeferredPrompt = e;
+      const btn = document.getElementById('adminInstallAppBtn');
+      if (btn) btn.style.display = 'inline-flex';
+      const drawerBtn = document.getElementById('adminDrawerInstallBtn');
+      if (drawerBtn) drawerBtn.style.display = 'flex';
+    });
+
+    function triggerAdminAppInstall() {
+      if (adminDeferredPrompt) {
+        adminDeferredPrompt.prompt();
+        adminDeferredPrompt.userChoice.then((choiceResult) => {
+          if (choiceResult.outcome === 'accepted') {
+            console.log('Admin PWA installed');
+          }
+          adminDeferredPrompt = null;
+          const btn = document.getElementById('adminInstallAppBtn');
+          if (btn) btn.style.display = 'none';
+        });
+      } else {
+        alert('অ্যাপটি মোবাইলে ইনস্টল করতে আপনার ব্রাউজারের থ্রি-ডট (⋮) মেনুতে ট্যাপ করে "Add to Home screen" বা "Install app" সিলেক্ট করুন!');
+      }
+    }
+
+
+// =========================================================================
     // 📍 PINCODE & DELIVERY SERVICEABILITY MASTER CONTROLLER
     // =========================================================================
     const DEFAULT_SERVICEABLE_PINCODES = [
@@ -9088,3 +9184,6 @@ document.addEventListener("DOMContentLoaded", () => { setTimeout(renderAdminPinc
       if (typeof renderWarehouseOperations === 'function') renderWarehouseOperations();
       alert(`✅ '${prod.title}' শাড়ির গোডাউন ভিত্তিক স্টক সফলভাবে আপডেট হয়েছে! মোট স্টক: ${totalStock} পিস।`);
     }
+  </script>
+</body>
+</html>

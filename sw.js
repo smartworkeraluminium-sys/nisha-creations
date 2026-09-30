@@ -1,5 +1,5 @@
 // Nisha Creations PWA Service Worker (Always Fresh Network-First with Immediate Cache Purge)
-const CACHE_NAME = 'nisha-pwa-v20260923_v16';
+const CACHE_NAME = 'nisha-pwa-clean-v20260930_v2';
 
 self.addEventListener('install', (event) => {
   self.skipWaiting();
