@@ -479,6 +479,28 @@
       </div>
     </div>
 
+    <!-- 🚴 Rider Delivery Shift Timer Banner (সকাল ৮:০০ টা - সন্ধ্যা ৬:০০ টা) -->
+    <div style="max-width:600px; margin:10px auto 0 auto; background:linear-gradient(135deg, #1e1b4b, #0f172a); border:1.5px solid #6366f1; padding:12px 14px; border-radius:12px; color:#fff;">
+      <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+        <div style="display:flex; align-items:center; gap:8px;">
+          <div style="width:32px; height:32px; border-radius:50%; background:#4338ca; display:flex; align-items:center; justify-content:center; color:#fde047; font-size:0.95rem;">
+            <i class="fa-solid fa-clock"></i>
+          </div>
+          <div>
+            <div style="font-size:0.85rem; font-weight:800; color:#fde047;">
+              🚴 আজকের ডেলিভারি শিফট: সকাল ০৮:০০ টা - সন্ধ্যা ১৮:০০ টা (১ দিনে ডেলিভারি)
+            </div>
+            <div style="font-size:0.72rem; color:#cbd5e1; margin-top:1px;">
+              ডেলিভারি বয় ডিউটিতে সক্রিয় থাকলে ১ দিনে ডেলিভারি সম্পন্ন হবে। সন্ধ্যা ৬টার পর শিফট বন্ধ।
+            </div>
+          </div>
+        </div>
+        <div id="riderShiftCountdownBadge" style="background:#065f46; color:#a7f3d0; border:1px solid #10b981; font-size:0.75rem; font-weight:800; padding:4px 10px; border-radius:8px;">
+          🟢 শিফট সক্রিয় আছে
+        </div>
+      </div>
+    </div>
+
     <!-- Active Hub & Rider Quick Switcher Strip -->
     <div style="max-width:600px; margin:10px auto 0 auto; background:rgba(0,0,0,0.25); padding:8px 12px; border-radius:12px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:8px;">
       <div style="display:flex; align-items:center; gap:6px;">
@@ -871,5 +893,25 @@
         : (status === 'Picked Up' ? `📦 অর্ডার #${orderId} দোকান থেকে সফলভাবে পিকআপ সম্পন্ন মার্ক হয়েছে!` : `🚚 অর্ডার #${orderId} এখন "পথে আছে (Out for Delivery)" স্ট্যাটাসে রাখা হয়েছে।`));
     }
   </script>
+
+  <script>
+    let isRiderActiveDuty = true;
+    function toggleRiderDutyStatus() {
+      isRiderActiveDuty = !isRiderActiveDuty;
+      const btn = document.getElementById('btnRiderDutyToggle');
+      const txt = document.getElementById('riderDutyStatusText');
+      if (isRiderActiveDuty) {
+        if (btn) { btn.style.background = '#059669'; }
+        if (txt) { txt.textContent = 'ডিউটিতে সক্রিয় (On-Duty)'; }
+        alert('🟢 ডেলিভারি বয় এখন ডিউটিতে সক্রিয় আছেন! ১ দিনের ডেলিভারি অর্ডারগুলো প্রসেস করা যাবে।');
+      } else {
+        if (btn) { btn.style.background = '#dc2626'; }
+        if (txt) { txt.textContent = 'বিশ্রামে / অফ-ডিউটি (Off-Duty)'; }
+        alert('🔴 ডেলিভারি বয় এখন অফ-ডিউটিতে আছেন। নতুন অর্ডারগুলো পরের দিন সকালের শিফটে ডেলিভারি হবে।');
+      }
+      try { localStorage.setItem('nc_rider_duty_active', isRiderActiveDuty ? 'true' : 'false'); } catch(e){}
+    }
+  </script>
+
 </body>
 </html>

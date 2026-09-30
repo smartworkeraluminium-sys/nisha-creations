@@ -1359,6 +1359,9 @@
         <i class="fa-solid fa-boxes-packing"></i> প্যাকিং ও ওয়্যারহাউস হাব (<span id="countTabWarehouse">0</span>)
       </button>
 
+      <button type="button" class="adm-tab-btn" id="tabBtnHaatShops" onclick="switchAdminView('haatShops')">
+        <i class="fa-solid fa-store"></i> <span>🎪 পিনকোড হাটের স্টল ও শপ (<span id="countTabHaatShops">5</span>)</span>
+      </button>
       <button type="button" class="adm-tab-btn" id="tabBtnStock" onclick="switchAdminView('stock')">
         <i class="fa-solid fa-layer-group"></i> শাড়ির স্টক ও ইনভেন্টরি (<span id="countTabStock">0</span>)
       </button>
@@ -1559,54 +1562,70 @@
 
     <div 
 <!-- TAB: SHOPS DISABLED -->
-    <div id="pane-shops" class="tab-pane" style="display:none !important;">
+    <div id="pane-haatShops" class="tab-pane">
       <div class="owner-card" style="margin-bottom:18px;">
         <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; margin-bottom:14px;">
           <div>
-            <h3 style="font-size:1.15rem; font-weight:800; color:#0f172a; display:flex; align-items:center; gap:8px;">
-              <i class="fa-solid fa-store" style="color:var(--primary);"></i> লোকাল শপ পার্টনার নেটওয়ার্ক ও অনবোর্ডিং পোর্টাল
+            <h3 style="font-size:1.15rem; font-weight:800; color:#fff; display:flex; align-items:center; gap:8px;">
+              <i class="fa-solid fa-store" style="color:#f59e0b;"></i> 🎪 পিনকোড ভিত্তিক হাটের বুটিক স্টল ও ভাড়া নেওয়া শাখা কাউন্টার
             </h3>
-            <p style="font-size:0.78rem; color:#64748b; margin-top:3px;">
-              আমতা ও পার্শ্ববর্তী এলাকার সাধারণ দোকানদারদের অনবোর্ড করুন। দোকানদাররা পণ্য আপলোড করবে ও প্যাক করবে, আর সেন্ট্রাল ডেলিভারি টিম তাঁদের দোকান থেকে পার্সেল তুলে গ্রাহকের বাড়ি পৌঁছে দেবে।
+            <p style="font-size:0.78rem; color:#94a3b8; margin-top:3px;">
+              আমতা, বাগনান, উলুবেড়িয়া, উদয়নারায়ণপুর ইত্যাদি এলাকার সাপ্তাহিক হাটে বা বাজারে ভাড়া নেওয়া ছোটখাটো বুটিক স্টল, অস্থায়ী কাউন্টার ও পিকআপ পয়েন্ট পরিচালনা করুন।
             </p>
           </div>
           <div style="display:flex; gap:8px; flex-wrap:wrap;">
-            <a href="seller.html" target="_blank" style="background:var(--primary); color:#fff; text-decoration:none; padding:10px 16px; border-radius:10px; font-weight:800; font-size:0.82rem; display:inline-flex; align-items:center; gap:6px;">
-              <i class="fa-solid fa-plus-circle"></i> নতুন দোকানদার রেজিস্ট্রেশন ফর্ম (seller.html)
-            </a>
-            <button type="button" onclick="copySellerOnboardingLink()" style="background:#059669; color:#fff; border:none; padding:10px 16px; border-radius:10px; font-weight:800; font-size:0.82rem; cursor:pointer; display:inline-flex; align-items:center; gap:6px;">
-              <i class="fa-solid fa-share-nodes"></i> হোয়াটসঅ্যাপে লিঙ্ক শেয়ার
+            <button type="button" onclick="openAddEditHaatStallModal()" style="background:linear-gradient(135deg, #f59e0b, #d97706); color:#fff; border:none; padding:10px 16px; border-radius:10px; font-weight:800; font-size:0.82rem; cursor:pointer; display:inline-flex; align-items:center; gap:6px; box-shadow:0 3px 10px rgba(217,119,6,0.25);">
+              <i class="fa-solid fa-plus-circle"></i> + নতুন হাটের স্টল / ভাড়া দোকান যুক্ত করুন
+            </button>
+            <button type="button" onclick="printHaatStallsSchedule()" style="background:#1e293b; color:#cbd5e1; border:1px solid #334155; padding:10px 14px; border-radius:10px; font-weight:700; font-size:0.82rem; cursor:pointer; display:inline-flex; align-items:center; gap:6px;">
+              <i class="fa-solid fa-print"></i> 🖨️ শিডিউল ও ভাড়ার তালিকা
             </button>
           </div>
         </div>
 
-        <!-- Required Documents Reference Guide -->
-        <div style="background:#f0fdf4; border:1.5px solid #bbf7d0; border-radius:12px; padding:14px 16px; margin-bottom:18px;">
-          <div style="font-size:0.88rem; font-weight:800; color:#166534; margin-bottom:6px; display:flex; align-items:center; gap:6px;">
-            <i class="fa-solid fa-file-circle-check"></i> নতুন দোকান যুক্ত করার জন্য প্রয়োজনীয় ডকুমেন্টস গাইড:
+        <!-- KPI Summary Strip -->
+        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(180px, 1fr)); gap:12px; margin-bottom:18px;">
+          <div style="background:#090d16; border:1px solid #1e293b; border-radius:12px; padding:12px;">
+            <div style="font-size:0.72rem; color:#94a3b8; font-weight:700;">🎪 মোট সক্রিয় স্টল/দোকান</div>
+            <div style="font-size:1.4rem; font-weight:800; color:#f59e0b; margin-top:4px;"><span id="kpiHaatTotalStalls">5</span> টি</div>
           </div>
-          <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:10px; font-size:0.78rem; color:#14532d;">
-            <div>• <strong>দোকানের নাম ও পূর্ণ ঠিকানা:</strong> বাজার এলাকা ও ল্যান্ডমার্ক (পিকআপ পয়েন্টের জন্য)।</div>
-            <div>• <strong>মালিকের হোয়াটসঅ্যাপ নম্বর:</strong> সরাসরি অর্ডার অ্যালার্ট পাওয়ার জন্য।</div>
-            <div>• <strong>ব্যবসার প্রমাণপত্র:</strong> ট্রেড লাইসেন্স / উদ্যম আধার / সাইনবোর্ড ফটো / GST।</div>
-            <div>• <strong>পেমেন্ট সেটেলমেন্ট:</strong> ব্যাংক অ্যাকাউন্ট নম্বর ও IFSC অথবা PhonePe/GPay UPI আইডি।</div>
+          <div style="background:#090d16; border:1px solid #1e293b; border-radius:12px; padding:12px;">
+            <div style="font-size:0.72rem; color:#94a3b8; font-weight:700;">📍 কভার করা পিনকোড</div>
+            <div style="font-size:1.4rem; font-weight:800; color:#38bdf8; margin-top:4px;"><span id="kpiHaatPincodes">6</span> টি</div>
           </div>
-        </div>
-
-        <!-- Active Shops List -->
-        <div style="font-size:0.95rem; font-weight:800; color:#0f172a; margin-bottom:12px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
-          <span>অনবোর্ডেড শপ পার্টনার্স তালিকা:</span>
-          <div style="display:flex; align-items:center; gap:8px;">
-            <span style="font-size:0.78rem; color:#64748b;" id="partnerShopsTotalCount">মোট দোকান: ১ টি</span>
-            <button type="button" onclick="renderPartnerShopsList()" style="background:#f1f5f9; border:1px solid #cbd5e1; color:#334155; padding:4px 10px; border-radius:6px; font-size:0.75rem; font-weight:800; cursor:pointer; display:inline-flex; align-items:center; gap:4px;">
-              <i class="fa-solid fa-rotate"></i> রিফ্রেশ লিস্ট
-            </button>
+          <div style="background:#090d16; border:1px solid #1e293b; border-radius:12px; padding:12px;">
+            <div style="font-size:0.72rem; color:#94a3b8; font-weight:700;">💰 মাসিক ভাড়ার মোট বাজেট</div>
+            <div style="font-size:1.4rem; font-weight:800; color:#10b981; margin-top:4px;"><span id="kpiHaatTotalRent">₹11,500</span></div>
+          </div>
+          <div style="background:#090d16; border:1px solid #1e293b; border-radius:12px; padding:12px;">
+            <div style="font-size:0.72rem; color:#94a3b8; font-weight:700;">📦 স্টলগুলোতে মোট মজুত মাল</div>
+            <div style="font-size:1.4rem; font-weight:800; color:#c084fc; margin-top:4px;"><span id="kpiHaatTotalStock">109</span> পিস</div>
           </div>
         </div>
 
-        <div id="partnerShopsGridContainer" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); gap:12px;">
-          <!-- Dynamically populated -->
+        <!-- Filter & Search Bar -->
+        <div style="background:#090d16; border:1px solid #1e293b; border-radius:12px; padding:10px 14px; margin-bottom:16px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px;">
+          <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
+            <span style="font-size:0.78rem; font-weight:700; color:#cbd5e1;">📍 পিনকোড ফিল্টার:</span>
+            <select id="haatPinFilterSelect" onchange="filterHaatStallsByPin(this.value)" style="background:#1e293b; border:1px solid #334155; color:#fff; padding:6px 12px; border-radius:8px; font-size:0.78rem; font-weight:700; cursor:pointer;">
+              <option value="all">সব পিনকোড ও এলাকা</option>
+              <option value="711401">711401 - আমতা সদর</option>
+              <option value="711303">711303 - বাগনান</option>
+              <option value="711410">711410 - উদয়নারায়ণপুর</option>
+              <option value="711312">711312 - উলুবেড়িয়া</option>
+              <option value="711414">711414 - জয়পুর</option>
+            </select>
+          </div>
+          <div style="font-size:0.75rem; color:#94a3b8;">
+            * কাস্টমাররা অর্ডারের সময় তাদের নিজস্ব পিনকোডের হাটের স্টল থেকে ₹০ খরচে কাপড় দেখে নিতে পারেন।
+          </div>
         </div>
+
+        <!-- Haat Stalls Grid Container -->
+        <div id="haatStallsGridContainer" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(320px, 1fr)); gap:14px;">
+          <!-- Dynamically populated by renderHaatStallsList() -->
+        </div>
+
       </div>
     </div>
 
@@ -1718,7 +1737,10 @@
             <i class="fa-solid fa-boxes-stacked" style="color:var(--amber);"></i>
             <span id="t-stockTotalTitle">শাড়ির স্টক তালিকা</span> (<span id="stockHeaderTotalCount">0</span>)
           </div>
-          <div style="display:flex; gap:6px;">
+          <div style="display:flex; gap:6px; flex-wrap:wrap;">
+            <button type="button" class="btn-fast-action" style="background:linear-gradient(135deg, #059669, #10b981); color:#fff; padding:8px 14px; font-size:0.75rem; border-radius:10px; font-weight:800; display:inline-flex; align-items:center; gap:6px; box-shadow:0 3px 10px rgba(16,185,129,0.3);" onclick="openWeeklyRestockBillModal()">
+              <i class="fa-solid fa-clipboard-list"></i> <span>📋 সাপ্তাহিক মালের ক্রয়ের বিল</span>
+            </button>
             <button type="button" class="btn-fast-action" style="background:#dc2626; color:#fff; padding:8px 12px; font-size:0.75rem; border-radius:10px; font-weight:800;" onclick="clearAllDemoProducts()">
               <i class="fa-solid fa-trash-can"></i> <span id="t-btnClearAllDemo">সব ডেমো শাড়ি মুছুন</span>
             </button>
@@ -1728,6 +1750,78 @@
           </div>
         </div>
         <input type="text" id="stockFilterInput" class="form-ctrl" placeholder="শাড়ির নাম দিয়ে ফিল্টার করুন..." oninput="renderOwnerStock()">
+        
+        <!-- 📦 ওয়্যারহাউস র্যাক লোকেশন ও বেশি মাল মজুত ম্যাপ (Visual Stock Density & Rack Locator) -->
+        <div class="owner-card" style="margin-top:14px; background:#0b1120; border:1px solid #1e293b; padding:14px; border-radius:14px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; margin-bottom:12px; border-bottom:1px solid #1e293b; padding-bottom:10px;">
+            <div>
+              <div style="font-size:1rem; font-weight:800; color:#fff; display:flex; align-items:center; gap:8px;">
+                <i class="fa-solid fa-layer-group" style="color:#38bdf8;"></i> স্টকে কোন তাকে কি শাড়ি আছে ও কোনখানে বেশি মাল মজুত (Rack Locator)
+              </div>
+              <div style="font-size:0.75rem; color:#94a3b8; margin-top:2px;">
+                তাকের অবস্থান অনুযায়ী শাড়ি ও পোশাকের সঠিক লোকেশন এবং কোন তাকে বেশি মাল ঠাসা আছে তার লাইভ হিটম্যাপ।
+              </div>
+            </div>
+            <div style="display:flex; gap:6px;">
+              <button type="button" onclick="filterRackDensityView('all')" id="btnRackFilterAll" style="background:#1e293b; color:#fff; border:1px solid #334155; padding:5px 10px; border-radius:6px; font-size:0.72rem; font-weight:700; cursor:pointer;">সব তাক</button>
+              <button type="button" onclick="filterRackDensityView('heavy')" id="btnRackFilterHeavy" style="background:rgba(16,185,129,0.15); color:#34d399; border:1px solid #10b981; padding:5px 10px; border-radius:6px; font-size:0.72rem; font-weight:800; cursor:pointer;">🟢 বেশি মাল মজুত তাক</button>
+              <button type="button" onclick="filterRackDensityView('low')" id="btnRackFilterLow" style="background:rgba(239,68,68,0.15); color:#f87171; border:1px solid #ef4444; padding:5px 10px; border-radius:6px; font-size:0.72rem; font-weight:800; cursor:pointer;">🔴 খালি / কম মালের তাক</button>
+            </div>
+          </div>
+          <div id="visualRackDensityMatrixContainer" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); gap:12px;">
+            <!-- Dynamically populated by renderVisualRackDensityMatrix() -->
+          </div>
+        </div>
+
+        <!-- 🎯 মিনিমাম ২০টি অর্ডারের রিস্টক সেটিং ও বাজার কেনাকাটার লিস্ট (20-Order Lot Purchase Rule) -->
+        <div class="owner-card" style="margin-top:14px; background:#0b1120; border:1.5px solid #6366f1; padding:14px; border-radius:14px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; margin-bottom:12px; border-bottom:1px solid #1e293b; padding-bottom:10px;">
+            <div>
+              <div style="font-size:1rem; font-weight:800; color:#fff; display:flex; align-items:center; gap:8px;">
+                <i class="fa-solid fa-cart-flatbed" style="color:#f59e0b;"></i> মিনিমাম ২০টি অর্ডারের রিস্টক সেটিং (মালের বাজার ফর্দ)
+              </div>
+              <div style="font-size:0.75rem; color:#c7d2fe; margin-top:2px;">
+                নিয়ম: শুধুমাত্র যে প্রোডাক্টগুলোর <strong>কমপক্ষে ২০টি করে অর্ডার বা ঘাটতি</strong> রয়েছে, সেগুলোই অটোমেটিক সেটিং স্টকে উঠে যাবে এবং কেনার জন্য প্রস্তুত হবে।
+              </div>
+            </div>
+            <div style="display:flex; align-items:center; gap:8px;">
+              <span style="font-size:0.75rem; color:#cbd5e1; font-weight:700;">সেটিং লট:</span>
+              <select id="selectMinOrderThreshold" onchange="changeMinOrderThreshold(this.value)" style="background:#1e293b; border:1px solid #6366f1; color:#fde047; font-weight:800; padding:4px 8px; border-radius:6px; font-size:0.78rem;">
+                <option value="20" selected>মিনিমাম ২০ পিস (১ কুড়ি)</option>
+                <option value="15">মিনিমাম ১৫ পিস</option>
+                <option value="30">মিনিমাম ৩০ পিস</option>
+                <option value="40">মিনিমাম ৪০ পিস (২ কুড়ি)</option>
+              </select>
+              <button type="button" onclick="print20OrderRestockBill()" style="background:#4338ca; color:#fff; border:none; padding:6px 12px; border-radius:8px; font-size:0.75rem; font-weight:800; cursor:pointer;">
+                <i class="fa-solid fa-print"></i> ২০-লট বিল প্রিন্ট
+              </button>
+            </div>
+          </div>
+          <div id="min20OrderPurchaseContainer">
+            <!-- Dynamically populated by renderMin20OrderPurchaseList() -->
+          </div>
+        </div>
+
+        <!-- Live Inventory Health & Auto-Restock Summary Bar -->
+        <div id="stockHealthSummaryBar" style="margin-top:10px; background:#090d16; border:1px solid #1e293b; border-radius:10px; padding:10px 14px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:8px;">
+          <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
+            <span style="font-size:0.78rem; font-weight:800; color:#38bdf8; display:flex; align-items:center; gap:5px;">
+              <i class="fa-solid fa-chart-pie"></i> স্টক এনালাইসিস:
+            </span>
+            <span id="pillStockOut" style="background:rgba(239,68,68,0.15); border:1px solid #ef4444; color:#fca5a5; font-size:0.72rem; font-weight:800; padding:2px 8px; border-radius:6px; cursor:pointer;" onclick="openWeeklyRestockBillModal('out')">
+              🔴 শেষ হয়ে গেছে: <strong id="countOutItems">0</strong> টি
+            </span>
+            <span id="pillStockLow" style="background:rgba(245,158,11,0.15); border:1px solid #f59e0b; color:#fde68a; font-size:0.72rem; font-weight:800; padding:2px 8px; border-radius:6px; cursor:pointer;" onclick="openWeeklyRestockBillModal('low')">
+              🟡 কম স্টক (&lt;৫ টি): <strong id="countLowItems">0</strong> টি
+            </span>
+            <span id="pillStockGood" style="background:rgba(16,185,129,0.15); border:1px solid #10b981; color:#a7f3d0; font-size:0.72rem; font-weight:800; padding:2px 8px; border-radius:6px;">
+              🟢 পর্যাপ্ত স্টক: <strong id="countGoodItems">0</strong> টি
+            </span>
+          </div>
+          <button type="button" onclick="openWeeklyRestockBillModal()" style="background:#1e1b4b; border:1px solid #6366f1; color:#c7d2fe; font-size:0.72rem; font-weight:800; padding:4px 10px; border-radius:6px; cursor:pointer; display:inline-flex; align-items:center; gap:5px;">
+            <i class="fa-solid fa-file-invoice"></i> ১-ক্লিকে মালের বিল দেখুন &gt;
+          </button>
+        </div>
       </div>
       <div class="inv-grid" id="stockGridContainer"></div>
     </div>
@@ -2535,7 +2629,7 @@
             <input type="text" id="admNewPinNumber" maxlength="6" placeholder="পিনকোড (যেমন 711315)" style="background:#1e293b; border:1px solid #334155; color:#fde047; font-weight:800; border-radius:8px; padding:8px 10px; font-size:0.85rem;">
             <input type="text" id="admNewPinArea" placeholder="এলাকার নাম (যেমন শ্যামপুর)" style="background:#1e293b; border:1px solid #334155; color:#fff; border-radius:8px; padding:8px 10px; font-size:0.85rem;">
             <select id="admNewPinTime" style="background:#1e293b; border:1px solid #334155; color:#fff; border-radius:8px; padding:8px 10px; font-size:0.82rem;">
-              <option value="২ ঘণ্টার মধ্যে এক্সপ্রেস ডেলিভারি">⚡ ২ ঘণ্টার এক্সপ্রেস ডেলিভারি</option>
+              <option value="১ দিনে নিশ্চিত হোম ডেলিভারি">⚡ ১ দিনে ডেলিভারি ডেলিভারি</option>
               <option value="২৪ ঘণ্টার মধ্যে ডেলিভারি" selected>🚚 ২৪ ঘণ্টার মধ্যে ডেলিভারি</option>
               <option value="৪৮ ঘণ্টার মধ্যে ডেলিভারি">📦 ৪৮ ঘণ্টার মধ্যে ডেলিভারি</option>
             </select>
@@ -4265,9 +4359,10 @@ function switchAdminView(tabKey) {
     renderOwnerStock();
   } else if (tabKey === 'add') {
     document.getElementById('tabBtnAdd')?.classList.add('active');
-  } else if (tabKey === 'shops') {
-    document.getElementById('tabBtnShops')?.classList.add('active');
-    renderPartnerShopsList();
+  } else if (tabKey === 'haatShops' || tabKey === 'shops') {
+    document.getElementById('tabBtnHaatShops')?.classList.add('active');
+    document.getElementById('pane-haatShops')?.classList.add('active');
+    renderHaatStallsList();
   }
 }
 
@@ -4771,6 +4866,9 @@ function closeAdminBarcodeStickerModal() {
 
     // Stock
     function renderOwnerStock() {
+      try { updateStockHealthSummary(); } catch(e){}
+      try { renderVisualRackDensityMatrix(); } catch(e){}
+      try { renderMin20OrderPurchaseList(); } catch(e){}
       const grid = document.getElementById('stockGridContainer');
       if (!grid) return;
 
@@ -8608,6 +8706,132 @@ window.addEventListener('DOMContentLoaded', initAdminDashboard);
 
 
 
+  
+  
+  <!-- ================= 🎪 ADD/EDIT HAAT STALL & RENTAL BOUTIQUE MODAL ================= -->
+  <div id="addEditHaatStallModal" style="display:none; position:fixed; inset:0; background:rgba(15,23,42,0.8); backdrop-filter:blur(6px); z-index:999999; align-items:center; justify-content:center; padding:12px; overflow-y:auto;">
+    <div style="background:#0f172a; color:#fff; border-radius:18px; max-width:580px; width:100%; border:1px solid #334155; box-shadow:0 25px 50px rgba(0,0,0,0.4); overflow:hidden;">
+      <div style="background:#1e293b; padding:14px 18px; display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #334155;">
+        <div style="font-weight:800; font-size:1rem; display:flex; align-items:center; gap:8px;">
+          <i class="fa-solid fa-store" style="color:#f59e0b;"></i> <span id="stallModalTitle">নতুন হাটের স্টল / ভাড়া দোকান যুক্ত করুন</span>
+        </div>
+        <button type="button" onclick="closeAddEditHaatStallModal()" style="background:#334155; color:#cbd5e1; border:none; width:30px; height:30px; border-radius:50%; font-size:1rem; cursor:pointer;">✕</button>
+      </div>
+      <form id="haatStallForm" onsubmit="handleSaveHaatStall(event)" style="padding:18px;">
+        <input type="hidden" id="stall_edit_id">
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:12px;">
+          <div>
+            <label style="display:block; font-size:0.75rem; font-weight:700; color:#cbd5e1; margin-bottom:4px;">📍 পিনকোড *</label>
+            <input type="text" id="stall_pincode" required placeholder="যেমন: 711401" style="width:100%; background:#1e293b; border:1px solid #334155; color:#fff; padding:8px 10px; border-radius:8px; font-size:0.85rem;">
+          </div>
+          <div>
+            <label style="display:block; font-size:0.75rem; font-weight:700; color:#cbd5e1; margin-bottom:4px;">এলাকার নাম *</label>
+            <input type="text" id="stall_area" required placeholder="যেমন: আমতা সদর / বাগনান" style="width:100%; background:#1e293b; border:1px solid #334155; color:#fff; padding:8px 10px; border-radius:8px; font-size:0.85rem;">
+          </div>
+        </div>
+        <div style="margin-bottom:12px;">
+          <label style="display:block; font-size:0.75rem; font-weight:700; color:#cbd5e1; margin-bottom:4px;">🎪 হাটের / বাজারের নাম *</label>
+          <input type="text" id="stall_haat_name" required placeholder="যেমন: আমতা চাঁদনী বাজার সাপ্তাহিক হাট বুটিক স্টল" style="width:100%; background:#1e293b; border:1px solid #334155; color:#fff; padding:8px 10px; border-radius:8px; font-size:0.85rem;">
+        </div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:12px;">
+          <div>
+            <label style="display:block; font-size:0.75rem; font-weight:700; color:#cbd5e1; margin-bottom:4px;">🗓️ হাট বসার দিন ও সময় *</label>
+            <input type="text" id="stall_days" required placeholder="যেমন: প্রতি রবি ও বৃহস্পতিবার" style="width:100%; background:#1e293b; border:1px solid #334155; color:#fff; padding:8px 10px; border-radius:8px; font-size:0.85rem;">
+          </div>
+          <div>
+            <label style="display:block; font-size:0.75rem; font-weight:700; color:#cbd5e1; margin-bottom:4px;">💰 ভাড়ার পরিমাণ ও ধরন *</label>
+            <input type="text" id="stall_rent" required placeholder="যেমন: দৈনিক ₹২০০ বা মাসিক ₹২,৫০০" style="width:100%; background:#1e293b; border:1px solid #334155; color:#fff; padding:8px 10px; border-radius:8px; font-size:0.85rem;">
+          </div>
+        </div>
+        <div style="margin-bottom:12px;">
+          <label style="display:block; font-size:0.75rem; font-weight:700; color:#cbd5e1; margin-bottom:4px;">📍 পূর্ণ ঠিকানা ও শেড নম্বর</label>
+          <input type="text" id="stall_address" placeholder="যেমন: আমতা স্টেশন রোড, সিনেমা তলা মোড়, শেড নং B-12" style="width:100%; background:#1e293b; border:1px solid #334155; color:#fff; padding:8px 10px; border-radius:8px; font-size:0.85rem;">
+        </div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:14px;">
+          <div>
+            <label style="display:block; font-size:0.75rem; font-weight:700; color:#cbd5e1; margin-bottom:4px;">👤 স্টল ইনচার্জ / ম্যানেজার</label>
+            <input type="text" id="stall_incharge" placeholder="যেমন: সাহেব ঘাঁটি / রাহুল" style="width:100%; background:#1e293b; border:1px solid #334155; color:#fff; padding:8px 10px; border-radius:8px; font-size:0.85rem;">
+          </div>
+          <div>
+            <label style="display:block; font-size:0.75rem; font-weight:700; color:#cbd5e1; margin-bottom:4px;">📞 মোবাইল / হোয়াটসঅ্যাপ নম্বর *</label>
+            <input type="tel" id="stall_phone" required placeholder="যেমন: 9239413517" style="width:100%; background:#1e293b; border:1px solid #334155; color:#fff; padding:8px 10px; border-radius:8px; font-size:0.85rem;">
+          </div>
+        </div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:16px;">
+          <div>
+            <label style="display:block; font-size:0.75rem; font-weight:700; color:#cbd5e1; margin-bottom:4px;">📦 স্টকে বর্তমান শাড়ির সংখ্যা (পিস)</label>
+            <input type="number" id="stall_stock" min="0" value="25" style="width:100%; background:#1e293b; border:1px solid #334155; color:#fff; padding:8px 10px; border-radius:8px; font-size:0.85rem;">
+          </div>
+          <div style="display:flex; align-items:center; gap:8px; margin-top:22px;">
+            <input type="checkbox" id="stall_pickup" checked style="width:18px; height:18px; cursor:pointer;">
+            <label for="stall_pickup" style="font-size:0.78rem; font-weight:700; color:#cbd5e1; cursor:pointer;">অনলাইন অর্ডারের ফ্রি পিকআপ সক্রিয়</label>
+          </div>
+        </div>
+        <div style="display:flex; justify-content:flex-end; gap:8px; border-top:1px solid #334155; padding-top:14px;">
+          <button type="button" onclick="closeAddEditHaatStallModal()" style="background:#1e293b; border:1px solid #334155; color:#cbd5e1; padding:8px 16px; border-radius:8px; font-size:0.82rem; font-weight:700; cursor:pointer;">বাতিল</button>
+          <button type="submit" style="background:linear-gradient(135deg, #f59e0b, #d97706); border:none; color:#fff; padding:8px 20px; border-radius:8px; font-size:0.82rem; font-weight:800; cursor:pointer; box-shadow:0 2px 8px rgba(217,119,6,0.3);">💾 সংরক্ষণ করুন</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ================= 📋 WEEKLY RESTOCK & PROCUREMENT BILL MODAL ================= -->
+  <div id="adminWeeklyRestockBillModal" style="display:none; position:fixed; inset:0; background:rgba(15,23,42,0.75); backdrop-filter:blur(6px); z-index:999999; align-items:center; justify-content:center; padding:12px; overflow-y:auto;">
+    <div style="background:#ffffff; color:#0f172a; border-radius:18px; max-width:820px; width:100%; max-height:94vh; display:flex; flex-direction:column; box-shadow:0 25px 50px -12px rgba(0,0,0,0.35); border:1px solid #cbd5e1; overflow:hidden;">
+      
+      <!-- Modal Navigation Header (No-Print) -->
+      <div class="no-print" style="background:#0f172a; color:#fff; padding:12px 18px; display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #334155;">
+        <div>
+          <div style="font-weight:800; font-size:1.05rem; display:flex; align-items:center; gap:8px;">
+            <i class="fa-solid fa-clipboard-list" style="color:#10b981;"></i> সাপ্তাহিক মালের রিস্টক ও ক্রয়ের বিল / বাজার ফর্দ
+          </div>
+          <div style="font-size:0.72rem; color:#94a3b8;">নিশা ক্রিয়েশনস • স্টক ঘাটতি এনালাইসিস ও পাইকারি কেনাকাটার অটোমেটিক চালান</div>
+        </div>
+        <button type="button" onclick="closeWeeklyRestockBillModal()" style="background:#334155; color:#fff; border:none; width:32px; height:32px; border-radius:50%; font-size:1rem; cursor:pointer;">✕</button>
+      </div>
+
+      <!-- Quick Action Tabs & Stats Banner (No-Print) -->
+      <div class="no-print" style="background:#f8fafc; padding:10px 16px; border-bottom:1px solid #e2e8f0; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
+        <div style="display:flex; gap:6px; flex-wrap:wrap;">
+          <button type="button" id="btnRestockTabAll" onclick="filterRestockModalView('all')" style="padding:6px 12px; border-radius:8px; border:1px solid #cbd5e1; background:#4338ca; color:#fff; font-size:0.75rem; font-weight:800; cursor:pointer;">
+            সব প্রয়োজন (<span id="restockStatTotalItems">0</span>)
+          </button>
+          <button type="button" id="btnRestockTabOut" onclick="filterRestockModalView('out')" style="padding:6px 12px; border-radius:8px; border:1px solid #fca5a5; background:#fee2e2; color:#b91c1c; font-size:0.75rem; font-weight:800; cursor:pointer;">
+            🔴 শেষ হওয়া (<span id="restockStatOutItems">0</span>)
+          </button>
+          <button type="button" id="btnRestockTabLow" onclick="filterRestockModalView('low')" style="padding:6px 12px; border-radius:8px; border:1px solid #fde68a; background:#fef3c7; color:#92400e; font-size:0.75rem; font-weight:800; cursor:pointer;">
+            🟡 কম স্টক (<span id="restockStatLowItems">0</span>)
+          </button>
+        </div>
+        <div style="font-size:0.82rem; font-weight:800; color:#1e293b; background:#e0e7ff; padding:6px 12px; border-radius:8px; border:1px solid #c7d2fe;">
+          মোট মাল: <span id="restockTotalUnitsPill" style="color:#4338ca;">0</span> পিস | আনুমানিক বাজেট: <span id="restockTotalBudgetPill" style="color:#047857;">₹0</span>
+        </div>
+      </div>
+
+      <!-- Printable Document Area -->
+      <div id="weeklyRestockPrintArea" style="flex:1; overflow-y:auto; padding:20px 24px; background:#fff;">
+        <!-- Rendered dynamically by renderWeeklyRestockBill() -->
+      </div>
+
+      <!-- Modal Bottom Actions (No-Print) -->
+      <div class="no-print" style="background:#f1f5f9; padding:12px 18px; border-top:1px solid #e2e8f0; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
+        <div style="display:flex; gap:8px;">
+          <button type="button" onclick="printWeeklyRestockBill()" style="background:#4338ca; color:#fff; border:none; padding:10px 16px; border-radius:10px; font-weight:800; font-size:0.85rem; cursor:pointer; display:inline-flex; align-items:center; gap:6px; box-shadow:0 3px 10px rgba(67,56,202,0.25);">
+            <i class="fa-solid fa-print"></i> 🖨️ ক্রয়ের বিল প্রিন্ট / PDF সেভ
+          </button>
+          <button type="button" onclick="shareWeeklyRestockWhatsApp()" style="background:#16a34a; color:#fff; border:none; padding:10px 16px; border-radius:10px; font-weight:800; font-size:0.85rem; cursor:pointer; display:inline-flex; align-items:center; gap:6px; box-shadow:0 3px 10px rgba(22,163,74,0.25);">
+            <i class="fa-brands fa-whatsapp"></i> 📲 WhatsApp-এ ফর্দ পাঠান
+          </button>
+        </div>
+        <button type="button" onclick="closeWeeklyRestockBillModal()" style="background:#e2e8f0; color:#334155; border:1px solid #cbd5e1; padding:10px 18px; border-radius:10px; font-weight:700; font-size:0.85rem; cursor:pointer;">
+          বন্ধ করুন
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+
   <!-- ================= ADMIN 3-IN-1 PROPER BILL & BARCODE STUDIO MODAL ================= -->
   <div id="adminBillingModal" style="display:none; position:fixed; inset:0; background:rgba(15,23,42,0.7); backdrop-filter:blur(5px); z-index:999999; align-items:center; justify-content:center; padding:12px; overflow-y:auto;">
     <div style="background:#fff; border-radius:18px; max-width:680px; width:100%; max-height:92vh; display:flex; flex-direction:column; box-shadow:0 20px 40px rgba(0,0,0,0.25); border:1px solid #cbd5e1; overflow:hidden;">
@@ -8908,7 +9132,7 @@ window.addEventListener('DOMContentLoaded', initAdminDashboard);
     // 📍 PINCODE & DELIVERY SERVICEABILITY MASTER CONTROLLER
     // =========================================================================
     const DEFAULT_SERVICEABLE_PINCODES = [
-      { pincode: '711401', area: 'আমতা সদর (লোকাল)', deliveryTime: '২ ঘণ্টার মধ্যে এক্সপ্রেস ডেলিভারি', status: 'available' },
+      { pincode: '711401', area: 'আমতা সদর (লোকাল)', deliveryTime: '১ দিনে নিশ্চিত হোম ডেলিভারি', status: 'available' },
       { pincode: '711303', area: 'বাগনান (হাওড়া)', deliveryTime: '২৪ ঘণ্টার মধ্যে ডেলিভারি', status: 'available' },
       { pincode: '711410', area: 'উদয়নারায়ণপুর', deliveryTime: '২৪ ঘণ্টার মধ্যে ডেলিভারি', status: 'available' },
       { pincode: '711312', area: 'উলুবেড়িয়া', deliveryTime: '২৪ ঘণ্টার মধ্যে ডেলিভারি', status: 'available' },
@@ -9184,6 +9408,918 @@ document.addEventListener("DOMContentLoaded", () => { setTimeout(renderAdminPinc
       if (typeof renderWarehouseOperations === 'function') renderWarehouseOperations();
       alert(`✅ '${prod.title}' শাড়ির গোডাউন ভিত্তিক স্টক সফলভাবে আপডেট হয়েছে! মোট স্টক: ${totalStock} পিস।`);
     }
+  
+    // =========================================================================
+    // 📋 WEEKLY PROCUREMENT & RESTOCK BILL GENERATOR (সাপ্তাহিক ক্রয়ের বিল)
+    // =========================================================================
+    let currentRestockFilter = 'all';
+    let currentRestockItems = [];
+
+    function updateStockHealthSummary() {
+      let prods = [];
+      try { prods = JSON.parse(localStorage.getItem('nc_products') || '[]'); } catch(e) {}
+      if (!prods.length) {
+        try { prods = JSON.parse(localStorage.getItem('nc_custom_products') || '[]'); } catch(e) {}
+      }
+      if (!prods.length && typeof INITIAL_PRODUCTS !== 'undefined' && Array.isArray(INITIAL_PRODUCTS)) {
+        prods = [...INITIAL_PRODUCTS];
+      }
+
+      let outCount = 0;
+      let lowCount = 0;
+      let goodCount = 0;
+
+      prods.forEach(p => {
+        const st = p.stock !== undefined ? parseInt(p.stock) : (p.inStock !== false ? 15 : 0);
+        if (st <= 0 || p.inStock === false) outCount++;
+        else if (st < 5) lowCount++;
+        else goodCount++;
+      });
+
+      const elOut = document.getElementById('countOutItems');
+      const elLow = document.getElementById('countLowItems');
+      const elGood = document.getElementById('countGoodItems');
+
+      if (elOut) elOut.textContent = outCount;
+      if (elLow) elLow.textContent = lowCount;
+      if (elGood) elGood.textContent = goodCount;
+    }
+
+    function openWeeklyRestockBillModal(filter = 'all') {
+      currentRestockFilter = filter;
+      const modal = document.getElementById('adminWeeklyRestockBillModal');
+      if (modal) modal.style.display = 'flex';
+      calculateAndBuildRestockItems();
+      renderWeeklyRestockBill();
+    }
+
+    function closeWeeklyRestockBillModal() {
+      const modal = document.getElementById('adminWeeklyRestockBillModal');
+      if (modal) modal.style.display = 'none';
+    }
+
+    function filterRestockModalView(filter) {
+      currentRestockFilter = filter;
+      document.querySelectorAll('#btnRestockTabAll, #btnRestockTabOut, #btnRestockTabLow').forEach(b => {
+        b.style.background = '#f1f5f9';
+        b.style.color = '#334155';
+        b.style.borderColor = '#cbd5e1';
+      });
+
+      const activeBtn = document.getElementById(filter === 'out' ? 'btnRestockTabOut' : (filter === 'low' ? 'btnRestockTabLow' : 'btnRestockTabAll'));
+      if (activeBtn) {
+        activeBtn.style.background = filter === 'out' ? '#fee2e2' : (filter === 'low' ? '#fef3c7' : '#4338ca');
+        activeBtn.style.color = filter === 'out' ? '#b91c1c' : (filter === 'low' ? '#92400e' : '#fff');
+        activeBtn.style.borderColor = filter === 'out' ? '#fca5a5' : (filter === 'low' ? '#fde68a' : '#4338ca');
+      }
+
+      renderWeeklyRestockBill();
+    }
+
+    function calculateAndBuildRestockItems() {
+      let prods = [];
+      try { prods = JSON.parse(localStorage.getItem('nc_products') || '[]'); } catch(e) {}
+      if (!prods.length) {
+        try { prods = JSON.parse(localStorage.getItem('nc_custom_products') || '[]'); } catch(e) {}
+      }
+      if (!prods.length && typeof INITIAL_PRODUCTS !== 'undefined' && Array.isArray(INITIAL_PRODUCTS)) {
+        prods = [...INITIAL_PRODUCTS];
+      }
+
+      currentRestockItems = [];
+
+      prods.forEach(p => {
+        const st = p.stock !== undefined ? parseInt(p.stock) : (p.inStock !== false ? 12 : 0);
+        const isOut = (st <= 0 || p.inStock === false);
+        const isLow = (!isOut && st < 5);
+
+        if (isOut || isLow || (p.sold && p.sold > 5)) {
+          const recQty = isOut ? 20 : (st < 5 ? (15 - st) : 10);
+          const estWholesale = Math.round(Number(p.price || 650) * 0.55);
+          currentRestockItems.push({
+            id: p.id,
+            title: p.title || 'বুটিক আইটেম',
+            category: p.category || 'saree',
+            type: p.type || 'saree',
+            curStock: st,
+            recQty: recQty,
+            estWholesale: estWholesale,
+            totalCost: recQty * estWholesale,
+            status: isOut ? 'out' : (isLow ? 'low' : 'bestseller'),
+            statusText: isOut ? '🔴 শেষ হয়েছে (০ স্টক)' : (isLow ? ('🟡 কম স্টক (' + st + 'টি বাকি)') : '⭐ ফাস্ট সেলিং')
+          });
+        }
+      });
+
+      if (currentRestockItems.length === 0) {
+        prods.slice(0, 6).forEach(p => {
+          const estWholesale = Math.round(Number(p.price || 650) * 0.55);
+          currentRestockItems.push({
+            id: p.id,
+            title: p.title || 'বুটিক আইটেম',
+            category: p.category || 'saree',
+            type: p.type || 'saree',
+            curStock: p.stock || 10,
+            recQty: 10,
+            estWholesale: estWholesale,
+            totalCost: 10 * estWholesale,
+            status: 'bestseller',
+            statusText: '⭐ সাপ্তাহিক রেগুলার স্টক'
+          });
+        });
+      }
+    }
+
+    function updateRestockItemQty(idx, delta) {
+      if (!currentRestockItems[idx]) return;
+      currentRestockItems[idx].recQty = Math.max(1, currentRestockItems[idx].recQty + delta);
+      currentRestockItems[idx].totalCost = currentRestockItems[idx].recQty * currentRestockItems[idx].estWholesale;
+      renderWeeklyRestockBill();
+    }
+
+    function renderWeeklyRestockBill() {
+      const container = document.getElementById('weeklyRestockPrintArea');
+      if (!container) return;
+
+      let list = [...currentRestockItems];
+      if (currentRestockFilter === 'out') {
+        list = list.filter(it => it.status === 'out');
+      } else if (currentRestockFilter === 'low') {
+        list = list.filter(it => it.status === 'low');
+      }
+
+      const totalItems = currentRestockItems.length;
+      const outItems = currentRestockItems.filter(i => i.status === 'out').length;
+      const lowItems = currentRestockItems.filter(i => i.status === 'low').length;
+
+      const statTotal = document.getElementById('restockStatTotalItems');
+      const statOut = document.getElementById('restockStatOutItems');
+      const statLow = document.getElementById('restockStatLowItems');
+
+      if (statTotal) statTotal.textContent = totalItems;
+      if (statOut) statOut.textContent = outItems;
+      if (statLow) statLow.textContent = lowItems;
+
+      const grandUnits = list.reduce((sum, it) => sum + it.recQty, 0);
+      const grandBudget = list.reduce((sum, it) => sum + it.totalCost, 0);
+
+      const totalUnitsEl = document.getElementById('restockTotalUnitsPill');
+      const totalBudgetEl = document.getElementById('restockTotalBudgetPill');
+
+      if (totalUnitsEl) totalUnitsEl.textContent = grandUnits;
+      if (totalBudgetEl) totalBudgetEl.textContent = '₹' + grandBudget.toLocaleString('en-IN');
+
+      const todayStr = new Date().toLocaleDateString('bn-IN', { day: 'numeric', month: 'long', year: 'numeric' });
+      const memoNo = 'PO-AMTA-' + new Date().getFullYear() + '-W' + Math.ceil(new Date().getDate() / 7);
+
+      container.innerHTML = `
+        <div class="po-bill-wrap" style="font-family:'Hind Siliguri', sans-serif;">
+          
+          <!-- Bill Header -->
+          <div style="display:flex; justify-content:space-between; align-items:flex-start; border-bottom:2px solid #0f172a; padding-bottom:14px; margin-bottom:16px;">
+            <div>
+              <div style="font-size:1.35rem; font-weight:800; color:#0f172a;">
+                🌸 নিশা ক্রিয়েশনস (Nisha Creations)
+              </div>
+              <div style="font-size:0.8rem; color:#475569; margin-top:2px;">
+                আমতা স্টেশন রোড, সিনেমা তলা মোড়, আমতা, হাওড়া - ৭১১৪০১ • ফোন: ৯২৩৯৪১৩৫১৭
+              </div>
+              <div style="display:inline-block; background:#e0e7ff; color:#3730a3; font-size:0.75rem; font-weight:800; padding:2px 8px; border-radius:4px; margin-top:6px;">
+                📋 সাপ্তাহিক পাইকারি ক্রয়ের চালান ও বাজার ফর্দ
+              </div>
+            </div>
+            <div style="text-align:right;">
+              <div style="font-size:0.8rem; color:#475569;">মেমো নং: <strong style="color:#0f172a;">${memoNo}</strong></div>
+              <div style="font-size:0.8rem; color:#475569;">তারিখ: <strong style="color:#0f172a;">${todayStr}</strong></div>
+              <div style="font-size:0.8rem; color:#475569;">আড়ত/বাজার: <strong>শান্তিপুর / বড়বাজার পাইকারি</strong></div>
+              <div style="font-size:0.8rem; color:#475569;">প্রস্তুতকারক: <strong>সাহেব ঘাঁটি (মালিক)</strong></div>
+            </div>
+          </div>
+
+          <!-- Items Table -->
+          <table style="width:100%; border-collapse:collapse; margin-bottom:20px; font-size:0.85rem;">
+            <thead>
+              <tr style="background:#0f172a; color:#fff;">
+                <th style="padding:10px 8px; text-align:center; width:40px;">#</th>
+                <th style="padding:10px 8px; text-align:left;">প্রোডাক্টের বিবরণ ও ভ্যারিয়েন্ট</th>
+                <th style="padding:10px 8px; text-align:center; width:100px;">বর্তমান স্টক</th>
+                <th style="padding:10px 8px; text-align:center; width:120px;">কেনার পরিমাণ (Qty)</th>
+                <th style="padding:10px 8px; text-align:right; width:95px;">পাইকারি দর</th>
+                <th style="padding:10px 8px; text-align:right; width:110px;">মোট টাকা</th>
+                <th style="padding:10px 8px; text-align:center; width:65px;">চেক (✔)</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${list.length === 0 ? `
+                <tr>
+                  <td colspan="7" style="text-align:center; padding:30px; color:#64748b;">
+                    সব স্টক পর্যাপ্ত আছে! কোনো প্রোডাক্ট শেষ হয়নি।
+                  </td>
+                </tr>
+              ` : list.map((it, idx) => `
+                <tr style="border-bottom:1px solid #e2e8f0; background:${idx % 2 === 0 ? '#fff' : '#f8fafc'};">
+                  <td style="padding:10px 8px; text-align:center; font-weight:700;">${idx + 1}</td>
+                  <td style="padding:10px 8px;">
+                    <div style="font-weight:800; color:#0f172a;">${it.title}</div>
+                    <div style="font-size:0.75rem; color:#64748b; display:flex; align-items:center; gap:8px;">
+                      <span>আইডি: ${it.id}</span>
+                      <span>•</span>
+                      <span style="font-weight:700; color:${it.status === 'out' ? '#dc2626' : (it.status === 'low' ? '#d97706' : '#2563eb')};">${it.statusText}</span>
+                    </div>
+                  </td>
+                  <td style="padding:10px 8px; text-align:center; font-weight:700;">
+                    <span style="background:${it.curStock === 0 ? '#fee2e2' : '#fef3c7'}; color:${it.curStock === 0 ? '#b91c1c' : '#92400e'}; padding:2px 8px; border-radius:6px;">
+                      ${it.curStock} পিস
+                    </span>
+                  </td>
+                  <td style="padding:10px 8px; text-align:center;">
+                    <div style="display:inline-flex; align-items:center; gap:6px;">
+                      <button type="button" class="no-print" onclick="updateRestockItemQty(${idx}, -1)" style="background:#e2e8f0; border:none; width:22px; height:22px; border-radius:4px; font-weight:800; cursor:pointer;">-</button>
+                      <span style="font-size:0.95rem; font-weight:800; color:#0f172a; min-width:24px;">${it.recQty}</span>
+                      <button type="button" class="no-print" onclick="updateRestockItemQty(${idx}, 1)" style="background:#e2e8f0; border:none; width:22px; height:22px; border-radius:4px; font-weight:800; cursor:pointer;">+</button>
+                    </div>
+                  </td>
+                  <td style="padding:10px 8px; text-align:right; font-weight:700;">₹${it.estWholesale}</td>
+                  <td style="padding:10px 8px; text-align:right; font-weight:800; color:#0f172a;">₹${it.totalCost.toLocaleString('en-IN')}</td>
+                  <td style="padding:10px 8px; text-align:center;">
+                    <input type="checkbox" style="width:16px; height:16px; cursor:pointer;">
+                  </td>
+                </tr>
+              `).join('')}
+            </tbody>
+            <tfoot>
+              <tr style="background:#f1f5f9; font-weight:800; border-top:2px solid #0f172a;">
+                <td colspan="3" style="padding:12px 10px; text-align:right;">সর্বমোট প্রস্তাবিত মাল:</td>
+                <td style="padding:12px 10px; text-align:center; color:#4338ca; font-size:1rem;">${grandUnits} পিস</td>
+                <td style="padding:12px 10px; text-align:right;">মোট বাজেট:</td>
+                <td style="padding:12px 10px; text-align:right; color:#059669; font-size:1.05rem;">₹${grandBudget.toLocaleString('en-IN')}</td>
+                <td></td>
+              </tr>
+            </tfoot>
+          </table>
+
+          <!-- 🌟 NEW ITEMS & SEASONAL DEMAND SUGGESTIONS (নতুন কালেকশনের সাজেশন) -->
+          <div style="background:#f8fafc; border:1px dashed #6366f1; border-radius:12px; padding:14px; margin-bottom:16px;">
+            <div style="font-weight:800; font-size:0.9rem; color:#3730a3; margin-bottom:8px; display:flex; align-items:center; gap:6px;">
+              <i class="fa-solid fa-sparkles" style="color:#eab308;"></i> বাজারে গিয়ে নতুন যে যে আইটেম তুলে আনা দরকার (New Arrival Suggestions):
+            </div>
+            <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:10px; font-size:0.8rem; color:#334155;">
+              <div style="background:#fff; padding:8px 10px; border-radius:8px; border:1px solid #e2e8f0;">
+                <strong>🌸 ঢাকাই জামদানি:</strong> ল্যাভেন্ডার, পিস্তা গ্রিন ও ডিপ মেরুন জরির কাজ (১০-১৫ পিস)
+              </div>
+              <div style="background:#fff; padding:8px 10px; border-radius:8px; border:1px solid #e2e8f0;">
+                <strong>👔 পুরুষদের পাঞ্জাবি:</strong> খাঁটি সুতির চিকনকারি ও শর্ট ফেস্টিভ কুর্তা (M, L, XL সাইজ)
+              </div>
+              <div style="background:#fff; padding:8px 10px; border-radius:8px; border:1px solid #e2e8f0;">
+                <strong>👗 রেডিমেড কুর্তি:</strong> আলিয়া কাট ও নায়রা কাট উইথ ওড়না সেট (১২ পিস)
+              </div>
+              <div style="background:#fff; padding:8px 10px; border-radius:8px; border:1px solid #e2e8f0;">
+                <strong>👶 ছোটদের পোশাক:</strong> প্রিন্সেস ফেস্টিভ ফ্রক ও ছোট ছেলেদের ধুতি-কুর্তা সেট (১৫ পিস)
+              </div>
+              <div style="background:#fff; padding:8px 10px; border-radius:8px; border:1px solid #e2e8f0;">
+                <strong>🎁 কাপল কম্বো:</strong> ম্যাচিং শাড়ি + পাঞ্জাবি গিফট বক্স (উৎসবে সর্বোচ্চ বিক্রি)
+              </div>
+              <div style="background:#fff; padding:8px 10px; border-radius:8px; border:1px solid #e2e8f0;">
+                <strong>💍 ব্রাইডাল গহনা:</strong> কুন্দন চোকার নেকলেস ও বালা সেট (১০ প্যাক)
+              </div>
+            </div>
+          </div>
+
+          <!-- Footer Signatures -->
+          <div style="display:flex; justify-content:space-between; align-items:flex-end; margin-top:30px; padding-top:14px; border-top:1px dashed #cbd5e1; font-size:0.75rem; color:#64748b;">
+            <div>
+              * দ্রষ্টব্য: এটি নিশা ক্রিয়েশনসের সাপ্তাহিক অটো-জেনারেটেড বাজার ফর্দ। পাইকারি রেট অনুযায়ী মোট খরচ পরিবর্তিত হতে পারে।
+            </div>
+            <div style="text-align:right;">
+              <div style="height:30px;"></div>
+              <div style="border-top:1px solid #0f172a; width:150px; padding-top:4px; font-weight:700; color:#0f172a;">
+                স্বাক্ষর (সাহেব ঘাঁটি)
+              </div>
+            </div>
+          </div>
+
+        </div>
+      `;
+    }
+
+        function printWeeklyRestockBill() {
+      const area = document.getElementById('weeklyRestockPrintArea');
+      if (!area) return;
+
+      const pWin = window.open('', '_blank', 'width=850,height=950');
+      if (!pWin) {
+        alert('পপ-আপ ব্লক করা আছে! অনুগ্রহ করে ব্রাউজার থেকে অনুমতি দিন।');
+        return;
+      }
+
+      const content = area.innerHTML;
+      pWin.document.open();
+      pWin.document.write('<!DOCTYPE html><html lang="bn"><head><meta charset="UTF-8"><title>সাপ্তাহিক ক্রয়ের বিল - নিশা ক্রিয়েশনস</title><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;600;700;800&display=swap"><style>* { box-sizing: border-box; } body { font-family: \'Hind Siliguri\', sans-serif; padding: 25px; color: #0f172a; background: #fff; } .no-print { display: none !important; } @media print { body { padding: 0; } @page { size: A4; margin: 12mm; } }</style></head><body>' + content + '</body></html>');
+      pWin.document.close();
+      setTimeout(() => {
+        try {
+          pWin.focus();
+          pWin.print();
+        } catch(e){}
+      }, 500);
+    }
+
+    function shareWeeklyRestockWhatsApp() {
+      let list = [...currentRestockItems];
+      if (currentRestockFilter === 'out') list = list.filter(it => it.status === 'out');
+      else if (currentRestockFilter === 'low') list = list.filter(it => it.status === 'low');
+
+      if (!list.length) {
+        alert('শেয়ার করার মতো কোনো আইটেম নেই!');
+        return;
+      }
+
+      const grandUnits = list.reduce((sum, it) => sum + it.recQty, 0);
+      const grandBudget = list.reduce((sum, it) => sum + it.totalCost, 0);
+
+      let msg = `📋 *নিশা ক্রিয়েশনস • সাপ্তাহিক বাজার ফর্দ ও রিস্টক লিস্ট*\n`;
+      msg += `তারিখ: ${new Date().toLocaleDateString('bn-IN')}\n`;
+      msg += `--------------------------------\n`;
+
+      list.forEach((it, idx) => {
+        msg += `${idx + 1}. *${it.title}*\n`;
+        msg += `   • কেনার পরিমাণ: *${it.recQty} পিস*\n`;
+        msg += `   • আনুমানিক দর: ₹${it.estWholesale} | মোট: ₹${it.totalCost.toLocaleString('en-IN')}\n`;
+      });
+
+      msg += `--------------------------------\n`;
+      msg += `📦 *সর্বমোট মাল:* ${grandUnits} পিস\n`;
+      msg += `💰 *আনুমানিক মোট বাজেট:* ₹${grandBudget.toLocaleString('en-IN')}\n\n`;
+      msg += `*নতুন আইটেমের রিকমেন্ডেশন:*\n`;
+      msg += `• নতুন রঙের ঢাকাই জামদানি (ল্যাভেন্ডার/মেরুন)\n`;
+      msg += `• সুতির চিকনকারি ও শর্ট কুর্তা\n`;
+      msg += `• বাচ্চাদের প্রিন্সেস ফ্রক ও ধুতি-কুর্তা\n`;
+      msg += `• কাপল কম্বো সেট ও ব্রাইডাল বক্স`;
+
+      const encoded = encodeURIComponent(msg);
+      window.open(`https://api.whatsapp.com/send?text=${encoded}`, '_blank');
+    }
+
+  
+    // =========================================================================
+    // 🎪 PINCODE-WISE WEEKLY HAAT STALLS & RENTAL BOUTIQUE CONTROLLER
+    // =========================================================================
+    const DEFAULT_HAAT_STALLS = [
+      {
+        id: 'HAAT-711401-01',
+        pincode: '711401',
+        area: 'আমতা সদর (লোকাল)',
+        haatName: 'আমতা চাঁদনী বাজার সাপ্তাহিক হাট বুটিক স্টল',
+        stallType: 'ভাড়া নেওয়া সাপ্তাহিক হাট স্টল (শেড B-12)',
+        haatDays: 'প্রতি রবিবার ও বৃহস্পতিবার (সকাল ৮টা - রাত ৮টা)',
+        rentAmount: 'দৈনিক ₹২০০ / মাসিক ₹২,৫০০',
+        rentType: 'daily',
+        rentNum: 200,
+        address: 'আমতা স্টেশন রোড, সিনেমা তলা মোড়, আমতা চাঁদনী বাজার হাটতলা',
+        incharge: 'সাহেব ঘাঁটি / নিশা',
+        phone: '9239413517',
+        stockCount: 28,
+        isHq: true,
+        pickupEnabled: true
+      },
+      {
+        id: 'HAAT-711303-01',
+        pincode: '711303',
+        area: 'বাগনান (হাওড়া)',
+        haatName: 'বাগনান স্টেশন সংলগ্ন হাট ও শপ কাউন্টার',
+        stallType: 'ভাড়া নেওয়া মিনি বুটিক স্টল ও কাউন্টার',
+        haatDays: 'প্রতি শনিবার ও মঙ্গলবার (সকাল ৯টা - রাত ৮:৩০)',
+        rentAmount: 'দৈনিক ₹২৫০ / মাসিক ₹৩,০০০',
+        rentType: 'daily',
+        rentNum: 250,
+        address: 'বাগনান স্টেশন ১ নং প্ল্যাটফর্ম সংলগ্ন হাট মার্কেট, বাগনান',
+        incharge: 'রাহুল সেন',
+        phone: '9832000001',
+        stockCount: 22,
+        isHq: false,
+        pickupEnabled: true
+      },
+      {
+        id: 'HAAT-711410-01',
+        pincode: '711410',
+        area: 'উদয়নারায়ণপুর',
+        haatName: 'উদয়নারায়ণপুর বাজার হাট বুটিক আউটলেট',
+        stallType: 'সাপ্তাহিক হাটের কাপড়ের স্টল',
+        haatDays: 'প্রতি বুধবার ও শুক্রবার (সকাল ৮টা - দুপুর ২টা ও বিকেল ৪টা - রাত ৮টা)',
+        rentAmount: 'দৈনিক ₹১৫০',
+        rentType: 'daily',
+        rentNum: 150,
+        address: 'উদয়নারায়ণপুর বাসস্ট্যান্ড সংলগ্ন বড় বাজার হাটতলা',
+        incharge: 'বিকাশ মণ্ডল',
+        phone: '9832104568',
+        stockCount: 18,
+        isHq: false,
+        pickupEnabled: true
+      },
+      {
+        id: 'HAAT-711312-01',
+        pincode: '711312',
+        area: 'উলুবেড়িয়া',
+        haatName: 'উলুবেড়িয়া মহকুমা হাট ও মিনি বুটিক শপ',
+        stallType: 'ভাড়া নেওয়া মিনি কর্নার শপ',
+        haatDays: 'প্রতি সোমবার ও শুক্রবার (সকাল ১০টা - রাত ৯টা)',
+        rentAmount: 'মাসিক ₹৩,৫০০',
+        rentType: 'monthly',
+        rentNum: 3500,
+        address: 'উলুবেড়িয়া বাজার রোড, মহকুমা হাসপাতালের বিপরীতে',
+        incharge: 'সুব্রত পাল',
+        phone: '9832204569',
+        stockCount: 25,
+        isHq: false,
+        pickupEnabled: true
+      },
+      {
+        id: 'HAAT-711414-01',
+        pincode: '711414',
+        area: 'জয়পুর (হাওড়া)',
+        haatName: 'জয়পুর রাজগঞ্জ সাপ্তাহিক হাট স্টল',
+        stallType: 'অস্থায়ী হাটের বুথ ও পিকআপ কর্নার',
+        haatDays: 'প্রতি রবিবার ও বুধবার (সকাল ৮টা - দুপুর ১টা)',
+        rentAmount: 'দৈনিক ₹১৫০',
+        rentType: 'daily',
+        rentNum: 150,
+        address: 'জয়পুর রাজগঞ্জ হাটতলা, আমতা-জয়পুর মেইন রোড',
+        incharge: 'অমিত রায়',
+        phone: '9832304570',
+        stockCount: 16,
+        isHq: false,
+        pickupEnabled: true
+      }
+    ];
+
+    let currentHaatPinFilter = 'all';
+
+    function getStoredHaatStalls() {
+      try {
+        const raw = localStorage.getItem('nc_haat_stalls');
+        if (raw) {
+          const parsed = JSON.parse(raw);
+          if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+        }
+      } catch(e) {}
+      localStorage.setItem('nc_haat_stalls', JSON.stringify(DEFAULT_HAAT_STALLS));
+      return DEFAULT_HAAT_STALLS;
+    }
+
+    function saveHaatStalls(list) {
+      localStorage.setItem('nc_haat_stalls', JSON.stringify(list));
+      renderHaatStallsList();
+      if (typeof CloudSync !== 'undefined' && CloudSync.isReady()) {
+        try {
+          ncDb.collection('settings').doc('haat_stalls').set({ list: list, updatedAt: new Date().toISOString() });
+        } catch(e) {}
+      }
+    }
+
+    function renderHaatStallsList() {
+      const container = document.getElementById('haatStallsGridContainer');
+      const stalls = getStoredHaatStalls();
+
+      const kpiTotal = document.getElementById('kpiHaatTotalStalls');
+      const kpiPins = document.getElementById('kpiHaatPincodes');
+      const kpiRent = document.getElementById('kpiHaatTotalRent');
+      const kpiStock = document.getElementById('kpiHaatTotalStock');
+      const countNav = document.getElementById('countTabHaatShops');
+
+      if (kpiTotal) kpiTotal.textContent = stalls.length;
+      if (countNav) countNav.textContent = stalls.length;
+
+      const uniquePins = [...new Set(stalls.map(s => s.pincode))];
+      if (kpiPins) kpiPins.textContent = uniquePins.length;
+
+      const totalStock = stalls.reduce((sum, s) => sum + (Number(s.stockCount) || 0), 0);
+      if (kpiStock) kpiStock.textContent = totalStock;
+
+      if (!container) return;
+
+      let displayList = [...stalls];
+      if (currentHaatPinFilter !== 'all') {
+        displayList = displayList.filter(s => s.pincode === currentHaatPinFilter);
+      }
+
+      if (displayList.length === 0) {
+        container.innerHTML = `
+          <div style="grid-column:1/-1; text-align:center; padding:40px; background:#090d16; border:1px dashed #334155; border-radius:14px; color:#94a3b8;">
+            <i class="fa-solid fa-store" style="font-size:2.5rem; color:#64748b; margin-bottom:10px;"></i>
+            <div style="font-size:1rem; font-weight:800; color:#fff;">এই পিনকোডে কোনো হাটের স্টল যুক্ত নেই!</div>
+            <p style="font-size:0.8rem; margin-top:4px;">উপরের '+ নতুন হাটের স্টল যুক্ত করুন' বাটনে ক্লিক করে দোকান যোগ করুন।</p>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = displayList.map(s => `
+        <div style="background:#090d16; border:1.5px solid ${s.isHq ? '#6366f1' : '#1e293b'}; border-radius:14px; padding:16px; box-shadow:0 4px 12px rgba(0,0,0,0.25); display:flex; flex-direction:column; justify-content:space-between;">
+          <div>
+            <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:10px; gap:8px;">
+              <div>
+                <span style="background:#1e293b; border:1px solid #38bdf8; color:#38bdf8; font-size:0.72rem; font-weight:800; padding:2px 8px; border-radius:6px; display:inline-block; margin-bottom:4px;">
+                  📍 পিন: ${s.pincode} (${s.area || 'লোকাল'})
+                </span>
+                <div style="font-size:1.05rem; font-weight:800; color:#fff; line-height:1.3;">${s.haatName}</div>
+                <div style="font-size:0.75rem; color:#94a3b8; margin-top:2px;">${s.stallType}</div>
+              </div>
+              <div>
+                <span style="background:${s.isHq ? '#312e81' : '#064e3b'}; border:1px solid ${s.isHq ? '#818cf8' : '#10b981'}; color:${s.isHq ? '#c7d2fe' : '#a7f3d0'}; font-size:0.68rem; font-weight:800; padding:3px 8px; border-radius:6px; white-space:nowrap;">
+                  ${s.isHq ? '⭐ প্রধান বুটিক' : '✓ সক্রিয় হাট'}
+                </span>
+              </div>
+            </div>
+
+            <div style="background:#131d2e; border:1px solid #1e293b; border-radius:10px; padding:10px; margin-bottom:12px; font-size:0.78rem; line-height:1.5; color:#cbd5e1;">
+              <div>🗓️ <strong>হাট বসার সময়:</strong> <span style="color:#fde047; font-weight:700;">${s.haatDays}</span></div>
+              <div style="margin-top:3px;">💰 <strong>ভাড়া:</strong> <span style="color:#34d399; font-weight:800;">${s.rentAmount}</span></div>
+              <div style="margin-top:3px;">📍 <strong>লোকেশন:</strong> ${s.address}</div>
+              <div style="margin-top:3px;">👤 <strong>ইনচার্জ:</strong> ${s.incharge} • 📞 <a href="tel:${s.phone}" style="color:#38bdf8; font-weight:800; text-decoration:none;">${s.phone}</a></div>
+            </div>
+
+            <div style="display:flex; justify-content:space-between; align-items:center; background:#1e293b; padding:8px 12px; border-radius:8px; margin-bottom:14px;">
+              <span style="font-size:0.75rem; color:#cbd5e1; font-weight:700;">📦 স্টলে বরাদ্দকৃত কাপড়:</span>
+              <strong style="font-size:0.95rem; color:#f59e0b;">${s.stockCount || 0} পিস</strong>
+            </div>
+          </div>
+
+          <div style="display:flex; justify-content:space-between; align-items:center; border-top:1px solid #1e293b; padding-top:12px; gap:8px;">
+            <div style="display:flex; gap:6px;">
+              <button type="button" onclick="openAddEditHaatStallModal('${s.id}')" style="background:#1e293b; border:1px solid #334155; color:#38bdf8; padding:6px 12px; border-radius:8px; font-size:0.75rem; font-weight:700; cursor:pointer;" title="এডিট করুন">
+                <i class="fa-solid fa-pen-to-square"></i> এডিট
+              </button>
+              <button type="button" onclick="quickAdjustHaatStock('${s.id}')" style="background:#1e1b4b; border:1px solid #6366f1; color:#c7d2fe; padding:6px 10px; border-radius:8px; font-size:0.75rem; font-weight:700; cursor:pointer;" title="মাল পাঠান">
+                <i class="fa-solid fa-dolly"></i> স্টক আপডেট
+              </button>
+            </div>
+            ${!s.isHq ? `
+              <button type="button" onclick="deleteHaatStall('${s.id}')" style="background:#450a0a; border:1px solid #dc2626; color:#fca5a5; padding:6px 10px; border-radius:8px; font-size:0.75rem; font-weight:700; cursor:pointer;" title="ডিলিট করুন">
+                <i class="fa-solid fa-trash"></i>
+              </button>
+            ` : ''}
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function filterHaatStallsByPin(pin) {
+      currentHaatPinFilter = pin;
+      renderHaatStallsList();
+    }
+
+    function openAddEditHaatStallModal(id = null) {
+      const modal = document.getElementById('addEditHaatStallModal');
+      const titleEl = document.getElementById('stallModalTitle');
+      const stalls = getStoredHaatStalls();
+
+      document.getElementById('haatStallForm').reset();
+      document.getElementById('stall_edit_id').value = '';
+
+      if (id) {
+        const item = stalls.find(s => s.id === id);
+        if (item) {
+          if (titleEl) titleEl.textContent = 'হাটের স্টল বা দোকান তথ্য এডিট করুন';
+          document.getElementById('stall_edit_id').value = item.id;
+          document.getElementById('stall_pincode').value = item.pincode || '';
+          document.getElementById('stall_area').value = item.area || '';
+          document.getElementById('stall_haat_name').value = item.haatName || '';
+          document.getElementById('stall_days').value = item.haatDays || '';
+          document.getElementById('stall_rent').value = item.rentAmount || '';
+          document.getElementById('stall_address').value = item.address || '';
+          document.getElementById('stall_incharge').value = item.incharge || '';
+          document.getElementById('stall_phone').value = item.phone || '';
+          document.getElementById('stall_stock').value = item.stockCount || 0;
+          document.getElementById('stall_pickup').checked = (item.pickupEnabled !== false);
+        }
+      } else {
+        if (titleEl) titleEl.textContent = 'নতুন হাটের স্টল / ভাড়া দোকান যুক্ত করুন';
+        document.getElementById('stall_stock').value = 25;
+        document.getElementById('stall_pickup').checked = true;
+      }
+
+      if (modal) modal.style.display = 'flex';
+    }
+
+    function closeAddEditHaatStallModal() {
+      const modal = document.getElementById('addEditHaatStallModal');
+      if (modal) modal.style.display = 'none';
+    }
+
+    function handleSaveHaatStall(event) {
+      event.preventDefault();
+      const id = document.getElementById('stall_edit_id').value;
+      const pincode = document.getElementById('stall_pincode').value.trim();
+      const area = document.getElementById('stall_area').value.trim();
+      const haatName = document.getElementById('stall_haat_name').value.trim();
+      const haatDays = document.getElementById('stall_days').value.trim();
+      const rentAmount = document.getElementById('stall_rent').value.trim();
+      const address = document.getElementById('stall_address').value.trim();
+      const incharge = document.getElementById('stall_incharge').value.trim();
+      const phone = document.getElementById('stall_phone').value.trim();
+      const stockCount = parseInt(document.getElementById('stall_stock').value) || 0;
+      const pickupEnabled = document.getElementById('stall_pickup').checked;
+
+      let stalls = getStoredHaatStalls();
+
+      if (id) {
+        const idx = stalls.findIndex(s => s.id === id);
+        if (idx !== -1) {
+          stalls[idx] = {
+            ...stalls[idx],
+            pincode, area, haatName, haatDays, rentAmount, address, incharge, phone, stockCount, pickupEnabled
+          };
+        }
+      } else {
+        const newId = 'HAAT-' + pincode + '-' + Math.floor(100 + Math.random() * 900);
+        stalls.push({
+          id: newId,
+          pincode, area, haatName, haatDays, rentAmount, address, incharge, phone, stockCount, pickupEnabled,
+          isHq: false
+        });
+      }
+
+      saveHaatStalls(stalls);
+      closeAddEditHaatStallModal();
+      alert('✅ হাটের স্টল সফলভাবে সংরক্ষণ করা হয়েছে!');
+    }
+
+    function quickAdjustHaatStock(id) {
+      let stalls = getStoredHaatStalls();
+      const item = stalls.find(s => s.id === id);
+      if (!item) return;
+
+      const newStock = prompt(`'${item.haatName}' স্টলে বর্তমান মজুত কাপড় (পিস):`, item.stockCount || 0);
+      if (newStock !== null) {
+        const num = Math.max(0, parseInt(newStock) || 0);
+        item.stockCount = num;
+        saveHaatStalls(stalls);
+        alert(`✅ '${item.haatName}' স্টলের স্টক আপডেট হয়েছে: ${num} পিস`);
+      }
+    }
+
+    function deleteHaatStall(id) {
+      let stalls = getStoredHaatStalls();
+      const item = stalls.find(s => s.id === id);
+      if (!item) return;
+      if (item.isHq) {
+        alert('প্রধান হেডকোয়ার্টার ডিলিট করা সম্ভব নয়!');
+        return;
+      }
+      if (!confirm(`আপনি কি নিশ্চিতভাবে '${item.haatName}' ডিলিট করতে চান?`)) return;
+
+      stalls = stalls.filter(s => s.id !== id);
+      saveHaatStalls(stalls);
+      alert('✓ হাটের স্টল সফলভাবে মুছে ফেলা হয়েছে!');
+    }
+
+    function printHaatStallsSchedule() {
+      const stalls = getStoredHaatStalls();
+      const pWin = window.open('', '_blank', 'width=850,height=950');
+      if (!pWin) {
+        alert('পপ-আপ ব্লক করা আছে! অনুগ্রহ করে ব্রাউজার থেকে অনুমতি দিন।');
+        return;
+      }
+
+      let rows = stalls.map((s, idx) => `
+        <tr style="border-bottom:1px solid #e2e8f0; font-size:0.85rem;">
+          <td style="padding:10px; text-align:center;">${idx+1}</td>
+          <td style="padding:10px; font-weight:700;">${s.pincode} (${s.area})</td>
+          <td style="padding:10px;"><strong>${s.haatName}</strong><br><span style="font-size:0.75rem; color:#64748b;">${s.address}</span></td>
+          <td style="padding:10px; color:#b45309; font-weight:700;">${s.haatDays}</td>
+          <td style="padding:10px; font-weight:800; color:#047857;">${s.rentAmount}</td>
+          <td style="padding:10px;">${s.incharge}<br><span style="font-size:0.75rem;">${s.phone}</span></td>
+          <td style="padding:10px; text-align:center; font-weight:800;">${s.stockCount || 0} পিস</td>
+        </tr>
+      `).join('');
+
+      pWin.document.open();
+      pWin.document.write('<!DOCTYPE html><html lang="bn"><head><meta charset="UTF-8"><title>হাটের স্টল ও শপ তালিকা - নিশা ক্রিয়েশনস</title><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;600;700;800&display=swap"><style>* { box-sizing: border-box; } body { font-family: \'Hind Siliguri\', sans-serif; padding: 25px; color: #0f172a; background: #fff; } table { width: 100%; border-collapse: collapse; margin-top: 15px; } th { background: #0f172a; color: #fff; padding: 10px; font-size: 0.85rem; text-align: left; } @media print { @page { size: A4 landscape; margin: 10mm; } }</style></head><body><div style="display:flex; justify-content:space-between; align-items:center; border-bottom:2px solid #0f172a; padding-bottom:10px; margin-bottom:15px;"><div><h2 style="margin:0; font-size:1.4rem;">🎪 নিশা ক্রিয়েশনস • সাপ্তাহিক হাটের স্টল ও ভাড়া দোকান শিডিউল</h2><p style="margin:4px 0 0 0; color:#475569; font-size:0.85rem;">আমতা, হাওড়া - ৭১১৪০১ | ফোন: ৯২৩৯৪১৩৫১৭</p></div><div style="text-align:right; font-size:0.85rem;">তারিখ: ' + new Date().toLocaleDateString('bn-IN') + '<br>মোট স্টল: ' + stalls.length + 'টি</div></div><table><thead><tr><th style="text-align:center;">#</th><th>পিনকোড ও এলাকা</th><th>হাটের নাম ও ঠিকানা</th><th>হাট বসার দিন</th><th>ভাড়া</th><th>ইনচার্জ ও ফোন</th><th style="text-align:center;">মজুত মাল</th></tr></thead><tbody>' + rows + '</tbody></table></body></html>');
+      pWin.document.close();
+      setTimeout(() => {
+        try { pWin.focus(); pWin.print(); } catch(e){}
+      }, 500);
+    }
+
+  
+    // =========================================================================
+    // 📦 VISUAL RACK LOCATOR & 20-ORDER RESTOCK CONTROLLER
+    // =========================================================================
+    let currentRackDensityFilter = 'all';
+    let minOrderThresholdQty = 20;
+
+    function filterRackDensityView(filter) {
+      currentRackDensityFilter = filter;
+      document.querySelectorAll('#btnRackFilterAll, #btnRackFilterHeavy, #btnRackFilterLow').forEach(b => {
+        b.style.background = '#1e293b';
+        b.style.color = '#cbd5e1';
+      });
+      const activeBtn = document.getElementById(filter === 'heavy' ? 'btnRackFilterHeavy' : (filter === 'low' ? 'btnRackFilterLow' : 'btnRackFilterAll'));
+      if (activeBtn) {
+        activeBtn.style.background = filter === 'heavy' ? '#065f46' : (filter === 'low' ? '#7f1d1d' : '#334155');
+        activeBtn.style.color = '#fff';
+      }
+      renderVisualRackDensityMatrix();
+    }
+
+    function changeMinOrderThreshold(val) {
+      minOrderThresholdQty = parseInt(val) || 20;
+      renderMin20OrderPurchaseList();
+    }
+
+    function renderVisualRackDensityMatrix() {
+      const container = document.getElementById('visualRackDensityMatrixContainer');
+      if (!container) return;
+
+      let prods = [];
+      try { prods = JSON.parse(localStorage.getItem('nc_products') || '[]'); } catch(e) {}
+      if (!prods.length) {
+        try { prods = JSON.parse(localStorage.getItem('nc_custom_products') || '[]'); } catch(e) {}
+      }
+      if (!prods.length && typeof INITIAL_PRODUCTS !== 'undefined' && Array.isArray(INITIAL_PRODUCTS)) {
+        prods = [...INITIAL_PRODUCTS];
+      }
+
+      // Group products by resolved rack/shelf
+      const rackGroups = {};
+      prods.forEach(p => {
+        const rackName = resolveItemWarehouseBin(p);
+        if (!rackGroups[rackName]) {
+          rackGroups[rackName] = { items: [], totalStock: 0 };
+        }
+        const st = p.stock !== undefined ? parseInt(p.stock) : (p.inStock !== false ? 12 : 0);
+        rackGroups[rackName].items.push({ ...p, currentStock: st });
+        rackGroups[rackName].totalStock += st;
+      });
+
+      let rackKeys = Object.keys(rackGroups);
+      if (currentRackDensityFilter === 'heavy') {
+        rackKeys = rackKeys.filter(k => rackGroups[k].totalStock >= 20);
+      } else if (currentRackDensityFilter === 'low') {
+        rackKeys = rackKeys.filter(k => rackGroups[k].totalStock < 10);
+      }
+
+      if (rackKeys.length === 0) {
+        container.innerHTML = '<div style="grid-column:1/-1; color:#94a3b8; font-size:0.8rem; text-align:center; padding:20px;">এই ফিল্টারে কোনো তাক পাওয়া যায়নি।</div>';
+        return;
+      }
+
+      container.innerHTML = rackKeys.map(rk => {
+        const group = rackGroups[rk];
+        const tot = group.totalStock;
+        const isHeavy = tot >= 25;
+        const isLow = tot < 5;
+        const statusBadge = isHeavy 
+          ? '<span style="background:rgba(16,185,129,0.2); border:1px solid #10b981; color:#34d399; font-size:0.68rem; font-weight:800; padding:2px 6px; border-radius:4px;">🟢 বেশি মাল মজুত (Heavy)</span>'
+          : (isLow 
+            ? '<span style="background:rgba(239,68,68,0.2); border:1px solid #ef4444; color:#f87171; font-size:0.68rem; font-weight:800; padding:2px 6px; border-radius:4px;">🔴 কম মাল / খালি</span>'
+            : '<span style="background:rgba(56,189,248,0.2); border:1px solid #0284c7; color:#38bdf8; font-size:0.68rem; font-weight:800; padding:2px 6px; border-radius:4px;">🔵 স্বাভাবিক স্টক</span>');
+
+        return `
+          <div style="background:#090d16; border:1px solid ${isHeavy ? '#10b981' : (isLow ? '#ef4444' : '#1e293b')}; border-radius:12px; padding:12px; display:flex; flex-direction:column; justify-content:space-between;">
+            <div>
+              <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:8px;">
+                <div>
+                  <div style="font-weight:800; color:#fff; font-size:0.92rem; display:flex; align-items:center; gap:6px;">
+                    <i class="fa-solid fa-boxes-stacked" style="color:${isHeavy ? '#34d399' : '#38bdf8'};"></i> ${rk}
+                  </div>
+                  <div style="font-size:0.72rem; color:#94a3b8; margin-top:2px;">মোট শাড়ি/পোশাক: <strong style="color:#fde047;">${tot} পিস</strong></div>
+                </div>
+                <div>${statusBadge}</div>
+              </div>
+              <div style="background:#131d2e; border-radius:8px; padding:8px; max-height:140px; overflow-y:auto; font-size:0.75rem;">
+                ${group.items.map(it => `
+                  <div style="display:flex; justify-content:space-between; align-items:center; padding:4px 0; border-bottom:1px dashed #1e293b;">
+                    <div style="color:#e2e8f0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:170px;" title="${it.title}">
+                      • ${it.title}
+                    </div>
+                    <div style="font-weight:800; color:${it.currentStock < 5 ? '#f87171' : '#34d399'}; min-width:45px; text-align:right;">
+                      ${it.currentStock} পিস
+                    </div>
+                  </div>
+                `).join('')}
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function renderMin20OrderPurchaseList() {
+      const container = document.getElementById('min20OrderPurchaseContainer');
+      if (!container) return;
+
+      let prods = [];
+      try { prods = JSON.parse(localStorage.getItem('nc_products') || '[]'); } catch(e) {}
+      if (!prods.length) {
+        try { prods = JSON.parse(localStorage.getItem('nc_custom_products') || '[]'); } catch(e) {}
+      }
+      if (!prods.length && typeof INITIAL_PRODUCTS !== 'undefined' && Array.isArray(INITIAL_PRODUCTS)) {
+        prods = [...INITIAL_PRODUCTS];
+      }
+
+      // Check demand: sold quantity, or deficit from healthy buffer of 20
+      const qualifiedItems = [];
+      prods.forEach(p => {
+        const st = p.stock !== undefined ? parseInt(p.stock) : (p.inStock !== false ? 12 : 0);
+        const sold = p.sold || 0;
+        // Demand deficit to maintain 20 buffer, or high demand
+        const deficit = Math.max(0, 20 - st);
+        const totalDemand = sold + deficit;
+
+        // Condition: ONLY IF totalDemand >= minOrderThresholdQty (20)
+        if (totalDemand >= minOrderThresholdQty || st === 0) {
+          const buyQty = Math.max(minOrderThresholdQty, Math.ceil(deficit / minOrderThresholdQty) * minOrderThresholdQty || minOrderThresholdQty);
+          const estRate = Math.round(Number(p.price || 650) * 0.55);
+          qualifiedItems.push({
+            id: p.id,
+            title: p.title,
+            rack: resolveItemWarehouseBin(p),
+            currentStock: st,
+            totalOrders: totalDemand,
+            buyQty: buyQty,
+            estRate: estRate,
+            totalCost: buyQty * estRate,
+            isZero: st === 0
+          });
+        }
+      });
+
+      if (qualifiedItems.length === 0) {
+        container.innerHTML = `
+          <div style="text-align:center; padding:25px; color:#94a3b8; font-size:0.82rem; background:#090d16; border-radius:10px; border:1px dashed #334155;">
+            <i class="fa-solid fa-circle-check" style="font-size:2rem; color:#34d399; margin-bottom:8px; display:block;"></i>
+            বর্তমানে কোনো মালের ২০টি অর্ডারের রিস্টক শর্ত পূরণ হয়নি। কোনো মালে ২০টি করে অর্ডার আসলে স্বয়ংক্রিয়ভাবে এখানে চলে আসবে।
+          </div>
+        `;
+        return;
+      }
+
+      const totalBuyPieces = qualifiedItems.reduce((s, it) => s + it.buyQty, 0);
+      const totalBudget = qualifiedItems.reduce((s, it) => s + it.totalCost, 0);
+
+      container.innerHTML = `
+        <div style="background:#090d16; border:1px solid #1e293b; border-radius:10px; overflow:hidden;">
+          <div style="background:#1e1b4b; padding:10px 14px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+            <div style="font-size:0.82rem; font-weight:800; color:#fde047;">
+              🚨 ${qualifiedItems.length}টি প্রোডাক্ট সেটিং স্টকে উঠেছে (মিনিমাম ২০ পিসের লট পূরণ)
+            </div>
+            <div style="font-size:0.8rem; font-weight:800; color:#a7f3d0;">
+              মোট কিনতে হবে: ${totalBuyPieces} পিস | পাইকারি বাজেট: ₹${totalBudget.toLocaleString('en-IN')}
+            </div>
+          </div>
+          <table style="width:100%; border-collapse:collapse; font-size:0.8rem; color:#cbd5e1;">
+            <thead>
+              <tr style="background:#0f172a; color:#fff; text-align:left;">
+                <th style="padding:8px 10px;">প্রোডাক্ট ও তাকের অবস্থান</th>
+                <th style="padding:8px 10px; text-align:center;">বর্তমান স্টক</th>
+                <th style="padding:8px 10px; text-align:center;">চাহিদা / অর্ডার</th>
+                <th style="padding:8px 10px; text-align:center; color:#fde047;">কিনতে হবে (কুড়ি লট)</th>
+                <th style="padding:8px 10px; text-align:right;">পাইকারি রেট</th>
+                <th style="padding:8px 10px; text-align:right;">মোট খরচ</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${qualifiedItems.map(it => `
+                <tr style="border-bottom:1px solid #1e293b;">
+                  <td style="padding:8px 10px;">
+                    <div style="font-weight:800; color:#fff;">${it.title}</div>
+                    <div style="font-size:0.7rem; color:#38bdf8;">📍 অবস্থান: ${it.rack}</div>
+                  </td>
+                  <td style="padding:8px 10px; text-align:center; font-weight:700; color:${it.isZero ? '#f87171' : '#fde047'};">
+                    ${it.currentStock} পিস ${it.isZero ? '(০ স্টক)' : ''}
+                  </td>
+                  <td style="padding:8px 10px; text-align:center; font-weight:800; color:#c084fc;">
+                    ${it.totalOrders} টি
+                  </td>
+                  <td style="padding:8px 10px; text-align:center; font-weight:800; color:#34d399; font-size:0.9rem;">
+                    ${it.buyQty} পিস (${it.buyQty / 20} কুড়ি)
+                  </td>
+                  <td style="padding:8px 10px; text-align:right; font-weight:700;">₹${it.estRate}</td>
+                  <td style="padding:8px 10px; text-align:right; font-weight:800; color:#fff;">₹${it.totalCost.toLocaleString('en-IN')}</td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+        </div>
+      `;
+    }
+
+    function print20OrderRestockBill() {
+      renderMin20OrderPurchaseList();
+      const area = document.getElementById('min20OrderPurchaseContainer');
+      if (!area) return;
+      const pWin = window.open('', '_blank', 'width=850,height=950');
+      if (!pWin) {
+        alert('পপ-আপ অনুমতি দিন!');
+        return;
+      }
+      pWin.document.open();
+      pWin.document.write('<!DOCTYPE html><html lang="bn"><head><meta charset="UTF-8"><title>২০-পিস লট কেনাকাটার বিল - নিশা ক্রিয়েশনস</title><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;600;700;800&display=swap"><style>* { box-sizing: border-box; } body { font-family: \'Hind Siliguri\', sans-serif; padding: 25px; color: #0f172a; background: #fff; } table { width: 100%; border-collapse: collapse; } th, td { border: 1px solid #cbd5e1; padding: 8px 10px; } th { background: #0f172a; color: #fff; }</style></head><body><h2 style="margin:0 0 4px 0;">🌸 নিশা ক্রিয়েশনস • ২০-অর্ডার সেটিং রিস্টক ফর্দ</h2><p style="margin:0 0 15px 0; color:#475569;">তারিখ: ' + new Date().toLocaleDateString('bn-IN') + ' • নিয়ম: মিনিমাম ২০ পিসের লট পূরণ হলেই কেনা হবে</p>' + area.innerHTML + '</body></html>');
+      pWin.document.close();
+      setTimeout(() => { try { pWin.focus(); pWin.print(); } catch(e){} }, 500);
+    }
+
   </script>
 </body>
 </html>

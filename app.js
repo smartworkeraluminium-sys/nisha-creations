@@ -277,9 +277,9 @@ try {
         uCatJewel: "গহনা ও চোকার",
         uCatBangles: "বালা ও চুড়ি",
         // Flash Sale
-        flashSaleTitle: "FLASH SALE • স্পেশাল 2 ঘণ্টার মেগা অফার",
+        flashSaleTitle: "FLASH SALE • স্পেশাল ১ দিনের মেগা অফার",
         flashSaleBadge: "UPTO 70% ছাড়",
-        flashSaleSub: "আমতায় 2 ঘণ্টায় ফ্রি ডেলিভারি • অফার শেষ হতে বাকি:",
+        flashSaleSub: "আমতায় ১ দিনে ফ্রি ডেলিভারি • অফার শেষ হতে বাকি:",
         timerHoursLbl: "ঘণ্টা",
         timerMinsLbl: "মিনিট",
         timerSecsLbl: "সেকেন্ড",
@@ -549,9 +549,9 @@ try {
         uCatJewel: "Jewellery & Choker",
         uCatBangles: "Bangles & Churi",
         // Flash Sale
-        flashSaleTitle: "FLASH SALE • Special 2-Hour Mega Offer",
+        flashSaleTitle: "FLASH SALE • Special 1-Day Delivery Offer",
         flashSaleBadge: "UPTO 70% OFF",
-        flashSaleSub: "Free 2-Hour Delivery in Amta • Ends in:",
+        flashSaleSub: "1-Day Free Delivery in Amta • Ends in:",
         timerHoursLbl: "Hours",
         timerMinsLbl: "Mins",
         timerSecsLbl: "Secs",
@@ -1204,7 +1204,7 @@ try {
       const fO1D = document.getElementById('t-ncOpt1Desc');
       if (fO1D) fO1D.textContent = isEn ? "Get ₹50 cashback | Share with friends and get discounts" : "পান ₹50 ক্যাশব্যাক | বান্ধবীদের সাথে শেয়ার করে ছাড় পান";
       const fO2T = document.getElementById('t-ncOpt2Title');
-      if (fO2T) fO2T.textContent = isEn ? "Free 2-Hour Home Delivery in Amta" : "আমতায় 2 ঘণ্টায় ফ্রি হোম ডেলিভারি";
+      if (fO2T) fO2T.textContent = isEn ? "1-Day Free Delivery in Amta" : "আমতায় ১ দিনে ফ্রি হোম ডেলিভারি";
       const fO2D = document.getElementById('t-ncOpt2Desc');
       if (fO2D) fO2D.textContent = isEn ? "100% Cash on Delivery (COD) & fast delivery guaranteed" : "100% ক্যাশ অন ডেলিভারি (COD) ও দ্রুত ডেলিভারি গ্যারান্টি";
       const fO3T = document.getElementById('t-ncOpt3Title');
@@ -4669,9 +4669,13 @@ function selectPdpSize(sz) {
       const total = cart.reduce((a, b) => a + b.price, 0);
       const dateStr = new Date().toLocaleDateString('bn-IN') + ", " + new Date().toLocaleTimeString('en-US', {hour:'2-digit', minute:'2-digit'});
 
+      const slotDetails = calculateDynamicDeliverySlot();
       const newOrder = {
         id: orderId,
         date: dateStr,
+        deliveryPromiseDate: slotDetails.deliveryDateStr,
+        deliveryPromiseSlot: slotDetails.slotTimeStr,
+        deliveryShiftNote: slotDetails.shiftNote,
         name: name,
         phone: phone,
         address: `${addr}, আমতা, হাওড়া - 711401`,
@@ -4684,6 +4688,14 @@ function selectPdpSize(sz) {
 
       orders.unshift(newOrder);
       localStorage.setItem('nc_orders', JSON.stringify(orders));
+
+      // Record this order ID as placed on this specific device for private viewing
+      try {
+        let myDevOrders = JSON.parse(localStorage.getItem('nc_my_device_orders') || '[]');
+        if (!Array.isArray(myDevOrders)) myDevOrders = [];
+        if (!myDevOrders.includes(newOrder.id)) myDevOrders.unshift(newOrder.id);
+        localStorage.setItem('nc_my_device_orders', JSON.stringify(myDevOrders));
+      } catch(e) {}
 
       // Sync order to Google Cloud Firestore in real-time
       if (typeof CloudSync !== 'undefined' && CloudSync.isReady()) {
@@ -4859,14 +4871,20 @@ function selectPdpSize(sz) {
       let stored = localStorage.getItem('nc_orders');
       let allOrders = stored ? JSON.parse(stored) : (orders || []);
 
-      // Filter orders by logged in customer's phone if available
+      // STRICT PRIVACY SHIELD: অন্য কাস্টমারের কোনো তথ্য বা অর্ডার অন্য কেউ দেখতে পাবে না
       let currentList = filterList;
       if (!currentList) {
         if (currentCustomer && currentCustomer.phone) {
+          // Logged in customer sees ONLY their own orders
           const userPhoneClean = currentCustomer.phone.replace(/[^0-9]/g, '');
           currentList = allOrders.filter(o => (o.phone || '').replace(/[^0-9]/g, '') === userPhoneClean);
         } else {
-          currentList = allOrders;
+          // If not logged in, show ONLY orders placed from this specific mobile/device
+          let myDevOrders = [];
+          try {
+            myDevOrders = JSON.parse(localStorage.getItem('nc_my_device_orders') || '[]');
+          } catch(e) {}
+          currentList = allOrders.filter(o => myDevOrders.includes(o.id));
         }
       }
 
@@ -5246,7 +5264,19 @@ function selectPdpSize(sz) {
     function trackOrderManual() {
       const q = document.getElementById('trackInput').value.trim().toLowerCase();
       if (!q) { renderOrders(); return; }
-      const res = orders.filter(o => o.id.toLowerCase().includes(q) || o.phone.includes(q));
+      let stored = localStorage.getItem('nc_orders');
+      let allOrders = stored ? JSON.parse(stored) : (orders || []);
+      
+      let allowedOrders = allOrders;
+      if (currentCustomer && currentCustomer.phone) {
+        const cleanPhone = currentCustomer.phone.replace(/[^0-9]/g, '');
+        allowedOrders = allOrders.filter(o => (o.phone || '').replace(/[^0-9]/g, '') === cleanPhone);
+      } else {
+        let myDevOrders = [];
+        try { myDevOrders = JSON.parse(localStorage.getItem('nc_my_device_orders') || '[]'); } catch(e) {}
+        allowedOrders = allOrders.filter(o => myDevOrders.includes(o.id));
+      }
+      const res = allowedOrders.filter(o => (o.id || '').toLowerCase().includes(q) || (o.phone && o.phone.includes(q)));
       renderOrders(res);
     }
 
@@ -6568,7 +6598,7 @@ var selectedPayMethod = 'UPI';
 // =========================================================================
 function getActiveServiceablePincodes() {
   const DEFAULT_PINS = [
-    { pincode: '711401', area: 'আমতা সদর (লোকাল)', deliveryTime: '২ ঘণ্টার মধ্যে এক্সপ্রেস ডেলিভারি', status: 'available' },
+    { pincode: '711401', area: 'আমতা সদর (লোকাল)', deliveryTime: '১ দিনে নিশ্চিত হোম ডেলিভারি', status: 'available' },
     { pincode: '711303', area: 'বাগনান (হাওড়া)', deliveryTime: '২৪ ঘণ্টার মধ্যে ডেলিভারি', status: 'available' },
     { pincode: '711410', area: 'উদয়নারায়ণপুর', deliveryTime: '২৪ ঘণ্টার মধ্যে ডেলিভারি', status: 'available' },
     { pincode: '711312', area: 'উলুবেড়িয়া', deliveryTime: '২৪ ঘণ্টার মধ্যে ডেলিভারি', status: 'available' },
@@ -6585,22 +6615,79 @@ function getActiveServiceablePincodes() {
   return DEFAULT_PINS;
 }
 
+
+// =========================================================================
+// ⏰ DYNAMIC DELIVERY SHIFT & 2-HOUR EXPRESS ENGINE
+// নিয়ম: সকাল ৮:০০ টা থেকে সন্ধ্যা ৬:০০ টা পর্যন্ত ডেলিভারি শিফট
+// • সকাল ৮টা - বিকাল ৪টা: ১ দিনে নিশ্চিত হোম ডেলিভারি
+// • বিকাল ৪টা - সন্ধ্যা ৬টা: আজ সন্ধ্যা ৬টার মধ্যে ডেলিভারি
+// • সন্ধ্যা ৬টার পর: রাইডাররা বিশ্রামে, কাল সকাল ৮টা - ১০টায় ডেলিভারি
+// =========================================================================
+
+function calculateDynamicDeliverySlot() {
+  const now = new Date();
+  const currentHour = now.getHours();
+
+  // Rider on-duty hours: 8:00 AM to 6:00 PM (18:00)
+  const isRiderOnDuty = (currentHour >= 8 && currentHour < 18);
+
+  let deliveryDateStr = '';
+  let slotTimeStr = '';
+  let badgeText = '';
+  let isNextDay = false;
+
+  if (isRiderOnDuty) {
+    // 1-Day Delivery (Same-day within shift when rider is active/awake)
+    deliveryDateStr = 'আজ (' + now.toLocaleDateString('bn-IN', { day: 'numeric', month: 'short' }) + ')';
+    slotTimeStr = 'আজ সন্ধ্যা ৬:০০ টার মধ্যে (১ দিনে ডেলিভারি)';
+    badgeText = '📦 ১ দিনে নিশ্চিত ডেলিভারি (আজকের মধ্যে)';
+  } else if (currentHour < 8) {
+    // Early morning before 8 AM -> Delivered today during active shift
+    deliveryDateStr = 'আজ (' + now.toLocaleDateString('bn-IN', { day: 'numeric', month: 'short' }) + ')';
+    slotTimeStr = 'আজকের শিফটে (সকাল ৮টা - সন্ধ্যা ৬টার মধ্যে)';
+    badgeText = '📦 ১ দিনে ডেলিভারি (আজকের শিফটে)';
+  } else {
+    // After 6:00 PM (18:00) -> Rider off-duty / resting, delivery next day
+    isNextDay = true;
+    let nextDate = new Date(now);
+    nextDate.setDate(nextDate.getDate() + 1);
+    const nextDateFormatted = nextDate.toLocaleDateString('bn-IN', { day: 'numeric', month: 'short' });
+    deliveryDateStr = 'আগামীকাল (' + nextDateFormatted + ')';
+    slotTimeStr = 'আগামীকাল শিফটে (সকাল ৮টা - সন্ধ্যা ৬টা)';
+    badgeText = '🌙 ১ দিনে ডেলিভারি (আগামীকাল শিফটে ডেলিভারি)';
+  }
+
+  return {
+    isTodayShiftActive: isRiderOnDuty,
+    isNextDay,
+    deliveryDateStr,
+    slotTimeStr,
+    badgeText,
+    shiftNote: isNextDay 
+      ? 'সন্ধ্যা ৬টার পর ডেলিভারি কর্মীরা বিশ্রামে থাকেন। আপনার অর্ডারটি কাল সকাল ৮টা থেকে সন্ধ্যা ৬টা শিফটের মধ্যে ১ দিনের ডেলিভারি সম্পন্ন হবে!'
+      : 'ডেলিভারি বয় ডিউটিতে সক্রিয় আছেন। আপনার অর্ডারটি ১ দিনে পৌঁছে যাবে।'
+  };
+}
+
+
 function calcPincodeDeliveryCharge(pin) {
   const cleanPin = String(pin || '').trim();
   const pinsList = getActiveServiceablePincodes();
   const matched = pinsList.find(p => p.pincode === cleanPin);
 
   if (!cleanPin || cleanPin === '711401') {
+    const slotInfo = calculateDynamicDeliverySlot();
     return {
       customerFee: 0,
       fee: 0,
       internalFee: 50,
       areaName: 'আমতা সদর (লোকাল)',
       label: '<span style="color:#15803d; font-weight:800;">FREE (১০০% ফ্রি হোম ডেলিভারি)</span>',
-      badge: '✓ আপনার ঠিকানায় ১০০% ফ্রি হোম ডেলিভারি (২ ঘণ্টায় ডেলিভারি)',
-      badgeColor: '#dcfce7',
-      badgeText: '#15803d',
-      border: '#86efac',
+      badge: slotInfo.badgeText + ' • ১০০% ফ্রি',
+      slotInfo: slotInfo,
+      badgeColor: slotInfo.isNextDay ? '#fef3c7' : '#dcfce7',
+      badgeText: slotInfo.isNextDay ? '#92400e' : '#15803d',
+      border: slotInfo.isNextDay ? '#fde68a' : '#86efac',
       isServiceable: true
     };
   }
@@ -6650,6 +6737,86 @@ function calcPincodeDeliveryCharge(pin) {
   };
 }
 
+
+// =========================================================================
+// 🎪 PINCODE-WISE LOCAL HAAT STALLS & POP-UP BOUTIQUE CONTROLLER
+// =========================================================================
+const DEFAULT_HAAT_STALLS_APP = [
+  {
+    id: 'HAAT-711401-01',
+    pincode: '711401',
+    area: 'আমতা সদর (লোকাল)',
+    haatName: 'আমতা চাঁদনী বাজার সাপ্তাহিক হাট বুটিক স্টল',
+    haatDays: 'প্রতি রবিবার ও বৃহস্পতিবার (সকাল ৮টা - রাত ৮টা)',
+    address: 'আমতা স্টেশন রোড, সিনেমা তলা মোড়, আমতা চাঁদনী বাজার হাটতলা',
+    phone: '9239413517'
+  },
+  {
+    id: 'HAAT-711303-01',
+    pincode: '711303',
+    area: 'বাগনান (হাওড়া)',
+    haatName: 'বাগনান স্টেশন সংলগ্ন হাট ও শপ কাউন্টার',
+    haatDays: 'প্রতি শনিবার ও মঙ্গলবার (সকাল ৯টা - রাত ৮:৩০)',
+    address: 'বাগনান স্টেশন ১ নং প্ল্যাটফর্ম সংলগ্ন হাট মার্কেট, বাগনান',
+    phone: '9832000001'
+  },
+  {
+    id: 'HAAT-711410-01',
+    pincode: '711410',
+    area: 'উদয়নারায়ণপুর',
+    haatName: 'উদয়নারায়ণপুর বাজার হাট বুটিক আউটলেট',
+    haatDays: 'প্রতি বুধবার ও শুক্রবার (সকাল ৮টা - রাত ৮টা)',
+    address: 'উদয়নারায়ণপুর বাসস্ট্যান্ড সংলগ্ন বড় বাজার হাটতলা',
+    phone: '9832104568'
+  },
+  {
+    id: 'HAAT-711312-01',
+    pincode: '711312',
+    area: 'উলুবেড়িয়া',
+    haatName: 'উলুবেড়িয়া মহকুমা হাট ও মিনি বুটিক শপ',
+    haatDays: 'প্রতি সোমবার ও শুক্রবার (সকাল ১০টা - রাত ৯টা)',
+    address: 'উলুবেড়িয়া বাজার রোড, মহকুমা হাসপাতালের বিপরীতে',
+    phone: '9832204569'
+  },
+  {
+    id: 'HAAT-711414-01',
+    pincode: '711414',
+    area: 'জয়পুর (হাওড়া)',
+    haatName: 'জয়পুর রাজগঞ্জ সাপ্তাহিক হাট স্টল',
+    haatDays: 'প্রতি রবিবার ও বুধবার (সকাল ৮টা - দুপুর ১টা)',
+    address: 'জয়পুর রাজগঞ্জ হাটতলা, আমতা-জয়পুর মেইন রোড',
+    phone: '9832304570'
+  }
+];
+
+function getStoredHaatStallsApp() {
+  try {
+    const raw = localStorage.getItem('nc_haat_stalls');
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+    }
+  } catch(e) {}
+  return DEFAULT_HAAT_STALLS_APP;
+}
+
+let isHaatPickupSelected = false;
+
+function toggleHaatPickupMode(isSelected) {
+  isHaatPickupSelected = isSelected;
+  const addrField = document.getElementById('cust_addr');
+  const pin = (document.getElementById('cust_pincode')?.value || '711401').trim();
+  const haats = getStoredHaatStallsApp();
+  const matched = haats.find(h => h.pincode === pin) || haats[0];
+
+  if (isSelected && addrField) {
+    addrField.value = `[🎪 হাটের স্টল থেকে পিকআপ]: ${matched.haatName} (${matched.haatDays}) - ${matched.address}`;
+  } else if (!isSelected && addrField && addrField.value.includes('[🎪 হাটের স্টল থেকে পিকআপ]')) {
+    addrField.value = '';
+  }
+}
+
+
 function handleCheckoutPincodeChange(pin) {
   localStorage.setItem('nc_cust_pincode', pin);
   const info = calcPincodeDeliveryCharge(pin);
@@ -6660,6 +6827,25 @@ function handleCheckoutPincodeChange(pin) {
     badge.style.color = info.badgeText;
     badge.style.borderColor = info.border;
   }
+
+  // Update Local Haat Stall Banner according to Pincode
+  const haats = getStoredHaatStallsApp();
+  const cleanPin = String(pin || '').trim();
+  const matchedHaat = haats.find(h => h.pincode === cleanPin);
+  const haatNoticeBox = document.getElementById('checkoutLocalHaatStallNotice');
+  const haatNameEl = document.getElementById('haatNoticeName');
+  const haatDaysEl = document.getElementById('haatNoticeDays');
+
+  if (haatNoticeBox) {
+    if (matchedHaat) {
+      haatNoticeBox.style.display = 'block';
+      if (haatNameEl) haatNameEl.textContent = matchedHaat.haatName;
+      if (haatDaysEl) haatDaysEl.textContent = `🗓️ ${matchedHaat.haatDays} • 📍 ${matchedHaat.address}`;
+    } else {
+      haatNoticeBox.style.display = 'none';
+    }
+  }
+
   updateCheckoutPriceDetails();
 }
 
