@@ -2553,3 +2553,11 @@
 .wishlist-btn-circle.active i, .wish-btn.active i {
   color: #ef4444 !important;
 }
+
+    .cat-icon-circle img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 50%;
+      display: block;
+    }

@@ -2166,26 +2166,41 @@ function adminQuickRestock(idx) {
 // =========================================================================
 
 const DEFAULT_CATEGORIES = [
-  { id: 'all', key: 'all', name: 'সব কালেকশন', icon: 'fa-solid fa-wand-magic-sparkles', isIcon: true },
-  { id: 'women', key: 'women', name: '🌸 মহিলাদের কালেকশন', icon: 'fa-solid fa-person-dress', isIcon: true },
-  { id: 'men', key: 'men', name: '👔 পুরুষদের কালেকশন', icon: 'fa-solid fa-shirt', isIcon: true },
-  { id: 'gift', key: 'gift', name: '🎁 গিফট ও কম্বো', icon: 'fa-solid fa-gift', isIcon: true },
-  { id: 'kids', key: 'kids', name: '👶 ছোটদের কালেকশন', icon: 'fa-solid fa-child', isIcon: true },
-  { id: 'saree', key: 'saree', name: 'শাড়ি কালেকশন', icon: 'fa-solid fa-wand-magic', isIcon: true },
-  { id: 'kurti', key: 'kurti', name: 'কুর্তি ও গাউন', icon: 'fa-solid fa-vest', isIcon: true },
-  { id: 'jewel', key: 'jewel', name: 'জুয়েলারি ও গহনা', icon: 'fa-solid fa-gem', isIcon: true }
+  { id: 'all', key: 'all', name: 'সব কালেকশন', img: 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=350&auto=format&fit=crop&q=80', icon: 'fa-solid fa-wand-magic-sparkles', isIcon: false },
+  { id: 'women', key: 'women', name: '🌸 মহিলাদের কালেকশন', img: 'https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?w=350&auto=format&fit=crop&q=80', icon: 'fa-solid fa-person-dress', isIcon: false },
+  { id: 'men', key: 'men', name: '👔 পুরুষদের কালেকশন', img: 'https://images.unsplash.com/photo-1621644825946-b6058e382098?w=350&auto=format&fit=crop&q=80', icon: 'fa-solid fa-shirt', isIcon: false },
+  { id: 'gift', key: 'gift', name: '🎁 গিফট ও কম্বো', img: 'https://images.unsplash.com/photo-1549465220-1a8b9238cd48?w=350&auto=format&fit=crop&q=80', icon: 'fa-solid fa-gift', isIcon: false },
+  { id: 'kids', key: 'kids', name: '👶 ছোটদের কালেকশন', img: 'https://images.unsplash.com/photo-1622290291468-a28f7a7dc6a8?w=350&auto=format&fit=crop&q=80', icon: 'fa-solid fa-child', isIcon: false },
+  { id: 'saree', key: 'saree', name: 'শাড়ি কালেকশন', img: 'https://images.unsplash.com/photo-1610030469983-98e550d6193c?w=350&auto=format&fit=crop&q=80', icon: 'fa-solid fa-wand-magic', isIcon: false },
+  { id: 'kurti', key: 'kurti', name: 'কুর্তি ও গাউন', img: 'https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=350&auto=format&fit=crop&q=80', icon: 'fa-solid fa-vest', isIcon: false },
+  { id: 'jewel', key: 'jewel', name: 'জুয়েলারি ও গহনা', img: 'https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=350&auto=format&fit=crop&q=80', icon: 'fa-solid fa-gem', isIcon: false }
 ];
 
 function getStoredCategories() {
   try {
     const raw = localStorage.getItem('nc_categories');
     if (raw) {
-      const parsed = JSON.parse(raw);
+      let parsed = JSON.parse(raw);
       if (Array.isArray(parsed) && parsed.length > 0) {
-        const hasMen = parsed.some(c => c.key === 'men');
-        const hasGift = parsed.some(c => c.key === 'gift');
-        const hasWomen = parsed.some(c => c.key === 'women');
-        if (hasMen && hasGift && hasWomen) return parsed;
+        let updated = false;
+        parsed = parsed.map(c => {
+          const def = DEFAULT_CATEGORIES.find(d => d.key === c.key);
+          if (def && (!c.img || c.isIcon)) {
+            updated = true;
+            return { ...c, img: def.img, isIcon: false, icon: def.icon };
+          }
+          return c;
+        });
+        DEFAULT_CATEGORIES.forEach(def => {
+          if (!parsed.some(c => c.key === def.key)) {
+            parsed.push(def);
+            updated = true;
+          }
+        });
+        if (updated) {
+          localStorage.setItem('nc_categories', JSON.stringify(parsed));
+        }
+        return parsed;
       }
     }
   } catch(e) {}
