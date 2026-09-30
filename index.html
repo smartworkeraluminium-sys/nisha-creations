@@ -298,13 +298,15 @@
       <div id="homeRecommendationGrid" style="display:grid; grid-template-columns:1fr 1fr; gap:10px;"></div>
     </div>
 
-    <!-- Filter & Sort Strip -->
+    <!-- Filter & Sort Strip (মহিলা, পুরুষ, গিফট ও ছোটদের সরাসরি বাটন) -->
     <div class="filter-bar">
       <button class="filter-btn" id="btnSortModalTrigger" onclick="openSortModal()">
         <i class="fa-solid fa-arrow-down-short-wide"></i> <span id="sortBtnLabel">Sort</span>
       </button>
-      <button class="filter-btn" onclick="filterByGender('women')" id="filterBtnWomen">👩 বড়দের / এডাল্ট</button>
-      <button class="filter-btn" onclick="filterByGender('girls')" id="filterBtnGirls">👧 ছোটদের ফ্রক</button>
+      <button class="filter-btn" onclick="filterByGender('women')" id="filterBtnWomen">🌸 মহিলা</button>
+      <button class="filter-btn" onclick="filterByGender('men')" id="filterBtnMen">👔 পুরুষ</button>
+      <button class="filter-btn" onclick="filterByGender('gift')" id="filterBtnGift">🎁 গিফট</button>
+      <button class="filter-btn" onclick="filterByGender('kids')" id="filterBtnGirls">👶 ছোটদের</button>
       <button class="filter-btn" onclick="openAdvancedFilterModal()">
         <i class="fa-solid fa-sliders"></i> Filters <span id="activeFilterBadge" style="display:none; background:var(--primary); color:#fff; font-size:0.65rem; padding:1px 6px; border-radius:10px; margin-left:2px;"></span>
       </button>
@@ -397,49 +399,37 @@
 
     <!-- 2-Column Split View Layout -->
     <div class="categories-layout">
-      <!-- Left Vertical Sidebar -->
+      <!-- Left Vertical Sidebar (৪টি মূল ক্যাটাগরি সহ সাজানো) -->
       <aside class="cat-sidebar">
+        <div class="cat-sidebar-item active" id="sidebar-women" onclick="selectCategoryTab('women')">
+          <div class="cat-icon-circle" style="background:#fce7f3; color:#db2777;">
+            <i class="fa-solid fa-person-dress"></i>
+          </div>
+          <span>🌸 মহিলা</span>
+        </div>
+        <div class="cat-sidebar-item" id="sidebar-men" onclick="selectCategoryTab('men')">
+          <div class="cat-icon-circle" style="background:#e0f2fe; color:#0284c7;">
+            <i class="fa-solid fa-shirt"></i>
+          </div>
+          <span>👔 পুরুষ</span>
+        </div>
+        <div class="cat-sidebar-item" id="sidebar-gift" onclick="selectCategoryTab('gift')">
+          <div class="cat-icon-circle" style="background:#fef3c7; color:#d97706;">
+            <i class="fa-solid fa-gift"></i>
+          </div>
+          <span>🎁 গিফট</span>
+        </div>
+        <div class="cat-sidebar-item" id="sidebar-kids" onclick="selectCategoryTab('kids')">
+          <div class="cat-icon-circle" style="background:#f3e8ff; color:#9333ea;">
+            <i class="fa-solid fa-child"></i>
+          </div>
+          <span>👶 ছোটদের</span>
+        </div>
         <div class="cat-sidebar-item" id="sidebar-popular" onclick="selectCategoryTab('popular')">
           <div class="cat-icon-circle" style="background:#fef9c3; color:#ca8a04;">
             <i class="fa-solid fa-star"></i>
           </div>
           <span id="side-t-popular">জনপ্রিয়</span>
-        </div>
-        <div class="cat-sidebar-item active" id="sidebar-saree_kurti" onclick="selectCategoryTab('saree_kurti')">
-          <div class="cat-icon-circle" style="background:#fce7f3; color:#db2777;">
-            <i class="fa-solid fa-person-dress"></i>
-          </div>
-          <span id="side-t-saree">শাড়ি ও কুর্তি</span>
-        </div>
-        <div class="cat-sidebar-item" id="sidebar-jewellery" onclick="selectCategoryTab('jewellery')">
-          <div class="cat-icon-circle" style="background:#fef3c7; color:#d97706;">
-            <i class="fa-solid fa-gem"></i>
-          </div>
-          <span id="side-t-jewel">জুয়েলারি</span>
-        </div>
-        <div class="cat-sidebar-item" id="sidebar-bags" onclick="selectCategoryTab('bags')">
-          <div class="cat-icon-circle" style="background:#ffe4e6; color:#e11d48;">
-            <i class="fa-solid fa-bag-shopping"></i>
-          </div>
-          <span id="side-t-bags">ব্যাগ ও পার্স</span>
-        </div>
-        <div class="cat-sidebar-item" id="sidebar-perfume" onclick="selectCategoryTab('perfume')">
-          <div class="cat-icon-circle" style="background:#f3e8ff; color:#9333ea;">
-            <i class="fa-solid fa-spray-can-sparkles"></i>
-          </div>
-          <span id="side-t-perfume">পারফিউম</span>
-        </div>
-        <div class="cat-sidebar-item" id="sidebar-western" onclick="selectCategoryTab('western')">
-          <div class="cat-icon-circle" style="background:#e0f2fe; color:#0284c7;">
-            <i class="fa-solid fa-shirt"></i>
-          </div>
-          <span id="side-t-western">ওয়েস্টার্ন</span>
-        </div>
-        <div class="cat-sidebar-item" id="sidebar-lingerie" onclick="selectCategoryTab('lingerie')">
-          <div class="cat-icon-circle" style="background:#fee2e2; color:#ef4444;">
-            <i class="fa-solid fa-heart"></i>
-          </div>
-          <span id="side-t-lingerie">নাইটওয়্যার</span>
         </div>
       </aside>
 
@@ -1396,17 +1386,7 @@
 <i class="fa-solid fa-download" style="color:var(--primary); font-size:0.8rem;"></i>
 </div>
 
-<!-- 8. SELLER HUB / দোকানদার পোর্টাল -->
-<div class="drawer-menu-item" onclick="window.location.href='seller.html';" style="display:flex; align-items:center; gap:12px; padding:10px 12px; background:#eff6ff; border:1px solid #bfdbfe; border-radius:12px; cursor:pointer; margin-top:8px;">
-<div style="width:36px; height:36px; border-radius:10px; background:#2563eb; color:#fff; display:flex; align-items:center; justify-content:center; font-size:1.1rem;">
-<i class="fa-solid fa-store"></i>
-</div>
-<div style="flex:1;">
-<div style="font-size:0.82rem; font-weight:800; color:#1e40af;">দোকানদার সেলার পোর্টাল</div>
-<div style="font-size:0.68rem; color:#3b82f6;">অনলাইনে আপনার দোকান খুলুন ও পরিচালনা করুন</div>
-</div>
-<i class="fa-solid fa-chevron-right" style="color:#2563eb; font-size:0.75rem;"></i>
-</div>
+
 <!-- 8. Drawer Login / Logout Action Menu Item -->
 
 <div style="flex:1;">
@@ -2205,8 +2185,8 @@
       <input type="tel" inputmode="numeric" id="secretOwnerPinInput" maxlength="6" autocomplete="off" placeholder="PIN কোড" style="width:100%; padding:10px; background:#0f172a; border:1.5px solid #334155; border-radius:10px; color:#fde047; font-size:1.2rem; font-weight:800; text-align:center; letter-spacing:4px; margin-bottom:14px; -webkit-text-security:disc;">
       
       <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:10px;">
-        <button type="button" onclick="verifySecretPinAndGo('seller.html')" style="background:#4338ca; color:#fff; border:none; padding:10px; border-radius:10px; font-weight:800; font-size:0.8rem; cursor:pointer;">
-          <i class="fa-solid fa-store"></i> দোকানদার সেলার হাব
+        <button type="button" onclick="verifySecretPinAndGo('admin.html')" style="background:#7e22ce; color:#fff; border:none; padding:10px; border-radius:10px; font-weight:800; font-size:0.8rem; cursor:pointer;">
+          <i class="fa-solid fa-user-shield"></i> নিশা ক্রিয়েশনস অ্যাডমিন
         </button>
         <button type="button" onclick="verifySecretPinAndGo('delivery.html')" style="background:#0284c7; color:#fff; border:none; padding:10px; border-radius:10px; font-weight:800; font-size:0.8rem; cursor:pointer;">
           <i class="fa-solid fa-motorcycle"></i> সেন্ট্রাল ডেলিভারি হাব

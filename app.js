@@ -2040,11 +2040,13 @@ function adminQuickRestock(idx) {
         } catch(e) {}
       }
 
-      // Check custom products
+      // Check custom products or seed from INITIAL_PRODUCTS
       let cust = [];
       try { cust = JSON.parse(localStorage.getItem('nc_custom_products') || '[]'); } catch(e) {}
       if (Array.isArray(cust) && cust.length > 0) {
         products = cust;
+      } else if (typeof INITIAL_PRODUCTS !== 'undefined' && Array.isArray(INITIAL_PRODUCTS) && INITIAL_PRODUCTS.length > 0) {
+        products = [...INITIAL_PRODUCTS];
       } else {
         products = [];
       }
@@ -2165,9 +2167,12 @@ function adminQuickRestock(idx) {
 
 const DEFAULT_CATEGORIES = [
   { id: 'all', key: 'all', name: 'সব কালেকশন', icon: 'fa-solid fa-wand-magic-sparkles', isIcon: true },
-  { id: 'saree', key: 'saree', name: 'শাড়ি কালেকশন', icon: 'fa-solid fa-person-dress', isIcon: true },
+  { id: 'women', key: 'women', name: '🌸 মহিলাদের কালেকশন', icon: 'fa-solid fa-person-dress', isIcon: true },
+  { id: 'men', key: 'men', name: '👔 পুরুষদের কালেকশন', icon: 'fa-solid fa-shirt', isIcon: true },
+  { id: 'gift', key: 'gift', name: '🎁 গিফট ও কম্বো', icon: 'fa-solid fa-gift', isIcon: true },
+  { id: 'kids', key: 'kids', name: '👶 ছোটদের কালেকশন', icon: 'fa-solid fa-child', isIcon: true },
+  { id: 'saree', key: 'saree', name: 'শাড়ি কালেকশন', icon: 'fa-solid fa-wand-magic', isIcon: true },
   { id: 'kurti', key: 'kurti', name: 'কুর্তি ও গাউন', icon: 'fa-solid fa-vest', isIcon: true },
-  { id: 'girls', key: 'girls', name: 'ছোটদের ফ্রক', icon: 'fa-solid fa-child', isIcon: true },
   { id: 'jewel', key: 'jewel', name: 'জুয়েলারি ও গহনা', icon: 'fa-solid fa-gem', isIcon: true }
 ];
 
@@ -2176,7 +2181,12 @@ function getStoredCategories() {
     const raw = localStorage.getItem('nc_categories');
     if (raw) {
       const parsed = JSON.parse(raw);
-      if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+      if (Array.isArray(parsed) && parsed.length > 0) {
+        const hasMen = parsed.some(c => c.key === 'men');
+        const hasGift = parsed.some(c => c.key === 'gift');
+        const hasWomen = parsed.some(c => c.key === 'women');
+        if (hasMen && hasGift && hasWomen) return parsed;
+      }
     }
   } catch(e) {}
   localStorage.setItem('nc_categories', JSON.stringify(DEFAULT_CATEGORIES));
@@ -2471,21 +2481,39 @@ function filterByUnifiedCat(catKey, element) {
   if (catKey === 'all') {
     filtered = [...products];
   } else if (catKey === 'women') {
-    filtered = products.filter(p => p.type !== 'girls' && p.type !== 'jewel' && p.type !== 'jewellery' && p.category !== 'jewel' && p.category !== 'bangles' && !(p.category || '').includes('frock'));
-  } else if (catKey === 'girls') {
-    filtered = products.filter(p => p.type === 'girls' || (p.category || '').includes('frock') || (p.category || '').includes('girl') || (p.title || '').includes('ফ্রক') || (p.title || '').toLowerCase().includes('frock'));
-  } else if (catKey === 'jamdani') {
-    filtered = products.filter(p => p.category === 'jamdani' || (p.title || '').includes('জামদানি'));
-  } else if (catKey === 'silk') {
-    filtered = products.filter(p => p.category === 'silk' || p.category === 'katan' || (p.title || '').includes('সিল্ক'));
-  } else if (catKey === 'tant') {
-    filtered = products.filter(p => p.category === 'tant' || p.category === 'phulia' || (p.title || '').includes('তাঁত'));
+    filtered = products.filter(p => {
+      const c = (p.category || '').toLowerCase();
+      const t = (p.type || '').toLowerCase();
+      const title = (p.title || '').toLowerCase();
+      return c === 'women' || t === 'women' || t === 'saree' || c === 'saree' || t === 'kurti' || c === 'kurti' || c === 'jamdani' || c === 'silk' || c === 'tant' || c === 'lehenga' || title.includes('শাড়ি') || title.includes('কুর্তি') || title.includes('লেহেঙ্গা') || title.includes('গাউন');
+    });
+  } else if (catKey === 'men') {
+    filtered = products.filter(p => {
+      const c = (p.category || '').toLowerCase();
+      const t = (p.type || '').toLowerCase();
+      const title = (p.title || '').toLowerCase();
+      return c === 'men' || t === 'men' || c === 'panjabi' || c === 'shirt' || title.includes('পাঞ্জাবি') || title.includes('কুর্তা') || title.includes('শার্ট') || title.includes('টি-শার্ট') || title.includes('ধুতি') || title.includes('লুঙ্গি') || title.includes('পুরুষ') || title.includes('ছেলেদের');
+    });
+  } else if (catKey === 'gift') {
+    filtered = products.filter(p => {
+      const c = (p.category || '').toLowerCase();
+      const t = (p.type || '').toLowerCase();
+      const title = (p.title || '').toLowerCase();
+      return c === 'gift' || t === 'gift' || c.includes('combo') || title.includes('গিফট') || title.includes('কম্বো') || title.includes('হ্যাম্পার') || title.includes('পারফিউম') || title.includes('কাপল') || title.includes('সেট') || title.includes('ঘড়ি') || title.includes('ওয়ালেট');
+    });
+  } else if (catKey === 'kids' || catKey === 'girls') {
+    filtered = products.filter(p => {
+      const c = (p.category || '').toLowerCase();
+      const t = (p.type || '').toLowerCase();
+      const title = (p.title || '').toLowerCase();
+      return c === 'kids' || t === 'kids' || t === 'girls' || c.includes('frock') || c.includes('kid') || c.includes('girl') || title.includes('ফ্রক') || title.includes('বাচ্চা') || title.includes('ছোটদের') || title.includes('বেবি') || title.includes('ড্রেস');
+    });
+  } else if (catKey === 'saree') {
+    filtered = products.filter(p => p.type === 'saree' || p.category === 'saree' || (p.title || '').includes('শাড়ি') || ['jamdani', 'silk', 'tant', 'katan'].includes(p.category));
   } else if (catKey === 'kurti') {
     filtered = products.filter(p => p.type === 'kurti' || p.category === 'kurti' || (p.title || '').includes('কুর্তি') || (p.title || '').includes('গাউন'));
   } else if (catKey === 'jewel') {
     filtered = products.filter(p => p.type === 'jewel' || p.type === 'jewellery' || ['jewel', 'jewellery', 'necklace', 'choker'].includes(p.category) || (p.title || '').includes('গহনা') || (p.title || '').includes('চোকার'));
-  } else if (catKey === 'bangles') {
-    filtered = products.filter(p => p.category === 'bangles' || (p.title || '').includes('চুড়ি') || (p.title || '').includes('বালা'));
   } else {
     filtered = products.filter(p => p.category === catKey || p.type === catKey);
   }
@@ -6297,8 +6325,12 @@ function applySortOption(sortType, label) {
 function filterByGender(gender) {
   if (gender === 'women') {
     filterByUnifiedCat('women');
-  } else if (gender === 'girls') {
-    filterByUnifiedCat('girls');
+  } else if (gender === 'men') {
+    filterByUnifiedCat('men');
+  } else if (gender === 'gift') {
+    filterByUnifiedCat('gift');
+  } else if (gender === 'girls' || gender === 'kids') {
+    filterByUnifiedCat('kids');
   }
   scrollToProducts();
 }
@@ -6405,13 +6437,32 @@ function selectCategoryTab(tabKey) {
   if (!contentArea) return;
 
   const subcats = {
+    women: [
+      { name: "ঢাকাই জামদানি শাড়ি", cat: "women", icon: "fa-solid fa-wand-magic-sparkles", img: "https://images.unsplash.com/photo-1610030469983-98e550d6193c?w=300&auto=format&fit=crop&q=75" },
+      { name: "সফট সিল্ক ও কাতান", cat: "women", icon: "fa-solid fa-person-dress", img: "https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?w=300&auto=format&fit=crop&q=75" },
+      { name: "ডিজাইনার কুর্তি সেট", cat: "women", icon: "fa-solid fa-vest", img: "https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?w=300&auto=format&fit=crop&q=75" },
+      { name: "ব্রাইডাল লেহেঙ্গা", cat: "women", icon: "fa-solid fa-sparkles", img: "https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=300&auto=format&fit=crop&q=75" }
+    ],
+    men: [
+      { name: "সুতির ডিজাইনার পাঞ্জাবি", cat: "men", icon: "fa-solid fa-shirt", img: "https://images.unsplash.com/photo-1621644825946-b6058e382098?w=300&auto=format&fit=crop&q=75" },
+      { name: "ফেস্টিভ কটন শর্ট কুর্তা", cat: "men", icon: "fa-solid fa-user-tie", img: "https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?w=300&auto=format&fit=crop&q=75" },
+      { name: "ক্যাজুয়াল ফর্মাল শার্ট", cat: "men", icon: "fa-solid fa-vest", img: "https://images.unsplash.com/photo-1621644825946-b6058e382098?w=300&auto=format&fit=crop&q=75" }
+    ],
+    gift: [
+      { name: "ম্যাচিং কাপল কম্বো সেট", cat: "gift", icon: "fa-solid fa-gift", img: "https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?w=300&auto=format&fit=crop&q=75" },
+      { name: "লাক্সারি পারফিউম ও ওয়ালেট", cat: "gift", icon: "fa-solid fa-spray-can-sparkles", img: "https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?w=300&auto=format&fit=crop&q=75" },
+      { name: "জুয়েলারি গিফট বক্স", cat: "gift", icon: "fa-solid fa-gem", img: "https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=300&auto=format&fit=crop&q=75" }
+    ],
+    kids: [
+      { name: "কিউট প্রিন্সেস ফ্রক", cat: "kids", icon: "fa-solid fa-child", img: "https://images.unsplash.com/photo-1622290291468-a28f7a7dc6a8?w=300&auto=format&fit=crop&q=75" },
+      { name: "ছোটদের কুর্তা ও ধুতি", cat: "kids", icon: "fa-solid fa-baby", img: "https://images.unsplash.com/photo-1503944583220-79d8926ad5e2?w=300&auto=format&fit=crop&q=75" }
+    ],
     popular: [
       { name: "ঢাকাই জামদানি", cat: "jamdani", icon: "fa-solid fa-wand-magic-sparkles", img: "https://images.unsplash.com/photo-1610030469983-98e550d6193c?w=300&auto=format&fit=crop&q=75" },
       { name: "সফট সিল্ক ও কাতান", cat: "silk", icon: "fa-solid fa-person-dress", img: "https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?w=300&auto=format&fit=crop&q=75" },
-      { name: "ট্রেন্ডি কুর্তি ও গাউন", cat: "kurti", icon: "fa-solid fa-vest", img: "https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?w=300&auto=format&fit=crop&q=75" },
-      { name: "বাচ্চাদের ফ্রক", cat: "girls", icon: "fa-solid fa-child", img: "https://images.unsplash.com/photo-1622290291468-a28f7a7dc6a8?w=300&auto=format&fit=crop&q=75" },
-      { name: "ব্রাইডাল জুয়েলারি", cat: "jewel", icon: "fa-solid fa-gem", img: "https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=300&auto=format&fit=crop&q=75" },
-      { name: "শান্তিপুরী সুতি তাঁত", cat: "tant", icon: "fa-solid fa-feather", img: "https://images.unsplash.com/photo-1609357605129-26f69add5d6e?w=300&auto=format&fit=crop&q=75" }
+      { name: "পাঞ্জাবি ও কুর্তা", cat: "men", icon: "fa-solid fa-shirt", img: "https://images.unsplash.com/photo-1621644825946-b6058e382098?w=300&auto=format&fit=crop&q=75" },
+      { name: "কাপল গিফট কম্বো", cat: "gift", icon: "fa-solid fa-gift", img: "https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?w=300&auto=format&fit=crop&q=75" },
+      { name: "বাচ্চাদের ফ্রক", cat: "kids", icon: "fa-solid fa-child", img: "https://images.unsplash.com/photo-1622290291468-a28f7a7dc6a8?w=300&auto=format&fit=crop&q=75" }
     ],
     saree_kurti: [
       { name: "খাঁটি ঢাকাই জামদানি", cat: "jamdani", icon: "fa-solid fa-wand-magic-sparkles", img: "https://images.unsplash.com/photo-1610030469983-98e550d6193c?w=300&auto=format&fit=crop&q=75" },
@@ -6471,33 +6522,87 @@ var selectedPayMethod = 'UPI';
 //    - 711402 - 711414 (পার্শ্ববর্তী এলাকা): সেন্ট্রাল ডেলিভারি ফি ₹৬০
 //    - Other Pincodes (দূরবর্তী এলাকা): সেন্ট্রাল ডেলিভারি ফি ₹৯০
 // =========================================================================
+function getActiveServiceablePincodes() {
+  const DEFAULT_PINS = [
+    { pincode: '711401', area: 'আমতা সদর (লোকাল)', deliveryTime: '২ ঘণ্টার মধ্যে এক্সপ্রেস ডেলিভারি', status: 'available' },
+    { pincode: '711303', area: 'বাগনান (হাওড়া)', deliveryTime: '২৪ ঘণ্টার মধ্যে ডেলিভারি', status: 'available' },
+    { pincode: '711410', area: 'উদয়নারায়ণপুর', deliveryTime: '২৪ ঘণ্টার মধ্যে ডেলিভারি', status: 'available' },
+    { pincode: '711312', area: 'উলুবেড়িয়া', deliveryTime: '২৪ ঘণ্টার মধ্যে ডেলিভারি', status: 'available' },
+    { pincode: '711414', area: 'জয়পুর (হাওড়া)', deliveryTime: '২৪ ঘণ্টার মধ্যে ডেলিভারি', status: 'available' },
+    { pincode: '700001', area: 'কলকাতা সেন্ট্রাল', deliveryTime: '৪৮ ঘণ্টার মধ্যে ডেলিভারি', status: 'available' }
+  ];
+  try {
+    const raw = localStorage.getItem('nc_serviceable_pincodes');
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+    }
+  } catch(e) {}
+  return DEFAULT_PINS;
+}
+
 function calcPincodeDeliveryCharge(pin) {
   const cleanPin = String(pin || '').trim();
-  let internalFee = 50; // Amta Local default B2B delivery fee
-  let areaName = 'আমতা সদর';
+  const pinsList = getActiveServiceablePincodes();
+  const matched = pinsList.find(p => p.pincode === cleanPin);
 
-  const num = parseInt(cleanPin, 10);
-  if (cleanPin === '711401' || cleanPin === '') {
-    internalFee = 50;
-    areaName = 'আমতা সদর (লোকাল)';
-  } else if (!isNaN(num) && num >= 711402 && num <= 711414) {
-    internalFee = 60;
-    areaName = 'পার্শ্ববর্তী গ্রামীণ এলাকা';
-  } else {
-    internalFee = 90;
-    areaName = 'দূরবর্তী জেলা / এলাকা';
+  if (!cleanPin || cleanPin === '711401') {
+    return {
+      customerFee: 0,
+      fee: 0,
+      internalFee: 50,
+      areaName: 'আমতা সদর (লোকাল)',
+      label: '<span style="color:#15803d; font-weight:800;">FREE (১০০% ফ্রি হোম ডেলিভারি)</span>',
+      badge: '✓ আপনার ঠিকানায় ১০০% ফ্রি হোম ডেলিভারি (২ ঘণ্টায় ডেলিভারি)',
+      badgeColor: '#dcfce7',
+      badgeText: '#15803d',
+      border: '#86efac',
+      isServiceable: true
+    };
   }
 
+  if (matched) {
+    if (matched.status === 'available') {
+      return {
+        customerFee: 0,
+        fee: 0,
+        internalFee: 60,
+        areaName: matched.area,
+        label: '<span style="color:#15803d; font-weight:800;">FREE (১০০% ফ্রি হোম ডেলিভারি)</span>',
+        badge: `✓ ${matched.area} • ডেলিভারি চালু (${matched.deliveryTime})`,
+        badgeColor: '#dcfce7',
+        badgeText: '#15803d',
+        border: '#86efac',
+        isServiceable: true
+      };
+    } else {
+      return {
+        customerFee: 0,
+        fee: 0,
+        internalFee: 90,
+        areaName: matched.area,
+        label: '<span style="color:#ef4444; font-weight:800;">সার্ভিস সাময়িক বন্ধ</span>',
+        badge: `⚠️ দুঃখিত! ${matched.area} (${cleanPin})-এ হোম ডেলিভারি সাময়িকভাবে বন্ধ আছে।`,
+        badgeColor: '#fee2e2',
+        badgeText: '#991b1b',
+        border: '#f87171',
+        isServiceable: false
+      };
+    }
+  }
+
+  // Not in the list
   return {
-    customerFee: 0, // Customer pays ZERO delivery fee!
-    fee: 0,         // For backwards compatibility in customer checkout
-    internalFee: internalFee, // Admin vs Seller internal delivery fee
-    areaName: areaName,
-    label: '<span style="color:#15803d; font-weight:800;"><span style="text-decoration:line-through; color:#94a3b8; font-weight:normal; margin-right:4px;">₹৬০</span>FREE (১০০% ফ্রি হোম ডেলিভারি)</span>',
-    badge: '✓ আপনার ঠিকানায় ১০০% ফ্রি হোম ডেলিভারি',
-    badgeColor: '#dcfce7',
-    badgeText: '#15803d',
-    border: '#86efac'
+    customerFee: 0,
+    fee: 0,
+    internalFee: 90,
+    areaName: 'অন্যান্য এলাকা',
+    label: '<span style="color:#f59e0b; font-weight:800;">অসমর্থিত এলাকা</span>',
+    badge: `⚠️ এই পিনকোডে (${cleanPin}) সরাসরি ডেলিভারি নেই। অর্ডার কনফার্ম করতে হোয়াটসঅ্যাপে যোগাযোগ করুন।`,
+    badgeColor: '#fef3c7',
+    badgeText: '#92400e',
+    border: '#fde68a',
+    isServiceable: false
   };
 }
 
@@ -6857,8 +6962,23 @@ function submitFinalOrder() {
 
   const dateStr = new Date().toLocaleDateString('bn-IN') + ", " + new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
 
-  // দোকানদারের নেট প্রাপ্য = কাস্টমার সেলস - সেন্ট্রাল ডেলিভারি ফি - প্ল্যাটফর্ম ফি
-  const sellerPayout = Math.max(0, finalTotal - internalDeliveryFee - platformFee);
+  // ১০০% নিশা ক্রিয়েশনসের নিজস্ব সেলস
+  const sellerPayout = finalTotal;
+
+  // Multi-Warehouse Routing by Pincode
+  let matchedHub = { id: 'wh_main', name: 'সেন্ট্রাল ওয়্যারহাউস (আমতা)' };
+  try {
+    const hubs = JSON.parse(localStorage.getItem('nc_warehouses') || '[]');
+    const found = hubs.find(h => {
+      if (h.pincode && h.pincode === pin) return true;
+      if (h.coveredPincodes) {
+        const pList = String(h.coveredPincodes).split(',').map(s => s.trim());
+        if (pList.includes(pin)) return true;
+      }
+      return false;
+    });
+    if (found) matchedHub = found;
+  } catch(e) {}
 
   const newOrder = {
     id: orderId,
@@ -6869,8 +6989,10 @@ function submitFinalOrder() {
     customerName: name,
     phone: phone,
     customerPhone: phone,
-    address: `${addr}, আমতা - ${pin}`,
+    address: `${addr} - ${pin}`,
     pincode: pin,
+    hubId: matchedHub.id,
+    hubName: matchedHub.name,
     items: [...cart],
     platformFee: platformFee,
     deliveryCharge: internalDeliveryFee, // B2B internal delivery charge (দোকানদারের থেকে কাটা হবে)
@@ -6927,6 +7049,9 @@ function submitFinalOrder() {
         const qty = cartItem.qty || 1;
         prod.stock = Math.max(0, (prod.stock !== undefined ? prod.stock : 10) - qty);
         prod.sold = (prod.sold || 0) + qty;
+        if (prod.warehouseStock && matchedHub && prod.warehouseStock[matchedHub.id] !== undefined) {
+          prod.warehouseStock[matchedHub.id] = Math.max(0, prod.warehouseStock[matchedHub.id] - qty);
+        }
       }
     });
     localStorage.setItem('nc_products', JSON.stringify(products));

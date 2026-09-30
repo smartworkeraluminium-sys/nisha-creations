@@ -1344,9 +1344,7 @@
       <button type="button" class="adm-tab-btn" id="tabBtnWarehouse" onclick="switchAdminView('warehouse')">
         <i class="fa-solid fa-boxes-packing"></i> প্যাকিং ও ওয়্যারহাউস হাব (<span id="countTabWarehouse">0</span>)
       </button>
-      <button type="button" class="adm-tab-btn" id="tabBtnShops" onclick="switchAdminView('shops')">
-        <i class="fa-solid fa-store"></i> শপ পার্টনার্স ও নতুন দোকানদার (<span id="countTabShops">1</span>)
-      </button>
+
       <button type="button" class="adm-tab-btn" id="tabBtnStock" onclick="switchAdminView('stock')">
         <i class="fa-solid fa-layer-group"></i> শাড়ির স্টক ও ইনভেন্টরি (<span id="countTabStock">0</span>)
       </button>
@@ -1546,8 +1544,8 @@
     </div>
 
     <div 
-    <!-- ==================== TAB: SHOPS & ONBOARDING BRIDGE ==================== -->
-    <div id="pane-shops" class="tab-pane">
+<!-- TAB: SHOPS DISABLED -->
+    <div id="pane-shops" class="tab-pane" style="display:none !important;">
       <div class="owner-card" style="margin-bottom:18px;">
         <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; margin-bottom:14px;">
           <div>
@@ -1861,10 +1859,12 @@
             <div class="form-group">
               <label class="form-label" id="addLblCat">ক্যাটাগরি নির্বাচন করুন *</label>
               <select id="op_cat" class="form-ctrl" required>
-                <option value="women">👩 বড়দের পোশাক / এডাল্ট (Adult / Women Fashion)</option>
-                <option value="saree" selected>🥻 শাড়ি - বড়দের (Saree - Adult)</option>
-                <option value="kurti">👚 কুর্তি ও গাউন - বড়দের (Kurti - Adult)</option>
-                <option value="girls">👧 ছোটদের ফ্রক ও জামা (Girls Frock / Kids)</option>
+                <option value="women" selected>🌸 মহিলাদের কালেকশন (শাড়ি, কুর্তি, লেহেঙ্গা)</option>
+                <option value="men">👔 পুরুষদের কালেকশন (পাঞ্জাবি, শার্ট, টি-শার্ট)</option>
+                <option value="gift">🎁 গিফট ও কম্বো কালেকশন (কাপল কম্বো, পারফিউম, হ্যাম্পার)</option>
+                <option value="kids">👶 ছোটদের কালেকশন (বাচ্চাদের ফ্রক ও ড্রেস)</option>
+                <option value="saree">🥻 শাড়ি কালেকশন (Saree)</option>
+                <option value="kurti">👚 কুর্তি ও গাউন (Kurti)</option>
                 <option value="jewel">💎 গহনা ও জুয়েলারি (Jewellery)</option>
                 <option value="bangles">✨ বালা ও চুড়ি (Bangles)</option>
                 <option value="bags">👜 ব্যাগ ও পার্স (Bags)</option>
@@ -2494,6 +2494,49 @@
         </div>
         <div id="pincodeTestResult" style="margin-top:10px; font-size:0.82rem; display:none; padding:10px; border-radius:8px;"></div>
       </div>
+
+      <!-- ================= 📍 পিনকোড সার্ভিসেবিলিটি ও ডেলিভারি জোন ম্যানেজার ================= -->
+      <div style="background:var(--surface); border:1.5px solid #38bdf8; border-radius:16px; padding:18px; margin-top:16px; box-shadow:0 4px 20px rgba(56,189,248,0.1);">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; flex-wrap:wrap; gap:8px;">
+          <div>
+            <div style="font-weight:900; color:#fff; font-size:1.05rem; display:flex; align-items:center; gap:8px;">
+              <i class="fa-solid fa-map-location-dot" style="color:#38bdf8; font-size:1.2rem;"></i>
+              <span>ডেলিভারি পিনকোড ম্যানেজার (Pincode Serviceability & Zones)</span>
+            </div>
+            <p style="font-size:0.75rem; color:#94a3b8; margin:2px 0 0 0;">
+              যে যে পিনকোডে ডেলিভারি দিতে চান তা চালু/বন্ধ করুন অথবা নতুন পিনকোড যোগ করুন।
+            </p>
+          </div>
+          <span id="adminPincodesTotalCount" style="background:#0369a1; color:#e0f2fe; padding:4px 10px; border-radius:20px; font-size:0.75rem; font-weight:800;">
+            ৬টি পিনকোড সক্রিয়
+          </span>
+        </div>
+
+        <!-- Add New Pincode Form -->
+        <div style="background:#0b0f19; border:1px solid #1f2937; border-radius:12px; padding:12px; margin-bottom:16px;">
+          <div style="font-size:0.82rem; font-weight:800; color:#38bdf8; margin-bottom:8px;">
+            <i class="fa-solid fa-plus-circle"></i> নতুন পিনকোড যুক্ত করুন:
+          </div>
+          <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(130px, 1fr)); gap:8px; margin-bottom:8px;">
+            <input type="text" id="admNewPinNumber" maxlength="6" placeholder="পিনকোড (যেমন 711315)" style="background:#1e293b; border:1px solid #334155; color:#fde047; font-weight:800; border-radius:8px; padding:8px 10px; font-size:0.85rem;">
+            <input type="text" id="admNewPinArea" placeholder="এলাকার নাম (যেমন শ্যামপুর)" style="background:#1e293b; border:1px solid #334155; color:#fff; border-radius:8px; padding:8px 10px; font-size:0.85rem;">
+            <select id="admNewPinTime" style="background:#1e293b; border:1px solid #334155; color:#fff; border-radius:8px; padding:8px 10px; font-size:0.82rem;">
+              <option value="২ ঘণ্টার মধ্যে এক্সপ্রেস ডেলিভারি">⚡ ২ ঘণ্টার এক্সপ্রেস ডেলিভারি</option>
+              <option value="২৪ ঘণ্টার মধ্যে ডেলিভারি" selected>🚚 ২৪ ঘণ্টার মধ্যে ডেলিভারি</option>
+              <option value="৪৮ ঘণ্টার মধ্যে ডেলিভারি">📦 ৪৮ ঘণ্টার মধ্যে ডেলিভারি</option>
+            </select>
+            <button type="button" onclick="adminAddNewPincode()" style="background:linear-gradient(135deg, #0284c7, #0ea5e9); color:#fff; border:none; padding:8px 14px; border-radius:8px; font-weight:800; font-size:0.82rem; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:6px;">
+              <i class="fa-solid fa-plus"></i> যোগ করুন
+            </button>
+          </div>
+        </div>
+
+        <!-- Pincodes List Container -->
+        <div id="adminPincodesListContainer" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); gap:10px;">
+          <!-- Dynamically populated with pincode cards -->
+        </div>
+      </div>
+
     </div>
 
     
@@ -4553,7 +4596,7 @@ function closeAdminBarcodeStickerModal() {
               কাস্টমার সেলস: <strong style="color:#fff;">₹${ord.total}</strong> <span style="color:#34d399; font-weight:700;">(কাস্টমারের জন্য ডেলিভারি ১০০% ফ্রি)</span><br>
               সেন্ট্রাল ডেলিভারি ফি (অ্যাডমিনের নিজস্ব আয়): <strong style="color:#f59e0b;">₹${ord.deliveryCharge || (ord.pincode === '711401' ? 50 : (ord.pincode >= 711402 && ord.pincode <= 711414 ? 60 : 90))}</strong> |
               প্ল্যাটফর্ম ফি: <strong style="color:#10b981;">₹${ord.platformFee !== undefined ? ord.platformFee : 10}</strong> |
-              দোকানদারকে প্রদেয় (Settlement): <strong style="color:#38bdf8; font-size:0.82rem;">₹${ord.sellerPayout || (ord.total - (ord.deliveryCharge || (ord.pincode === '711401' ? 50 : (ord.pincode >= 711402 && ord.pincode <= 711414 ? 60 : 90))) - (ord.platformFee !== undefined ? ord.platformFee : 10))}</strong>
+              নিট আয় (Nisha Creations Net): <strong style="color:#34d399; font-size:0.82rem;">₹${ord.total}</strong>
             </div>
             <div style="color:#a7f3d0; font-weight:800;">
               পিন কোড: ${ord.pincode || '711401'}
@@ -4824,6 +4867,15 @@ function closeAdminBarcodeStickerModal() {
             </div>
 
             <div style="display:flex; align-items:center; gap:6px; margin-top:8px; flex-wrap:wrap;">
+              <!-- 1-CLICK IN-STOCK / OUT-OF-STOCK TOGGLE -->
+              <button type="button" onclick="toggleOwnerStockStatus('${p.id}')" style="background:${isOutOfStock ? '#7f1d1d' : '#065f46'}; color:${isOutOfStock ? '#fecaca' : '#a7f3d0'}; border:1.5px solid ${isOutOfStock ? '#ef4444' : '#10b981'}; font-size:0.75rem; font-weight:800; padding:4px 9px; border-radius:8px; cursor:pointer; display:inline-flex; align-items:center; gap:4px; box-shadow:0 2px 6px rgba(0,0,0,0.3);">
+                <i class="fa-solid ${isOutOfStock ? 'fa-ban' : 'fa-circle-check'}"></i>
+                <span>${isOutOfStock ? (isEn ? 'Out of Stock' : 'স্টক শেষ') : (isEn ? 'In Stock' : 'স্টকে আছে')}</span>
+              </button>
+              <!-- MULTI-WAREHOUSE STOCK DISTRIBUTION BUTTON -->
+              <button type="button" onclick="openWarehouseStockModal('${p.id}')" style="background:#1e1b4b; border:1.5px solid #818cf8; color:#c7d2fe; font-size:0.75rem; font-weight:800; padding:4px 9px; border-radius:8px; cursor:pointer; display:inline-flex; align-items:center; gap:5px; box-shadow:0 2px 6px rgba(129,140,248,0.25);" title="কোন গোডাউনে কত পিস স্টক আছে দেখুন ও নির্ধারণ করুন">
+                <i class="fa-solid fa-warehouse"></i> <span>ওয়্যারহাউস স্টক</span>
+              </button>
               <button type="button" class="btn-qty-ctl" onclick="adjustOwnerStock('${p.id}', -1)">-</button>
               <input type="number" class="stock-val-box" id="inpStock_${p.id}" value="${curStock}" min="0" onchange="saveOwnerStock('${p.id}', this.value)" oninput="saveOwnerStock('${p.id}', this.value)">
               <button type="button" class="btn-qty-ctl" onclick="adjustOwnerStock('${p.id}', 1)">+</button>
@@ -5861,6 +5913,41 @@ function closeAdminBarcodeStickerModal() {
       ${ord.paymentMode === "UPI" ? (isEn ? "✅ ONLINE PREPAID (PAID)" : "✅ অনলাইন প্রিপেইড (পেইড)") : (isEn ? `💵 CASH ON DELIVERY: ₹${ord.total}` : `💵 ক্যাশ অন ডেলিভারি (COD): ₹${ord.total}`)}
     </div>
   </div>
+
+  <!-- ================= 🏢 MULTI-WAREHOUSE STOCK DISTRIBUTION MODAL ================= -->
+  <div id="modalWarehouseStock" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.8); backdrop-filter:blur(4px); z-index:99999; align-items:center; justify-content:center; padding:16px;">
+    <div style="background:#1e293b; border:1.5px solid #38bdf8; border-radius:18px; max-width:520px; width:100%; padding:22px; box-shadow:0 15px 40px rgba(0,0,0,0.6);">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; border-bottom:1px solid #334155; padding-bottom:10px;">
+        <div>
+          <h4 style="font-size:1.1rem; font-weight:900; color:#38bdf8; margin:0;" id="whModalProductTitle">শাড়ির নাম</h4>
+          <p style="font-size:0.75rem; color:#94a3b8; margin:3px 0 0 0;" id="whModalProductMeta">ID: #NC-00 • মোট স্টক: 0 পিস</p>
+        </div>
+        <button type="button" onclick="closeWarehouseStockModal()" style="background:#334155; border:none; color:#cbd5e1; width:32px; height:32px; border-radius:50%; font-size:1.1rem; cursor:pointer;">&times;</button>
+      </div>
+
+      <div style="font-size:0.82rem; color:#cbd5e1; margin-bottom:12px; font-weight:700;">
+        📍 কোন ওয়্যারহাউসে (পিনকোড অনুযায়ী) কত পিস মাল থাকবে বণ্টন করুন:
+      </div>
+
+      <!-- Hubs Stock Input List -->
+      <div id="whModalStockRowsContainer" style="display:flex; flex-direction:column; gap:10px; max-height:55vh; overflow-y:auto; margin-bottom:16px; padding-right:4px;">
+        <!-- Dynamically generated rows per hub with pincode and stock input -->
+      </div>
+
+      <div style="display:flex; justify-content:space-between; align-items:center; background:#0f172a; padding:10px 14px; border-radius:10px; margin-bottom:14px; border:1px solid #334155;">
+        <span style="font-size:0.85rem; font-weight:800; color:#fff;">সব গোডাউন মিলিয়ে মোট স্টক:</span>
+        <span style="font-size:1.1rem; font-weight:900; color:#fde047;" id="whModalCalculatedTotalStock">0 পিস</span>
+      </div>
+
+      <div style="display:flex; justify-content:flex-end; gap:10px;">
+        <button type="button" onclick="closeWarehouseStockModal()" style="background:#334155; color:#cbd5e1; border:none; padding:10px 18px; border-radius:10px; font-weight:700; font-size:0.85rem; cursor:pointer;">বাতিল</button>
+        <button type="button" onclick="saveWarehouseStockDistribution()" style="background:linear-gradient(135deg, #0284c7, #0ea5e9); color:#fff; border:none; padding:10px 22px; border-radius:10px; font-weight:900; font-size:0.85rem; cursor:pointer; box-shadow:0 4px 14px rgba(2,132,199,0.35);">
+          <i class="fa-solid fa-floppy-disk"></i> স্টক সংরক্ষণ করুন
+        </button>
+      </div>
+    </div>
+  </div>
+
 </body>
 </html>`;
 
@@ -7091,6 +7178,41 @@ window.addEventListener('DOMContentLoaded', initAdminDashboard);
       এটি একটি কম্পিউটার জেনারেটেড ডিজিটাল ইনভয়েস। নিশা ক্রিয়েশনস থেকে কেনাকাটার জন্য ধন্যবাদ!
     </div>
   </div>
+
+  <!-- ================= 🏢 MULTI-WAREHOUSE STOCK DISTRIBUTION MODAL ================= -->
+  <div id="modalWarehouseStock" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.8); backdrop-filter:blur(4px); z-index:99999; align-items:center; justify-content:center; padding:16px;">
+    <div style="background:#1e293b; border:1.5px solid #38bdf8; border-radius:18px; max-width:520px; width:100%; padding:22px; box-shadow:0 15px 40px rgba(0,0,0,0.6);">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; border-bottom:1px solid #334155; padding-bottom:10px;">
+        <div>
+          <h4 style="font-size:1.1rem; font-weight:900; color:#38bdf8; margin:0;" id="whModalProductTitle">শাড়ির নাম</h4>
+          <p style="font-size:0.75rem; color:#94a3b8; margin:3px 0 0 0;" id="whModalProductMeta">ID: #NC-00 • মোট স্টক: 0 পিস</p>
+        </div>
+        <button type="button" onclick="closeWarehouseStockModal()" style="background:#334155; border:none; color:#cbd5e1; width:32px; height:32px; border-radius:50%; font-size:1.1rem; cursor:pointer;">&times;</button>
+      </div>
+
+      <div style="font-size:0.82rem; color:#cbd5e1; margin-bottom:12px; font-weight:700;">
+        📍 কোন ওয়্যারহাউসে (পিনকোড অনুযায়ী) কত পিস মাল থাকবে বণ্টন করুন:
+      </div>
+
+      <!-- Hubs Stock Input List -->
+      <div id="whModalStockRowsContainer" style="display:flex; flex-direction:column; gap:10px; max-height:55vh; overflow-y:auto; margin-bottom:16px; padding-right:4px;">
+        <!-- Dynamically generated rows per hub with pincode and stock input -->
+      </div>
+
+      <div style="display:flex; justify-content:space-between; align-items:center; background:#0f172a; padding:10px 14px; border-radius:10px; margin-bottom:14px; border:1px solid #334155;">
+        <span style="font-size:0.85rem; font-weight:800; color:#fff;">সব গোডাউন মিলিয়ে মোট স্টক:</span>
+        <span style="font-size:1.1rem; font-weight:900; color:#fde047;" id="whModalCalculatedTotalStock">0 পিস</span>
+      </div>
+
+      <div style="display:flex; justify-content:flex-end; gap:10px;">
+        <button type="button" onclick="closeWarehouseStockModal()" style="background:#334155; color:#cbd5e1; border:none; padding:10px 18px; border-radius:10px; font-weight:700; font-size:0.85rem; cursor:pointer;">বাতিল</button>
+        <button type="button" onclick="saveWarehouseStockDistribution()" style="background:linear-gradient(135deg, #0284c7, #0ea5e9); color:#fff; border:none; padding:10px 22px; border-radius:10px; font-weight:900; font-size:0.85rem; cursor:pointer; box-shadow:0 4px 14px rgba(2,132,199,0.35);">
+          <i class="fa-solid fa-floppy-disk"></i> স্টক সংরক্ষণ করুন
+        </button>
+      </div>
+    </div>
+  </div>
+
 </body>
 </html>`;
 
@@ -7363,14 +7485,13 @@ window.addEventListener('DOMContentLoaded', initAdminDashboard);
     // ============================================================
     const DEFAULT_CATEGORIES_ADMIN = [
       { id: 'all', key: 'all', name: 'সব কালেকশন', icon: 'fa-solid fa-wand-magic-sparkles', isIcon: true },
-      { id: 'women', key: 'women', name: '👩 Women', img: 'logo.png' },
-      { id: 'girls', key: 'girls', name: '👧 Girls ফ্রক', img: 'logo.png' },
-      { id: 'jamdani', key: 'jamdani', name: 'ঢাকai জামদানি', img: 'logo.png' },
-      { id: 'silk', key: 'silk', name: 'সফট সিল্ক', img: 'logo.png' },
-      { id: 'tant', key: 'tant', name: 'সুতি তাঁত', img: 'logo.png' },
-      { id: 'kurti', key: 'kurti', name: 'কুর্তি ও সেট', img: 'logo.png' },
-      { id: 'jewel', key: 'jewel', name: 'গহনা ও চোকার', img: 'logo.png' },
-      { id: 'bangles', key: 'bangles', name: 'বালা ও চুড়ি', img: 'logo.png' }
+      { id: 'women', key: 'women', name: '🌸 মহিলাদের কালেকশন', icon: 'fa-solid fa-person-dress', isIcon: true },
+      { id: 'men', key: 'men', name: '👔 পুরুষদের কালেকশন', icon: 'fa-solid fa-shirt', isIcon: true },
+      { id: 'gift', key: 'gift', name: '🎁 গিফট ও কম্বো', icon: 'fa-solid fa-gift', isIcon: true },
+      { id: 'kids', key: 'kids', name: '👶 ছোটদের কালেকশন', icon: 'fa-solid fa-child', isIcon: true },
+      { id: 'saree', key: 'saree', name: 'শাড়ি কালেকশন', icon: 'fa-solid fa-wand-magic', isIcon: true },
+      { id: 'kurti', key: 'kurti', name: 'কুর্তি ও গাউন', icon: 'fa-solid fa-vest', isIcon: true },
+      { id: 'jewel', key: 'jewel', name: 'জুয়েলারি ও গহনা', icon: 'fa-solid fa-gem', isIcon: true }
     ];
 
     let uploadedCatImgBase64 = '';
@@ -7822,6 +7943,41 @@ window.addEventListener('DOMContentLoaded', initAdminDashboard);
 </head>
 <body onload="window.print()">
   ${content}
+
+  <!-- ================= 🏢 MULTI-WAREHOUSE STOCK DISTRIBUTION MODAL ================= -->
+  <div id="modalWarehouseStock" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.8); backdrop-filter:blur(4px); z-index:99999; align-items:center; justify-content:center; padding:16px;">
+    <div style="background:#1e293b; border:1.5px solid #38bdf8; border-radius:18px; max-width:520px; width:100%; padding:22px; box-shadow:0 15px 40px rgba(0,0,0,0.6);">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; border-bottom:1px solid #334155; padding-bottom:10px;">
+        <div>
+          <h4 style="font-size:1.1rem; font-weight:900; color:#38bdf8; margin:0;" id="whModalProductTitle">শাড়ির নাম</h4>
+          <p style="font-size:0.75rem; color:#94a3b8; margin:3px 0 0 0;" id="whModalProductMeta">ID: #NC-00 • মোট স্টক: 0 পিস</p>
+        </div>
+        <button type="button" onclick="closeWarehouseStockModal()" style="background:#334155; border:none; color:#cbd5e1; width:32px; height:32px; border-radius:50%; font-size:1.1rem; cursor:pointer;">&times;</button>
+      </div>
+
+      <div style="font-size:0.82rem; color:#cbd5e1; margin-bottom:12px; font-weight:700;">
+        📍 কোন ওয়্যারহাউসে (পিনকোড অনুযায়ী) কত পিস মাল থাকবে বণ্টন করুন:
+      </div>
+
+      <!-- Hubs Stock Input List -->
+      <div id="whModalStockRowsContainer" style="display:flex; flex-direction:column; gap:10px; max-height:55vh; overflow-y:auto; margin-bottom:16px; padding-right:4px;">
+        <!-- Dynamically generated rows per hub with pincode and stock input -->
+      </div>
+
+      <div style="display:flex; justify-content:space-between; align-items:center; background:#0f172a; padding:10px 14px; border-radius:10px; margin-bottom:14px; border:1px solid #334155;">
+        <span style="font-size:0.85rem; font-weight:800; color:#fff;">সব গোডাউন মিলিয়ে মোট স্টক:</span>
+        <span style="font-size:1.1rem; font-weight:900; color:#fde047;" id="whModalCalculatedTotalStock">0 পিস</span>
+      </div>
+
+      <div style="display:flex; justify-content:flex-end; gap:10px;">
+        <button type="button" onclick="closeWarehouseStockModal()" style="background:#334155; color:#cbd5e1; border:none; padding:10px 18px; border-radius:10px; font-weight:700; font-size:0.85rem; cursor:pointer;">বাতিল</button>
+        <button type="button" onclick="saveWarehouseStockDistribution()" style="background:linear-gradient(135deg, #0284c7, #0ea5e9); color:#fff; border:none; padding:10px 22px; border-radius:10px; font-weight:900; font-size:0.85rem; cursor:pointer; box-shadow:0 4px 14px rgba(2,132,199,0.35);">
+          <i class="fa-solid fa-floppy-disk"></i> স্টক সংরক্ষণ করুন
+        </button>
+      </div>
+    </div>
+  </div>
+
 </body>
 </html>`;
 
@@ -7904,6 +8060,41 @@ window.addEventListener('DOMContentLoaded', initAdminDashboard);
 </head>
 <body onload="window.print()">
   ${allBillsHtml}
+
+  <!-- ================= 🏢 MULTI-WAREHOUSE STOCK DISTRIBUTION MODAL ================= -->
+  <div id="modalWarehouseStock" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.8); backdrop-filter:blur(4px); z-index:99999; align-items:center; justify-content:center; padding:16px;">
+    <div style="background:#1e293b; border:1.5px solid #38bdf8; border-radius:18px; max-width:520px; width:100%; padding:22px; box-shadow:0 15px 40px rgba(0,0,0,0.6);">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; border-bottom:1px solid #334155; padding-bottom:10px;">
+        <div>
+          <h4 style="font-size:1.1rem; font-weight:900; color:#38bdf8; margin:0;" id="whModalProductTitle">শাড়ির নাম</h4>
+          <p style="font-size:0.75rem; color:#94a3b8; margin:3px 0 0 0;" id="whModalProductMeta">ID: #NC-00 • মোট স্টক: 0 পিস</p>
+        </div>
+        <button type="button" onclick="closeWarehouseStockModal()" style="background:#334155; border:none; color:#cbd5e1; width:32px; height:32px; border-radius:50%; font-size:1.1rem; cursor:pointer;">&times;</button>
+      </div>
+
+      <div style="font-size:0.82rem; color:#cbd5e1; margin-bottom:12px; font-weight:700;">
+        📍 কোন ওয়্যারহাউসে (পিনকোড অনুযায়ী) কত পিস মাল থাকবে বণ্টন করুন:
+      </div>
+
+      <!-- Hubs Stock Input List -->
+      <div id="whModalStockRowsContainer" style="display:flex; flex-direction:column; gap:10px; max-height:55vh; overflow-y:auto; margin-bottom:16px; padding-right:4px;">
+        <!-- Dynamically generated rows per hub with pincode and stock input -->
+      </div>
+
+      <div style="display:flex; justify-content:space-between; align-items:center; background:#0f172a; padding:10px 14px; border-radius:10px; margin-bottom:14px; border:1px solid #334155;">
+        <span style="font-size:0.85rem; font-weight:800; color:#fff;">সব গোডাউন মিলিয়ে মোট স্টক:</span>
+        <span style="font-size:1.1rem; font-weight:900; color:#fde047;" id="whModalCalculatedTotalStock">0 পিস</span>
+      </div>
+
+      <div style="display:flex; justify-content:flex-end; gap:10px;">
+        <button type="button" onclick="closeWarehouseStockModal()" style="background:#334155; color:#cbd5e1; border:none; padding:10px 18px; border-radius:10px; font-weight:700; font-size:0.85rem; cursor:pointer;">বাতিল</button>
+        <button type="button" onclick="saveWarehouseStockDistribution()" style="background:linear-gradient(135deg, #0284c7, #0ea5e9); color:#fff; border:none; padding:10px 22px; border-radius:10px; font-weight:900; font-size:0.85rem; cursor:pointer; box-shadow:0 4px 14px rgba(2,132,199,0.35);">
+          <i class="fa-solid fa-floppy-disk"></i> স্টক সংরক্ষণ করুন
+        </button>
+      </div>
+    </div>
+  </div>
+
 </body>
 </html>`;
 
@@ -8558,5 +8749,322 @@ window.addEventListener('DOMContentLoaded', initAdminDashboard);
     </div>
   </div>
 
+
+  <!-- ================= 🏢 MULTI-WAREHOUSE STOCK DISTRIBUTION MODAL ================= -->
+  <div id="modalWarehouseStock" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.8); backdrop-filter:blur(4px); z-index:99999; align-items:center; justify-content:center; padding:16px;">
+    <div style="background:#1e293b; border:1.5px solid #38bdf8; border-radius:18px; max-width:520px; width:100%; padding:22px; box-shadow:0 15px 40px rgba(0,0,0,0.6);">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; border-bottom:1px solid #334155; padding-bottom:10px;">
+        <div>
+          <h4 style="font-size:1.1rem; font-weight:900; color:#38bdf8; margin:0;" id="whModalProductTitle">শাড়ির নাম</h4>
+          <p style="font-size:0.75rem; color:#94a3b8; margin:3px 0 0 0;" id="whModalProductMeta">ID: #NC-00 • মোট স্টক: 0 পিস</p>
+        </div>
+        <button type="button" onclick="closeWarehouseStockModal()" style="background:#334155; border:none; color:#cbd5e1; width:32px; height:32px; border-radius:50%; font-size:1.1rem; cursor:pointer;">&times;</button>
+      </div>
+
+      <div style="font-size:0.82rem; color:#cbd5e1; margin-bottom:12px; font-weight:700;">
+        📍 কোন ওয়্যারহাউসে (পিনকোড অনুযায়ী) কত পিস মাল থাকবে বণ্টন করুন:
+      </div>
+
+      <!-- Hubs Stock Input List -->
+      <div id="whModalStockRowsContainer" style="display:flex; flex-direction:column; gap:10px; max-height:55vh; overflow-y:auto; margin-bottom:16px; padding-right:4px;">
+        <!-- Dynamically generated rows per hub with pincode and stock input -->
+      </div>
+
+      <div style="display:flex; justify-content:space-between; align-items:center; background:#0f172a; padding:10px 14px; border-radius:10px; margin-bottom:14px; border:1px solid #334155;">
+        <span style="font-size:0.85rem; font-weight:800; color:#fff;">সব গোডাউন মিলিয়ে মোট স্টক:</span>
+        <span style="font-size:1.1rem; font-weight:900; color:#fde047;" id="whModalCalculatedTotalStock">0 পিস</span>
+      </div>
+
+      <div style="display:flex; justify-content:flex-end; gap:10px;">
+        <button type="button" onclick="closeWarehouseStockModal()" style="background:#334155; color:#cbd5e1; border:none; padding:10px 18px; border-radius:10px; font-weight:700; font-size:0.85rem; cursor:pointer;">বাতিল</button>
+        <button type="button" onclick="saveWarehouseStockDistribution()" style="background:linear-gradient(135deg, #0284c7, #0ea5e9); color:#fff; border:none; padding:10px 22px; border-radius:10px; font-weight:900; font-size:0.85rem; cursor:pointer; box-shadow:0 4px 14px rgba(2,132,199,0.35);">
+          <i class="fa-solid fa-floppy-disk"></i> স্টক সংরক্ষণ করুন
+        </button>
+      </div>
+    </div>
+  </div>
+
 </body>
 </html>
+
+
+    // =========================================================================
+    // 📍 PINCODE & DELIVERY SERVICEABILITY MASTER CONTROLLER
+    // =========================================================================
+    const DEFAULT_SERVICEABLE_PINCODES = [
+      { pincode: '711401', area: 'আমতা সদর (লোকাল)', deliveryTime: '২ ঘণ্টার মধ্যে এক্সপ্রেস ডেলিভারি', status: 'available' },
+      { pincode: '711303', area: 'বাগনান (হাওড়া)', deliveryTime: '২৪ ঘণ্টার মধ্যে ডেলিভারি', status: 'available' },
+      { pincode: '711410', area: 'উদয়নারায়ণপুর', deliveryTime: '২৪ ঘণ্টার মধ্যে ডেলিভারি', status: 'available' },
+      { pincode: '711312', area: 'উলুবেড়িয়া', deliveryTime: '২৪ ঘণ্টার মধ্যে ডেলিভারি', status: 'available' },
+      { pincode: '711414', area: 'জয়পুর (হাওড়া)', deliveryTime: '২৪ ঘণ্টার মধ্যে ডেলিভারি', status: 'available' },
+      { pincode: '700001', area: 'কলকাতা সেন্ট্রাল', deliveryTime: '৪৮ ঘণ্টার মধ্যে ডেলিভারি', status: 'available' }
+    ];
+
+    function getAdminPincodes() {
+      try {
+        const raw = localStorage.getItem('nc_serviceable_pincodes');
+        if (raw) {
+          const parsed = JSON.parse(raw);
+          if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+        }
+      } catch(e) {}
+      localStorage.setItem('nc_serviceable_pincodes', JSON.stringify(DEFAULT_SERVICEABLE_PINCODES));
+      return DEFAULT_SERVICEABLE_PINCODES;
+    }
+
+    function saveAdminPincodes(list) {
+      localStorage.setItem('nc_serviceable_pincodes', JSON.stringify(list));
+      renderAdminPincodesList();
+      // Sync to Firebase Cloud if ready
+      if (typeof CloudSync !== 'undefined' && CloudSync.isReady()) {
+        try {
+          ncDb.collection('settings').doc('pincodes').set({ list: list, updatedAt: new Date().toISOString() });
+        } catch(e) {}
+      }
+    }
+
+    function renderAdminPincodesList() {
+      const container = document.getElementById('adminPincodesListContainer');
+      const countBadge = document.getElementById('adminPincodesTotalCount');
+      if (!container) return;
+
+      const list = getAdminPincodes();
+      const activeCount = list.filter(p => p.status === 'available').length;
+      if (countBadge) countBadge.textContent = `${activeCount}টি পিনকোডে ডেলিভারি চালু (${list.length}টি মোট)`;
+
+      container.innerHTML = list.map((item, idx) => {
+        const isAvail = (item.status === 'available');
+        return `
+          <div style="background:#1e293b; border:1.5px solid ${isAvail ? '#10b981' : '#ef4444'}; border-radius:12px; padding:12px; display:flex; justify-content:space-between; align-items:center; gap:8px;">
+            <div>
+              <div style="font-size:1.05rem; font-weight:900; color:#fde047; letter-spacing:1px; display:flex; align-items:center; gap:6px;">
+                <span>${item.pincode}</span>
+                <span style="font-size:0.7rem; font-weight:800; background:${isAvail ? '#065f46' : '#7f1d1d'}; color:${isAvail ? '#a7f3d0' : '#fecaca'}; padding:2px 8px; border-radius:6px;">
+                  ${isAvail ? '✓ ডেলিভারি চালু' : '✕ বন্ধ (Unavailable)'}
+                </span>
+              </div>
+              <div style="font-size:0.82rem; font-weight:700; color:#fff; margin-top:2px;">${item.area}</div>
+              <div style="font-size:0.7rem; color:#94a3b8; margin-top:1px;"><i class="fa-solid fa-clock"></i> ${item.deliveryTime}</div>
+            </div>
+            <div style="display:flex; flex-direction:column; gap:6px; align-items:flex-end;">
+              <button type="button" onclick="toggleAdminPincodeStatus(${idx})" style="background:${isAvail ? '#7f1d1d' : '#065f46'}; color:#fff; border:none; padding:6px 10px; border-radius:8px; font-size:0.72rem; font-weight:800; cursor:pointer;">
+                ${isAvail ? '🔴 বন্ধ করুন' : '🟢 চালু করুন'}
+              </button>
+              <button type="button" onclick="deleteAdminPincode(${idx})" style="background:transparent; border:none; color:#ef4444; font-size:0.85rem; cursor:pointer; padding:2px 4px;" title="পিনকোড মুছুন">
+                <i class="fa-solid fa-trash-can"></i>
+              </button>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function adminAddNewPincode() {
+      const pin = (document.getElementById('admNewPinNumber')?.value || '').trim();
+      const area = (document.getElementById('admNewPinArea')?.value || '').trim();
+      const time = document.getElementById('admNewPinTime')?.value || '২৪ ঘণ্টার মধ্যে ডেলিভারি';
+
+      if (!pin || pin.length !== 6 || isNaN(pin)) {
+        alert("দয়া করে ৬ সংখ্যার সঠিক পিনকোড দিন (যেমন 711401)");
+        return;
+      }
+      if (!area) {
+        alert("দয়া করে এলাকার নাম লিখুন (যেমন আমতা বা বাগনান)");
+        return;
+      }
+
+      const list = getAdminPincodes();
+      const exists = list.some(p => p.pincode === pin);
+      if (exists) {
+        alert(`পিনকোড ${pin} ইতিমধ্যে তালিকায় রয়েছে!`);
+        return;
+      }
+
+      list.unshift({ pincode: pin, area: area, deliveryTime: time, status: 'available' });
+      saveAdminPincodes(list);
+
+      document.getElementById('admNewPinNumber').value = '';
+      document.getElementById('admNewPinArea').value = '';
+      alert(`🎉 পিনকোড ${pin} (${area}) সফলভাবে যুক্ত করা হয়েছে! এখন এই পিনকোডে ডেলিভারি নেওয়া যাবে।`);
+    }
+
+    function toggleAdminPincodeStatus(idx) {
+      const list = getAdminPincodes();
+      if (!list[idx]) return;
+      list[idx].status = (list[idx].status === 'available') ? 'unavailable' : 'available';
+      saveAdminPincodes(list);
+    }
+
+    function deleteAdminPincode(idx) {
+      const list = getAdminPincodes();
+      if (!list[idx]) return;
+      if (!confirm(`আপনি কি নিশ্চিত যে ${list[idx].pincode} পিনকোডটি তালিকা থেকে মুছে ফেলতে চান?`)) return;
+      list.splice(idx, 1);
+      saveAdminPincodes(list);
+    }
+
+    // 1-Click Out-of-Stock Toggle Handler
+    function toggleOwnerStockStatus(id) {
+      let prods = [];
+      try { prods = JSON.parse(localStorage.getItem('nc_products') || '[]'); } catch(e) {}
+      const prod = prods.find(p => p.id === id);
+      if (!prod) return;
+
+      const isCurOut = (prod.stock <= 0 || prod.inStock === false);
+      if (isCurOut) {
+        // Turn In Stock
+        prod.inStock = true;
+        prod.stock = (prod.prevStock && prod.prevStock > 0) ? prod.prevStock : 15;
+      } else {
+        // Turn Out of Stock
+        prod.prevStock = prod.stock || 10;
+        prod.inStock = false;
+        prod.stock = 0;
+      }
+
+      localStorage.setItem('nc_products', JSON.stringify(prods));
+
+      let cust = [];
+      try {
+        cust = JSON.parse(localStorage.getItem('nc_custom_products') || '[]');
+        const cIdx = cust.findIndex(p => p.id === id);
+        if (cIdx !== -1) {
+          cust[cIdx].inStock = prod.inStock;
+          cust[cIdx].stock = prod.stock;
+          localStorage.setItem('nc_custom_products', JSON.stringify(cust));
+        }
+      } catch(e) {}
+
+      if (typeof CloudSync !== 'undefined' && CloudSync.isReady()) {
+        try { CloudSync.saveProduct(prod); } catch(e) {}
+      }
+
+      renderOwnerStock();
+      if (typeof renderWarehouseOperations === 'function') renderWarehouseOperations();
+    }
+
+document.addEventListener("DOMContentLoaded", () => { setTimeout(renderAdminPincodesList, 500); });
+
+
+    // =========================================================================
+    // 🏢 MULTI-WAREHOUSE STOCK DISTRIBUTION LOGIC
+    // =========================================================================
+    let currentEditingWhProductId = null;
+
+    function openWarehouseStockModal(prodId) {
+      currentEditingWhProductId = prodId;
+      let prods = [];
+      try { prods = JSON.parse(localStorage.getItem('nc_products') || '[]'); } catch(e) {}
+      const prod = prods.find(p => p.id === prodId);
+      if (!prod) return;
+
+      let hubs = [];
+      try { hubs = JSON.parse(localStorage.getItem('nc_warehouses') || '[]'); } catch(e) {}
+      if (hubs.length === 0) {
+        hubs = [
+          { id: 'wh_main', name: 'সেন্ট্রাল ওয়্যারহাউস (আমতা মূল শাখা)', location: 'আমতা চাঁদনী বাজার, হাওড়া', pincode: '711401', coveredPincodes: '711401, 711414', incharge: 'নিশা ঘাঁটি', phone: '9641405426', isDefault: true },
+          { id: 'wh_bagnan', name: 'হাব ২ - বাগনান মাইক্রো-পয়েন্ট', location: 'বাগনান স্টেশন রোড', pincode: '711303', coveredPincodes: '711303, 711312', incharge: 'রাহুল সেন', phone: '9832000001', isDefault: false },
+          { id: 'wh_uday', name: 'হাব ৩ - উদয়নারায়ণপুর হাব', location: 'উদয়নারায়ণপুর বাজার', pincode: '711410', coveredPincodes: '711410', incharge: 'সৌরভ দাস', phone: '9832000002', isDefault: false }
+        ];
+      }
+
+      const titleEl = document.getElementById('whModalProductTitle');
+      const metaEl = document.getElementById('whModalProductMeta');
+      const container = document.getElementById('whModalStockRowsContainer');
+      const modal = document.getElementById('modalWarehouseStock');
+
+      if (titleEl) titleEl.textContent = prod.title;
+      if (metaEl) metaEl.textContent = `ID: #${prod.id} • বর্তমান মোট স্টক: ${prod.stock || 0} পিস`;
+
+      if (!prod.warehouseStock || typeof prod.warehouseStock !== 'object') {
+        prod.warehouseStock = {};
+        prod.warehouseStock[hubs[0].id] = prod.stock || 15;
+      }
+
+      if (container) {
+        container.innerHTML = hubs.map(h => {
+          const curVal = prod.warehouseStock[h.id] !== undefined ? parseInt(prod.warehouseStock[h.id]) : 0;
+          const pinDisp = h.pincode ? `(পিন: ${h.pincode})` : (h.coveredPincodes ? `(পিন: ${h.coveredPincodes})` : '');
+          return `
+            <div style="background:#0f172a; border:1px solid #334155; border-radius:12px; padding:12px; display:flex; justify-content:space-between; align-items:center; gap:10px;">
+              <div>
+                <div style="font-weight:800; color:#38bdf8; font-size:0.9rem;">
+                  <i class="fa-solid fa-warehouse"></i> ${h.name}
+                </div>
+                <div style="font-size:0.75rem; color:#94a3b8; margin-top:2px;">
+                  📍 ${h.location} <strong style="color:#fde047;">${pinDisp}</strong>
+                </div>
+              </div>
+              <div style="display:flex; align-items:center; gap:6px;">
+                <input type="number" min="0" value="${curVal}" data-hub-id="${h.id}" class="wh-stock-input" oninput="calculateWhModalTotalStock()" style="width:75px; text-align:center; background:#1e293b; border:1.5px solid #38bdf8; color:#fde047; font-weight:900; font-size:1.05rem; padding:6px; border-radius:8px;">
+                <span style="font-size:0.8rem; color:#cbd5e1; font-weight:700;">পিস</span>
+              </div>
+            </div>
+          `;
+        }).join('');
+      }
+
+      calculateWhModalTotalStock();
+      if (modal) modal.style.display = 'flex';
+    }
+
+    function calculateWhModalTotalStock() {
+      const inputs = document.querySelectorAll('.wh-stock-input');
+      let total = 0;
+      inputs.forEach(inp => {
+        total += parseInt(inp.value) || 0;
+      });
+      const totalEl = document.getElementById('whModalCalculatedTotalStock');
+      if (totalEl) totalEl.textContent = `${total} পিস`;
+    }
+
+    function closeWarehouseStockModal() {
+      const modal = document.getElementById('modalWarehouseStock');
+      if (modal) modal.style.display = 'none';
+      currentEditingWhProductId = null;
+    }
+
+    function saveWarehouseStockDistribution() {
+      if (!currentEditingWhProductId) return;
+      let prods = [];
+      try { prods = JSON.parse(localStorage.getItem('nc_products') || '[]'); } catch(e) {}
+      const prod = prods.find(p => p.id === currentEditingWhProductId);
+      if (!prod) return;
+
+      const inputs = document.querySelectorAll('.wh-stock-input');
+      if (!prod.warehouseStock) prod.warehouseStock = {};
+      let totalStock = 0;
+
+      inputs.forEach(inp => {
+        const hubId = inp.getAttribute('data-hub-id');
+        const val = Math.max(0, parseInt(inp.value) || 0);
+        prod.warehouseStock[hubId] = val;
+        totalStock += val;
+      });
+
+      prod.stock = totalStock;
+      prod.inStock = totalStock > 0;
+
+      localStorage.setItem('nc_products', JSON.stringify(prods));
+
+      let cust = [];
+      try {
+        cust = JSON.parse(localStorage.getItem('nc_custom_products') || '[]');
+        const cIdx = cust.findIndex(p => p.id === currentEditingWhProductId);
+        if (cIdx !== -1) {
+          cust[cIdx].stock = totalStock;
+          cust[cIdx].inStock = prod.inStock;
+          cust[cIdx].warehouseStock = prod.warehouseStock;
+          localStorage.setItem('nc_custom_products', JSON.stringify(cust));
+        }
+      } catch(e) {}
+
+      if (typeof CloudSync !== 'undefined' && CloudSync.isReady()) {
+        try { CloudSync.saveProduct(prod); } catch(e) {}
+      }
+
+      closeWarehouseStockModal();
+      renderOwnerStock();
+      if (typeof renderWarehouseOperations === 'function') renderWarehouseOperations();
+      alert(`✅ '${prod.title}' শাড়ির গোডাউন ভিত্তিক স্টক সফলভাবে আপডেট হয়েছে! মোট স্টক: ${totalStock} পিস।`);
+    }
