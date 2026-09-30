@@ -6429,6 +6429,7 @@ function applyAdvancedFilters() {
 // 🌟 4. CATEGORIES SCREEN SIDEBAR & CARDS (selectCategoryTab)
 // =========================================================================
 function selectCategoryTab(tabKey) {
+  currentCategoryTab = tabKey;
   document.querySelectorAll('.cat-sidebar-item').forEach(el => el.classList.remove('active'));
   const btn = document.getElementById(`sidebar-${tabKey}`);
   if (btn) btn.classList.add('active');
@@ -6436,71 +6437,99 @@ function selectCategoryTab(tabKey) {
   const contentArea = document.getElementById('catContentArea');
   if (!contentArea) return;
 
-  const subcats = {
-    women: [
-      { name: "ঢাকাই জামদানি শাড়ি", cat: "women", icon: "fa-solid fa-wand-magic-sparkles", img: "https://images.unsplash.com/photo-1610030469983-98e550d6193c?w=300&auto=format&fit=crop&q=75" },
-      { name: "সফট সিল্ক ও কাতান", cat: "women", icon: "fa-solid fa-person-dress", img: "https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?w=300&auto=format&fit=crop&q=75" },
-      { name: "ডিজাইনার কুর্তি সেট", cat: "women", icon: "fa-solid fa-vest", img: "https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?w=300&auto=format&fit=crop&q=75" },
-      { name: "ব্রাইডাল লেহেঙ্গা", cat: "women", icon: "fa-solid fa-sparkles", img: "https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=300&auto=format&fit=crop&q=75" }
-    ],
-    men: [
-      { name: "সুতির ডিজাইনার পাঞ্জাবি", cat: "men", icon: "fa-solid fa-shirt", img: "https://images.unsplash.com/photo-1621644825946-b6058e382098?w=300&auto=format&fit=crop&q=75" },
-      { name: "ফেস্টিভ কটন শর্ট কুর্তা", cat: "men", icon: "fa-solid fa-user-tie", img: "https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?w=300&auto=format&fit=crop&q=75" },
-      { name: "ক্যাজুয়াল ফর্মাল শার্ট", cat: "men", icon: "fa-solid fa-vest", img: "https://images.unsplash.com/photo-1621644825946-b6058e382098?w=300&auto=format&fit=crop&q=75" }
-    ],
-    gift: [
-      { name: "ম্যাচিং কাপল কম্বো সেট", cat: "gift", icon: "fa-solid fa-gift", img: "https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?w=300&auto=format&fit=crop&q=75" },
-      { name: "লাক্সারি পারফিউম ও ওয়ালেট", cat: "gift", icon: "fa-solid fa-spray-can-sparkles", img: "https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?w=300&auto=format&fit=crop&q=75" },
-      { name: "জুয়েলারি গিফট বক্স", cat: "gift", icon: "fa-solid fa-gem", img: "https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=300&auto=format&fit=crop&q=75" }
-    ],
-    kids: [
-      { name: "কিউট প্রিন্সেস ফ্রক", cat: "kids", icon: "fa-solid fa-child", img: "https://images.unsplash.com/photo-1622290291468-a28f7a7dc6a8?w=300&auto=format&fit=crop&q=75" },
-      { name: "ছোটদের কুর্তা ও ধুতি", cat: "kids", icon: "fa-solid fa-baby", img: "https://images.unsplash.com/photo-1503944583220-79d8926ad5e2?w=300&auto=format&fit=crop&q=75" }
-    ],
-    popular: [
-      { name: "ঢাকাই জামদানি", cat: "jamdani", icon: "fa-solid fa-wand-magic-sparkles", img: "https://images.unsplash.com/photo-1610030469983-98e550d6193c?w=300&auto=format&fit=crop&q=75" },
-      { name: "সফট সিল্ক ও কাতান", cat: "silk", icon: "fa-solid fa-person-dress", img: "https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?w=300&auto=format&fit=crop&q=75" },
-      { name: "পাঞ্জাবি ও কুর্তা", cat: "men", icon: "fa-solid fa-shirt", img: "https://images.unsplash.com/photo-1621644825946-b6058e382098?w=300&auto=format&fit=crop&q=75" },
-      { name: "কাপল গিফট কম্বো", cat: "gift", icon: "fa-solid fa-gift", img: "https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?w=300&auto=format&fit=crop&q=75" },
-      { name: "বাচ্চাদের ফ্রক", cat: "kids", icon: "fa-solid fa-child", img: "https://images.unsplash.com/photo-1622290291468-a28f7a7dc6a8?w=300&auto=format&fit=crop&q=75" }
-    ],
-    saree_kurti: [
-      { name: "খাঁটি ঢাকাই জামদানি", cat: "jamdani", icon: "fa-solid fa-wand-magic-sparkles", img: "https://images.unsplash.com/photo-1610030469983-98e550d6193c?w=300&auto=format&fit=crop&q=75" },
-      { name: "সফট সিল্ক শাড়ি", cat: "silk", icon: "fa-solid fa-person-dress", img: "https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?w=300&auto=format&fit=crop&q=75" },
-      { name: "শান্তিপুরী সুতি তাঁত", cat: "tant", icon: "fa-solid fa-feather", img: "https://images.unsplash.com/photo-1609357605129-26f69add5d6e?w=300&auto=format&fit=crop&q=75" },
-      { name: "ডিজাইনার কুর্তি সেট", cat: "kurti", icon: "fa-solid fa-vest", img: "https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?w=300&auto=format&fit=crop&q=75" }
-    ],
-    jewellery: [
-      { name: "চোকার ও নেকলেস সেট", cat: "jewel", icon: "fa-solid fa-gem", img: "https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=300&auto=format&fit=crop&q=75" },
-      { name: "গোল্ড প্লেটেড বালা ও চুড়ি", cat: "bangles", icon: "fa-solid fa-ring", img: "https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=300&auto=format&fit=crop&q=75" }
-    ],
-    bags: [
-      { name: "বুটিক হ্যান্ডব্যাগ ও ক্লাচ", cat: "all", icon: "fa-solid fa-bag-shopping", img: "https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=300&auto=format&fit=crop&q=75" }
-    ],
-    perfume: [
-      { name: "রয়েল আতর ও বডি মিস্ট", cat: "all", icon: "fa-solid fa-spray-can-sparkles", img: "https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?w=300&auto=format&fit=crop&q=75" }
-    ]
+  const categoryGalleries = {
+    women: {
+      title: "🌸 মহিলাদের সম্পূর্ণ কালেকশন",
+      items: [
+        { name: "ঢাকাই জামদানি শাড়ি", cat: "women", img: "https://images.unsplash.com/photo-1610030469983-98e550d6193c?w=350&auto=format&fit=crop&q=80" },
+        { name: "সফট সিল্ক ও কাতান", cat: "women", img: "https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?w=350&auto=format&fit=crop&q=80" },
+        { name: "শান্তিপুরী সুতি তাঁত", cat: "women", img: "https://images.unsplash.com/photo-1609357605129-26f69add5d6e?w=350&auto=format&fit=crop&q=80" },
+        { name: "ট্রেন্ডি কুর্তি ও গাউন", cat: "women", img: "https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?w=350&auto=format&fit=crop&q=80" },
+        { name: "ব্রাইডাল লেহেঙ্গা সেট", cat: "women", img: "https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=350&auto=format&fit=crop&q=80" },
+        { name: "জুয়েলারি ও গহনা", cat: "jewel", img: "https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=350&auto=format&fit=crop&q=80" },
+        { name: "বালা ও চুড়ি কালেকশন", cat: "jewel", img: "https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?w=350&auto=format&fit=crop&q=80" },
+        { name: "ব্যাগ ও ক্লাচ পার্স", cat: "all", img: "https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=350&auto=format&fit=crop&q=80" }
+      ]
+    },
+    men: {
+      title: "👔 পুরুষদের সম্পূর্ণ কালেকশন",
+      items: [
+        { name: "সুতির ডিজাইনার পাঞ্জাবি", cat: "men", img: "https://images.unsplash.com/photo-1621644825946-b6058e382098?w=350&auto=format&fit=crop&q=80" },
+        { name: "ফেস্টিভ কটন শর্ট কুর্তা", cat: "men", img: "https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?w=350&auto=format&fit=crop&q=80" },
+        { name: "ক্যাজুয়াল ও ফর্মাল শার্ট", cat: "men", img: "https://images.unsplash.com/photo-1596755094514-f87e34085b2c?w=350&auto=format&fit=crop&q=80" },
+        { name: "ঐতিহ্যবাহী ধুতি ও পাঞ্জাবি সেট", cat: "men", img: "https://images.unsplash.com/photo-1507679799987-c73779587ccf?w=350&auto=format&fit=crop&q=80" },
+        { name: "লেদার ওয়ালেট ও বেল্ট কম্বো", cat: "gift", img: "https://images.unsplash.com/photo-1627123424574-724758594e93?w=350&auto=format&fit=crop&q=80" },
+        { name: "মেনস স্পোর্টস ও পোলো টি-শার্ট", cat: "men", img: "https://images.unsplash.com/photo-1521572267360-ee0c2909d518?w=350&auto=format&fit=crop&q=80" }
+      ]
+    },
+    gift: {
+      title: "🎁 গিফট ও স্পেশাল কম্বো প্যাক",
+      items: [
+        { name: "ম্যাচিং কাপল কম্বো (শাড়ি + পাঞ্জাবি)", cat: "gift", img: "https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?w=350&auto=format&fit=crop&q=80" },
+        { name: "লাক্সারি পারফিউম ও ওয়ালেট বক্স", cat: "gift", img: "https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?w=350&auto=format&fit=crop&q=80" },
+        { name: "ব্রাইডাল জুয়েলারি গিফট সেট", cat: "gift", img: "https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=350&auto=format&fit=crop&q=80" },
+        { name: "কাপল হাতঘড়ি (Watch) কম্বো", cat: "gift", img: "https://images.unsplash.com/photo-1524805444758-089113d48a6d?w=350&auto=format&fit=crop&q=80" },
+        { name: "সুগন্ধি মোমবাতি ও গিফট হ্যাম্পার", cat: "gift", img: "https://images.unsplash.com/photo-1603006905003-be475563bc59?w=350&auto=format&fit=crop&q=80" },
+        { name: "ফেস্টিভ্যাল স্পেশাল গিফট বক্স", cat: "gift", img: "https://images.unsplash.com/photo-1549465220-1a8b9238cd48?w=350&auto=format&fit=crop&q=80" }
+      ]
+    },
+    kids: {
+      title: "👶 ছোটদের কিউট কালেকশন",
+      items: [
+        { name: "কিউট প্রিন্সেস ফ্রক", cat: "kids", img: "https://images.unsplash.com/photo-1622290291468-a28f7a7dc6a8?w=350&auto=format&fit=crop&q=80" },
+        { name: "ছোট ছেলেদের কুর্তা ও ধুতি সেট", cat: "kids", img: "https://images.unsplash.com/photo-1503944583220-79d8926ad5e2?w=350&auto=format&fit=crop&q=80" },
+        { name: "বাচ্চাদের উৎসবের পার্টি ড্রেস", cat: "kids", img: "https://images.unsplash.com/photo-1518831959646-742c3a14ebf7?w=350&auto=format&fit=crop&q=80" },
+        { name: "নবজাতকের সুতির ঝাবলা সেট", cat: "kids", img: "https://images.unsplash.com/photo-1515488042361-ee00e0ddd4e4?w=350&auto=format&fit=crop&q=80" },
+        { name: "কিউট বেবি ক্যাপ ও মোজা কম্বো", cat: "kids", img: "https://images.unsplash.com/photo-1522771930-78848d9293e8?w=350&auto=format&fit=crop&q=80" },
+        { name: "বাচ্চাদের খেলনা ও পুতুল", cat: "kids", img: "https://images.unsplash.com/photo-1596461404969-9ae70f2830c1?w=350&auto=format&fit=crop&q=80" }
+      ]
+    },
+    popular: {
+      title: "⭐ সবচেয়ে জনপ্রিয় কালেকশন",
+      items: [
+        { name: "খাঁটি ঢাকাই জামদানি", cat: "women", img: "https://images.unsplash.com/photo-1610030469983-98e550d6193c?w=350&auto=format&fit=crop&q=80" },
+        { name: "রয়্যাল সফট সিল্ক", cat: "women", img: "https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?w=350&auto=format&fit=crop&q=80" },
+        { name: "সুতির ডিজাইনার পাঞ্জাবি", cat: "men", img: "https://images.unsplash.com/photo-1621644825946-b6058e382098?w=350&auto=format&fit=crop&q=80" },
+        { name: "ম্যাচিং কাপল কম্বো", cat: "gift", img: "https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?w=350&auto=format&fit=crop&q=80" },
+        { name: "কিউট প্রিন্সেস ফ্রক", cat: "kids", img: "https://images.unsplash.com/photo-1622290291468-a28f7a7dc6a8?w=350&auto=format&fit=crop&q=80" },
+        { name: "কুন্দন ব্রাইডাল গহনা", cat: "jewel", img: "https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=350&auto=format&fit=crop&q=80" }
+      ]
+    }
   };
 
-  const currentList = subcats[tabKey] || subcats.popular;
+  const group = categoryGalleries[tabKey] || categoryGalleries.women;
+
   let html = `
-    <div style="padding:14px;">
-      <h3 style="font-size:0.95rem; font-weight:800; color:#0f172a; margin-bottom:12px;">কালেকশন বাছুন</h3>
+    <div style="padding:12px 14px 20px 14px;">
+      <div style="font-size:0.95rem; font-weight:900; color:#0f172a; margin-bottom:12px; display:flex; align-items:center; justify-content:space-between;">
+        <span>${group.title}</span>
+        <span style="font-size:0.7rem; color:var(--primary); font-weight:700;">${group.items.length}টি ক্যাটাগরি</span>
+      </div>
       <div style="display:grid; grid-template-columns:repeat(2, 1fr); gap:12px;">
   `;
-  currentList.forEach(item => {
+
+  group.items.forEach(item => {
     html += `
-      <div onclick="showScreen('home'); filterByUnifiedCat('${item.cat}');" style="background:#fff; border:1px solid #e2e8f0; border-radius:14px; padding:20px 10px; cursor:pointer; box-shadow:0 2px 6px rgba(0,0,0,0.04); text-align:center;">
-        <div style="width:48px; height:48px; border-radius:50%; background:#fdf4ff; border:1px solid #e2e8f0; display:flex; align-items:center; justify-content:center; margin:0 auto 10px auto; color:var(--primary); font-size:1.3rem;">
-          <i class="${item.icon || 'fa-solid fa-shapes'}"></i>
+      <div onclick="showScreen('home'); filterByUnifiedCat('${item.cat}');" style="background:#ffffff; border:1px solid #e2e8f0; border-radius:14px; overflow:hidden; cursor:pointer; box-shadow:0 3px 10px rgba(0,0,0,0.05); text-align:center; transition:transform 0.15s ease;" onmousedown="this.style.transform='scale(0.97)'" onmouseup="this.style.transform='scale(1)'">
+        <div style="width:100%; height:115px; position:relative; overflow:hidden; background:#f1f5f9;">
+          <img src="${item.img}" alt="${item.name}" loading="lazy" style="width:100%; height:100%; object-fit:cover; display:block;" onerror="this.onerror=null; this.src='logo.png';">
         </div>
-        <div style="padding:4px 6px; font-size:0.8rem; font-weight:800; color:#0f172a;">${item.name}</div>
+        <div style="padding:8px 6px;">
+          <div style="font-size:0.78rem; font-weight:800; color:#1e293b; line-height:1.3; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">
+            ${item.name}
+          </div>
+          <div style="font-size:0.68rem; color:var(--primary); font-weight:800; margin-top:2px;">
+            প্রোডাক্ট দেখুন ➔
+          </div>
+        </div>
       </div>
     `;
   });
+
   html += `</div></div>`;
   contentArea.innerHTML = html;
 }
+
 
 var selectedPayMethod = 'UPI';
 
@@ -7767,3 +7796,5 @@ function renderRecentlyViewedSections() {
 }
 
 document.addEventListener("DOMContentLoaded", () => { setTimeout(renderRecentlyViewedSections, 300); });
+
+document.addEventListener("DOMContentLoaded", () => { setTimeout(() => { try { selectCategoryTab("women"); } catch(e){} }, 400); });
