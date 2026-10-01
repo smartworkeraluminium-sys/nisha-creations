@@ -810,7 +810,7 @@
     /* Packaging Home Stage Grid */
     .pack-apps-grid {
       display: grid;
-      grid-template-columns: repeat(5, 1fr);
+      grid-template-columns: repeat(4, 1fr);
       gap: 16px 8px;
       padding: 10px 4px;
     }
@@ -851,7 +851,7 @@
     .pack-apps-title {
       font-size: 0.75rem;
       font-weight: 700;
-      color: #f8fafc;
+      color: #1e293b;
       line-height: 1.15;
       text-align: center;
       margin-top: 4px;
@@ -1055,119 +1055,6 @@
 
     <!-- 3-Step Clear Navigation Tabs -->
     
-    <!-- ==================== SMARTPHONE APP SCROLLER BAR (প্যাকিংয়ের গোল অ্যাপ আইকন) ==================== -->
-    <div class="pack-scroller-wrapper">
-      <div class="pack-scroller-hint-bar">
-        <span><i class="fa-solid fa-shapes" style="color:#fbbf24;"></i> <strong>প্যাকিং অ্যাপস:</strong> যেকোনো অপশনে হাত দিন</span>
-        <span class="pack-swipe-badge"><i class="fa-solid fa-arrow-left"></i> আঙুল দিয়ে ডানে-বামে টানুন <i class="fa-solid fa-arrow-right"></i></span>
-      </div>
-      <button type="button" class="btn-pack-scroll-arrow left" onclick="scrollPackScroller(-150)" aria-label="Scroll Left">
-        <i class="fa-solid fa-chevron-left"></i>
-      </button>
-      <button type="button" class="btn-pack-scroll-arrow right" onclick="scrollPackScroller(150)" aria-label="Scroll Right">
-        <i class="fa-solid fa-chevron-right"></i>
-      </button>
-
-      <div class="pack-app-scroller" id="packAppScroller">
-        <!-- 0. ALL APPS HOME -->
-        <button type="button" class="app-icon-card active" id="packCardApps" onclick="switchPackagingStep('apps')">
-          <div class="app-icon-bubble" style="background: linear-gradient(135deg, #6366f1, #a855f7);">
-            <i class="fa-solid fa-shapes"></i>
-          </div>
-          <span class="app-icon-title">📱 অল অ্যাপস</span>
-        </button>
-
-        <!-- 1. STEP 1: INBOUND STOCK -->
-        <button type="button" class="app-icon-card" id="packCardStep1" onclick="switchPackagingStep(1)">
-          <div class="app-icon-bubble" style="background: linear-gradient(135deg, #2563eb, #38bdf8);">
-            <i class="fa-solid fa-cart-flatbed"></i>
-          </div>
-          <span class="app-icon-title">📥 মাল গ্রহণ</span>
-        </button>
-
-        <!-- 2. STEP 2: PACK & SCAN -->
-        <button type="button" class="app-icon-card" id="packCardStep2" onclick="switchPackagingStep(2)">
-          <div class="app-icon-bubble" style="background: linear-gradient(135deg, #ea580c, #f59e0b);">
-            <i class="fa-solid fa-box-open"></i>
-            <span class="pack-icon-badge" id="badgePackStep2Scroller">0</span>
-          </div>
-          <span class="app-icon-title">📦 অর্ডার প্যাক</span>
-        </button>
-
-        <!-- 3. STEP 3: DISPATCH BAGGING -->
-        <button type="button" class="app-icon-card" id="packCardStep3" onclick="switchPackagingStep(3)">
-          <div class="app-icon-bubble" style="background: linear-gradient(135deg, #059669, #10b981);">
-            <i class="fa-solid fa-truck-ramp-box"></i>
-          </div>
-          <span class="app-icon-title">🚚 ব্যাগে ভরা</span>
-        </button>
-
-        <!-- 4. STEP 4: PICK-LIST -->
-        <button type="button" class="app-icon-card" id="packCardStep4" onclick="switchPackagingStep(4)">
-          <div class="app-icon-bubble" style="background: linear-gradient(135deg, #7c3aed, #c084fc);">
-            <i class="fa-solid fa-list-check"></i>
-          </div>
-          <span class="app-icon-title">📋 পিক-লিস্ট</span>
-        </button>
-
-        <!-- 5. STEP 5: RETURN QC -->
-        <button type="button" class="app-icon-card" id="packCardStep5" onclick="switchPackagingStep(5)">
-          <div class="app-icon-bubble" style="background: linear-gradient(135deg, #e11d48, #f43f5e);">
-            <i class="fa-solid fa-rotate-left"></i>
-          </div>
-          <span class="app-icon-title">🔄 রিটার্ন কিউসি</span>
-        </button>
-
-        <!-- 6. PRINT BARCODES -->
-        <button type="button" class="app-icon-card" id="packCardBarcode" onclick="switchPackagingStep('barcode')">
-          <div class="app-icon-bubble" style="background: linear-gradient(135deg, #334155, #475569);">
-            <i class="fa-solid fa-barcode"></i>
-          </div>
-          <span class="app-icon-title">🏷️ সব বারকোড</span>
-        </button>
-
-        <!-- 7. TROLLEY STICKERS -->
-        <button type="button" class="app-icon-card" id="packCardTrolley" onclick="switchPackagingStep('trolley')">
-          <div class="app-icon-bubble" style="background: linear-gradient(135deg, #9333ea, #d946ef);">
-            <i class="fa-solid fa-dolly"></i>
-          </div>
-          <span class="app-icon-title">🛒 ট্রলি স্টিকার</span>
-        </button>
-
-        <!-- 8. VACANT RACKS -->
-        <button type="button" class="app-icon-card" id="packCardVacant" onclick="switchPackagingStep(1)">
-          <div class="app-icon-bubble" style="background: linear-gradient(135deg, #0284c7, #06b6d4);">
-            <i class="fa-solid fa-warehouse"></i>
-          </div>
-          <span class="app-icon-title">🏢 খালি তাক</span>
-        </button>
-
-        <!-- 9. ADMIN MONITOR -->
-        <a href="admin.html" class="app-icon-card" style="text-decoration:none;">
-          <div class="app-icon-bubble" style="background: linear-gradient(135deg, #4338ca, #6366f1);">
-            👑
-          </div>
-          <span class="app-icon-title">👑 এডমিন মনিটর</span>
-        </a>
-
-        <!-- 10. DELIVERY PORTAL -->
-        <a href="delivery.html" class="app-icon-card" style="text-decoration:none;">
-          <div class="app-icon-bubble" style="background: linear-gradient(135deg, #15803d, #22c55e);">
-            <i class="fa-solid fa-motorcycle"></i>
-          </div>
-          <span class="app-icon-title">🚚 ডেলিভারি বয়</span>
-        </a>
-
-        <!-- 11. SHOP -->
-        <a href="index.html" class="app-icon-card" style="text-decoration:none;">
-          <div class="app-icon-bubble" style="background: linear-gradient(135deg, #0284c7, #38bdf8);">
-            <i class="fa-solid fa-store"></i>
-          </div>
-          <span class="app-icon-title">🛍️ শোরুম</span>
-        </a>
-      </div>
-    </div>
-
     <!-- Hidden compatibility elements for existing code -->
     <div style="display:none;" aria-hidden="true">
       <button id="tabStep1" class="step-tab-btn"></button>
@@ -1178,43 +1065,7 @@
     </div>
 
     <!-- ==================== PACKAGING APPS HOME STAGE (📱 প্যাকিংয়ের মূল অ্যাপ হোমস্ক্রিন) ==================== -->
-    <div id="panelAppsHome" class="warehouse-panel-card" style="background:#090d16; border:2px solid #334155; padding:18px 14px; border-radius:24px;">
-      
-      <!-- 💡 সহজ ৮-পাস নির্দেশিকা ব্যানার -->
-      <div style="background:#fef3c7; border:1.5px solid #f59e0b; border-radius:16px; padding:12px 16px; margin-bottom:18px; color:#78350f;">
-        <div style="font-size:0.95rem; font-weight:800; display:flex; align-items:center; gap:8px;">
-          <i class="fa-solid fa-circle-question"></i> প্যাকিং কর্মীর সহজ সহায়িকা (যে কেউ চালাতে পারবে)
-        </div>
-        <div style="font-size:0.78rem; line-height:1.4; margin-top:4px;">
-          👉 আপনি যে কাজটি করতে চান, নিচের সেই <strong>গোল অ্যাপ আইকনে হাত দিন (ক্লিক করুন)</strong>।<br>
-          👉 কাজ শেষ হলে ওপরে থাকা <strong>'🔙 সমস্ত প্যাকিং অ্যাপে ফিরুন'</strong> বোতামে চাপ দিলে আবার এই পর্দায় চলে আসবেন।
-        </div>
-      </div>
-
-      <!-- আজকের ৩টি লাইভ কাউন্টার কার্ড -->
-      <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(130px, 1fr)); gap:10px; margin-bottom:18px;">
-        <div style="background:#1e293b; border:1px solid #334155; border-radius:14px; padding:12px; text-align:center; cursor:pointer;" onclick="switchPackagingStep(2)">
-          <div style="font-size:0.72rem; color:#94a3b8; font-weight:700;">📦 প্যাকিং বাকি</div>
-          <div style="font-size:1.35rem; font-weight:800; color:#f59e0b;" id="homePackPendingCount">0 টি</div>
-        </div>
-        <div style="background:#1e293b; border:1px solid #334155; border-radius:14px; padding:12px; text-align:center; cursor:pointer;" onclick="switchPackagingStep(2)">
-          <div style="font-size:0.72rem; color:#94a3b8; font-weight:700;">✅ প্যাকিং সম্পন্ন</div>
-          <div style="font-size:1.35rem; font-weight:800; color:#10b981;" id="homePackDoneCount">0 টি</div>
-        </div>
-        <div style="background:#1e293b; border:1px solid #334155; border-radius:14px; padding:12px; text-align:center; cursor:pointer;" onclick="switchPackagingStep(1)">
-          <div style="font-size:0.72rem; color:#94a3b8; font-weight:700;">🏢 মোট র্যাক সংখ্যা</div>
-          <div style="font-size:1.35rem; font-weight:800; color:#38bdf8;" id="homePackRackCount">৮টি</div>
-        </div>
-      </div>
-
-      <!-- ১০টি গোল (Circular) অ্যাপ আইকন গ্রিড -->
-      <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:10px; padding:0 4px;">
-        <span style="font-size:0.85rem; font-weight:800; color:#ffffff; display:flex; align-items:center; gap:6px;">
-          <i class="fa-solid fa-grip" style="color:#fbbf24;"></i> প্যাকিংয়ের সমস্ত অ্যাপ আইকন
-        </span>
-        <span style="font-size:0.72rem; color:#94a3b8;">১০টি অপশন</span>
-      </div>
-
+    <div id="panelAppsHome" class="warehouse-panel-card" style="background:#f8fafc; border:1.5px solid #e2e8f0; padding:18px 14px; border-radius:24px;">
       <div class="pack-apps-grid">
         <!-- 1. INBOUND STOCK -->
         <div class="pack-apps-tile" onclick="switchPackagingStep(1)" title="গাড়ি থেকে নতুন মাল গ্রহণ ও রেকে সাজানো">

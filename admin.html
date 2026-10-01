@@ -1638,19 +1638,16 @@
     /* 5-Column Grid like Android Home Screen */
     .all-apps-grid {
       display: grid;
-      grid-template-columns: repeat(5, 1fr) !important;
+      grid-template-columns: repeat(4, 1fr) !important;
       gap: 16px 8px !important;
       padding: 12px 4px !important;
     }
     @media (max-width: 580px) {
       .all-apps-grid {
         grid-template-columns: repeat(4, 1fr) !important;
-        gap: 14px 6px !important;
+        gap: 16px 8px !important;
       }
     }
-    @media (max-width: 360px) {
-      .all-apps-grid {
-        grid-template-columns: repeat(3, 1fr) !important;
         gap: 10px 4px !important;
       }
     }
@@ -1960,155 +1957,7 @@
     
     <!-- ==================== 4. SMARTPHONE APP SCROLLER BAR (হাতে স্ক্রোল করার অ্যাপ আইকন) ==================== -->
     
-    <div class="scroller-wrapper">
-      <div class="scroller-hint-bar">
-        <span><i class="fa-solid fa-shapes" style="color:#4338ca;"></i> <strong>অ্যাপ আইকন বার:</strong> যেকোনো অপশনে হাত দিন</span>
-        <span class="scroller-swipe-badge"><i class="fa-solid fa-arrow-left"></i> আঙুল দিয়ে ডানে-বামে টানুন <i class="fa-solid fa-arrow-right"></i></span>
-      </div>
-      <button type="button" class="btn-scroll-arrow left" onclick="scrollAppScroller(-160)" aria-label="Scroll Left" title="বামে স্ক্রোল করুন">
-        <i class="fa-solid fa-chevron-left"></i>
-      </button>
-      <button type="button" class="btn-scroll-arrow right" onclick="scrollAppScroller(160)" aria-label="Scroll Right" title="ডানে স্ক্রোল করুন">
-        <i class="fa-solid fa-chevron-right"></i>
-      </button>
-      <div class="admin-app-scroller" id="adminAppScroller">
-
-      <!-- 0. ALL APPS LAUNCHER -->
-      <button type="button" class="app-icon-card active" id="appCardApps" onclick="switchAdminView('apps')">
-        <div class="app-icon-bubble" style="background: linear-gradient(135deg, #6366f1, #a855f7);">
-          <i class="fa-solid fa-shapes"></i>
-        </div>
-        <span class="app-icon-title">📱 অল অ্যাপস</span>
-      </button>
-
-      <!-- 1. DASHBOARD / FINANCE -->
-      <button type="button" class="app-icon-card" id="appCardDashboard" onclick="switchAdminView('dashboard')">
-        <div class="app-icon-bubble" style="background: linear-gradient(135deg, #059669, #10b981);">
-          <i class="fa-solid fa-indian-rupee-sign"></i>
-        </div>
-        <span class="app-icon-title">💰 আজকের টাকা</span>
-      </button>
-
-      <!-- 2. ORDERS -->
-      <button type="button" class="app-icon-card" id="appCardOrders" onclick="switchAdminView('orders')">
-        <div class="app-icon-bubble" style="background: linear-gradient(135deg, #2563eb, #38bdf8);">
-          <i class="fa-solid fa-boxes-packing"></i>
-          <span class="app-icon-badge" id="badgeOrdersScroller">0</span>
-        </div>
-        <span class="app-icon-title">📦 অর্ডার পার্সেল</span>
-      </button>
-
-      
-      <!-- 2.5 PACKAGING STATION (📦 প্যাকিং স্টেশন) -->
-      <button type="button" class="app-icon-card" id="appCardPackaging" onclick="openPackagingStation()" title="বারকোড স্ক্যানার ও পার্সেল প্যাকিং স্টেশন">
-        <div class="app-icon-bubble" style="background: linear-gradient(135deg, #d97706, #f59e0b);">
-          <i class="fa-solid fa-boxes-packing"></i>
-          <span class="app-icon-badge" id="badgePackagingScroller" style="display:none;">0</span>
-        </div>
-        <span class="app-icon-title">📦 প্যাকিং স্টেশন</span>
-      </button>
-
-      <!-- 3. 5-RIDER SPLIT & WAREHOUSE -->
-      <button type="button" class="app-icon-card" id="appCardWarehouse" onclick="switchAdminView('warehouse')">
-        <div class="app-icon-bubble" style="background: linear-gradient(135deg, #ea580c, #f59e0b);">
-          <i class="fa-solid fa-motorcycle"></i>
-          <span class="app-icon-badge" id="badgeWarehouseScroller">0</span>
-        </div>
-        <span class="app-icon-title">🚚 ৫ ডেলিভারি বয়</span>
-      </button>
-
-      <!-- 4. STOCK & INVENTORY -->
-      <button type="button" class="app-icon-card" id="appCardStock" onclick="switchAdminView('stock')">
-        <div class="app-icon-bubble" style="background: linear-gradient(135deg, #e11d48, #f43f5e);">
-          <i class="fa-solid fa-layer-group"></i>
-          <span class="app-icon-badge" id="badgeStockScroller">0</span>
-        </div>
-        <span class="app-icon-title">👗 শাড়ির স্টক</span>
-      </button>
-
-      <!-- 5. HAAT STALLS & SHOPS -->
-      <button type="button" class="app-icon-card" id="appCardHaatShops" onclick="switchAdminView('haatShops')">
-        <div class="app-icon-bubble" style="background: linear-gradient(135deg, #7c3aed, #c084fc);">
-          <i class="fa-solid fa-store"></i>
-          <span class="app-icon-badge" id="badgeHaatShopsScroller">5</span>
-        </div>
-        <span class="app-icon-title">🎪 হাটের স্টল</span>
-      </button>
-
-      <!-- 6. ADD PRODUCT -->
-      <button type="button" class="app-icon-card" id="appCardAdd" onclick="switchAdminView('add')">
-        <div class="app-icon-bubble" style="background: linear-gradient(135deg, #0284c7, #06b6d4);">
-          <i class="fa-solid fa-camera"></i>
-        </div>
-        <span class="app-icon-title">➕ নতুন শাড়ি</span>
-      </button>
-
-      <!-- 7. WHOLESALE RESTOCK BAZAR MEMO -->
-      <button type="button" class="app-icon-card" id="appCardRestock" onclick="switchAdminView('restock')">
-        <div class="app-icon-bubble" style="background: linear-gradient(135deg, #b45309, #d97706);">
-          <i class="fa-solid fa-cart-shopping"></i>
-        </div>
-        <span class="app-icon-title">🛒 বাজার ফর্দ</span>
-      </button>
-
-      <!-- 8. PROPER BILL & INVOICE -->
-      <button type="button" class="app-icon-card" id="appCardBill" onclick="switchAdminView('bill')">
-        <div class="app-icon-bubble" style="background: linear-gradient(135deg, #0d9488, #2dd4bf);">
-          <i class="fa-solid fa-receipt"></i>
-        </div>
-        <span class="app-icon-title">🧾 পাকা বিল</span>
-      </button>
-
-      <!-- 9. BARCODE & RACK STICKERS -->
-      <button type="button" class="app-icon-card" id="appCardBarcode" onclick="switchAdminView('barcode')">
-        <div class="app-icon-bubble" style="background: linear-gradient(135deg, #475569, #64748b);">
-          <i class="fa-solid fa-barcode"></i>
-        </div>
-        <span class="app-icon-title">🏷️ বারকোড</span>
-      </button>
-
-      <!-- 10. CATEGORIES -->
-      <button type="button" class="app-icon-card" id="appCardCategories" onclick="switchAdminView('categories')">
-        <div class="app-icon-bubble" style="background: linear-gradient(135deg, #4338ca, #6366f1);">
-          <i class="fa-solid fa-tags"></i>
-          <span class="app-icon-badge" id="badgeCategoriesScroller">9</span>
-        </div>
-        <span class="app-icon-title">🗂️ ক্যাটাগরি</span>
-      </button>
-
-      <!-- 11. BANNERS -->
-      <button type="button" class="app-icon-card" id="appCardBanners" onclick="switchAdminView('banners')">
-        <div class="app-icon-bubble" style="background: linear-gradient(135deg, #9333ea, #d946ef);">
-          <i class="fa-solid fa-images"></i>
-        </div>
-        <span class="app-icon-title">🖼️ ব্যানার ছবি</span>
-      </button>
-
-      <!-- 12. PROMOTIONS / COUPONS -->
-      <button type="button" class="app-icon-card" id="appCardPromotions" onclick="switchAdminView('promotions')">
-        <div class="app-icon-bubble" style="background: linear-gradient(135deg, #ca8a04, #eab308);">
-          <i class="fa-solid fa-gift"></i>
-        </div>
-        <span class="app-icon-title">🎁 ছাড়ের কুপন</span>
-      </button>
-
-      <!-- 13. REVIEWS -->
-      <button type="button" class="app-icon-card" id="appCardReviews" onclick="switchAdminView('reviews')">
-        <div class="app-icon-bubble" style="background: linear-gradient(135deg, #0284c7, #38bdf8);">
-          <i class="fa-solid fa-star"></i>
-        </div>
-        <span class="app-icon-title">⭐ কাস্টমার রিভিউ</span>
-      </button>
-
-      <!-- 14. SECURITY & PIN -->
-      <button type="button" class="app-icon-card" id="appCardSecurity" onclick="switchAdminView('security')">
-        <div class="app-icon-bubble" style="background: linear-gradient(135deg, #334155, #475569);">
-          <i class="fa-solid fa-shield-halved"></i>
-        </div>
-        <span class="app-icon-title">🔒 লক ও পিন</span>
-      </button>
-    </div>
-    </div><!-- end .scroller-wrapper -->
+    
 
     <!-- Hidden compatibility elements for existing legacy scripts -->
     <div style="display:none;" aria-hidden="true">
@@ -2127,343 +1976,142 @@
 
     <!-- ==================== TAB 0: ALL APPS HOME LAUNCHER (📱 সমস্ত অ্যাপস হোমস্ক্রিন) ==================== -->
     <div id="pane-apps" class="tab-pane active">
-      <div class="pane-apps-container">
-        
-        <!-- 💡 ৮-পাস সহজ সহায়িকা ব্যানার -->
-        <div class="all-apps-guide-banner">
-          <div class="all-apps-guide-title">
-            <i class="fa-solid fa-circle-question" style="font-size:1.2rem;"></i>
-            <span>খুব সহজ নিয়ম • সাধারণ ছেলে বা এইট পাশ ছেলে সবার জন্য</span>
-          </div>
-          <div class="all-apps-guide-desc">
-            👉 আপনি যে কাজটি দেখতে চান বা করতে চান, নিচের সেই <strong>অ্যাপ আইকনে হাত দিন (ক্লিক করুন)</strong>।<br>
-            👉 কাজ শেষ হলে ওপরে থাকা <strong>'🔙 সমস্ত অ্যাপে ফিরুন'</strong> বড় বোতামে চাপ দিলে আবার সব অ্যাপ সামনে চলে আসবে।
-          </div>
-          <div class="guide-color-pills">
-            <span class="guide-color-pill" style="color:#059669;"><span style="display:inline-block; width:10px; height:10px; border-radius:50%; background:#10b981;"></span> 🟢 সবুজ বোতাম = টাকা পেয়েছি / কাজ সম্পন্ন / চালু আছে</span>
-            <span class="guide-color-pill" style="color:#dc2626;"><span style="display:inline-block; width:10px; height:10px; border-radius:50%; background:#ef4444;"></span> 🔴 লাল বোতাম = টাকা বাকি / মাল শেষ / সতর্ক</span>
-            <span class="guide-color-pill" style="color:#d97706;"><span style="display:inline-block; width:10px; height:10px; border-radius:50%; background:#f59e0b;"></span> 🟡 হলুদ বোতাম = প্যাকিং চলছে / লাইনে আছে</span>
-            <span class="guide-color-pill" style="color:#2563eb;"><span style="display:inline-block; width:10px; height:10px; border-radius:50%; background:#3b82f6;"></span> 🔵 নীল বোতাম = নতুন যোগ করুন বা প্রিন্ট করুন</span>
-          </div>
-        </div>
-
-        <!-- আজকের ৪টি জরুরি হিসাব কার্ড -->
-        <div class="home-stats-grid">
-          <div class="home-stat-card" style="border-top:4px solid #10b981; cursor:pointer;" onclick="switchAdminView('dashboard')">
-            <div class="home-stat-lbl">💰 আজকের মোট বিক্রি</div>
-            <div class="home-stat-val" id="homeStatRevenue" style="color:#059669;">₹0</div>
-            <div style="font-size:0.7rem; color:#64748b;">ক্যাশ ও অনলাইন মিলিয়ে</div>
-          </div>
-          <div class="home-stat-card" style="border-top:4px solid #3b82f6; cursor:pointer;" onclick="switchAdminView('orders')">
-            <div class="home-stat-lbl">📦 নতুন পার্সেল বাকি</div>
-            <div class="home-stat-val" id="homeStatOrders" style="color:#2563eb;">0</div>
-            <div style="font-size:0.7rem; color:#64748b;">প্যাকিং ও ডেলিভারি বাকি</div>
-          </div>
-          <div class="home-stat-card" style="border-top:4px solid #f59e0b; cursor:pointer;" onclick="switchAdminView('warehouse')">
-            <div class="home-stat-lbl">🚚 ৫ জন ডেলিভারি টিম</div>
-            <div class="home-stat-val" id="homeStatRiders" style="color:#d97706;">৫ জন</div>
-            <div style="font-size:0.7rem; color:#64748b;">সমান ভাগে পার্সেল বণ্টন</div>
-          </div>
-          <div class="home-stat-card" style="border-top:4px solid #e11d48; cursor:pointer;" onclick="switchAdminView('stock')">
-            <div class="home-stat-lbl">👗 শাড়ির মোট স্টক</div>
-            <div class="home-stat-val" id="homeStatStock" style="color:#e11d48;">০</div>
-            <div style="font-size:0.7rem; color:#64748b;">গোডাউনের তাক ও র‍্যাকে</div>
-          </div>
-        </div>
-
-        <!-- ঝটপট কাজের শর্টকাট বোতাম -->
-        <div class="home-quick-actions">
-
-          <button type="button" class="btn-quick-shortcut" onclick="openPackagingStation()" style="border-left:5px solid #d97706;">
-            <div style="width:38px; height:38px; border-radius:10px; background:#fef3c7; color:#d97706; display:flex; align-items:center; justify-content:center; font-size:1.2rem;">
-              <i class="fa-solid fa-boxes-packing"></i>
-            </div>
-            <div style="text-align:left;">
-              <div style="font-weight:800; color:#0f172a;">📦 প্যাকিং স্টেশন খুলুন</div>
-              <div style="font-size:0.72rem; color:#64748b;">বারকোড স্ক্যান ও পার্সেল প্যাক</div>
-            </div>
-          </button>
-
-          <button type="button" class="btn-quick-shortcut" onclick="switchAdminView('warehouse')" style="border-left:5px solid #ea580c;">
-            <div style="width:38px; height:38px; border-radius:10px; background:#ffedd5; color:#ea580c; display:flex; align-items:center; justify-content:center; font-size:1.2rem;">
-              <i class="fa-solid fa-arrows-split-up-and-left"></i>
-            </div>
-            <div style="text-align:left;">
-              <div style="font-weight:800; color:#0f172a;">⚡ ৫ জনের মধ্যে সমান ভাগ</div>
-              <div style="font-size:0.72rem; color:#64748b;">১-ক্লিকে পার্সেল বণ্টন করুন</div>
-            </div>
-          </button>
-
-          <button type="button" class="btn-quick-shortcut" onclick="openWeeklyRestockBillModal('all')" style="border-left:5px solid #b45309;">
-            <div style="width:38px; height:38px; border-radius:10px; background:#fef3c7; color:#b45309; display:flex; align-items:center; justify-content:center; font-size:1.2rem;">
-              <i class="fa-solid fa-cart-shopping"></i>
-            </div>
-            <div style="text-align:left;">
-              <div style="font-weight:800; color:#0f172a;">📋 পাইকারি বাজার ফর্দ</div>
-              <div style="font-size:0.72rem; color:#64748b;">২০ অর্ডারের খরিদ মেমো প্রিন্ট</div>
-            </div>
-          </button>
-
-          <button type="button" class="btn-quick-shortcut" onclick="openAdminProperBillModal(null)" style="border-left:5px solid #0d9488;">
-            <div style="width:38px; height:38px; border-radius:10px; background:#ccfbf1; color:#0d9488; display:flex; align-items:center; justify-content:center; font-size:1.2rem;">
-              <i class="fa-solid fa-receipt"></i>
-            </div>
-            <div style="text-align:left;">
-              <div style="font-weight:800; color:#0f172a;">🧾 কাস্টমারের পাকা বিল</div>
-              <div style="font-size:0.72rem; color:#64748b;">কাগজে পাকা রসিদ চালান প্রিন্ট</div>
-            </div>
-          </button>
-
-          <button type="button" class="btn-quick-shortcut" onclick="switchAdminView('add')" style="border-left:5px solid #0284c7;">
-            <div style="width:38px; height:38px; border-radius:10px; background:#e0f2fe; color:#0284c7; display:flex; align-items:center; justify-content:center; font-size:1.2rem;">
-              <i class="fa-solid fa-camera"></i>
-            </div>
-            <div style="text-align:left;">
-              <div style="font-weight:800; color:#0f172a;">➕ নতুন শাড়ির ছবি তুলুন</div>
-              <div style="font-size:0.72rem; color:#64748b;">মোবাইল দিয়ে শাড়ি আপলোড</div>
-            </div>
-          </button>
-        </div>
-
-        
-        <!-- 👑 মালিকের লাইভ নজরদারি কেন্দ্র (Admin Supervisor Live Center) -->
-        <div style="background: linear-gradient(135deg, #1e1b4b, #2e1065); border: 2px solid #6366f1; border-radius: 22px; padding: 18px 20px; margin-bottom: 20px; box-shadow: 0 6px 20px rgba(99, 102, 241, 0.25); color: #ffffff;">
-          <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; margin-bottom:12px;">
-            <div style="display:flex; align-items:center; gap:10px;">
-              <span style="width:44px; height:44px; border-radius:50%; background:linear-gradient(135deg, #f59e0b, #d97706); display:flex; align-items:center; justify-content:center; font-size:1.4rem; color:#0f172a; box-shadow:0 4px 12px rgba(245,158,11,0.4);">
-                👑
-              </span>
-              <div>
-                <h3 style="font-size:1.15rem; font-weight:800; color:#ffffff; margin:0;">মালিকের লাইভ নজরদারি কেন্দ্র (Live Supervisor)</h3>
-                <p style="font-size:0.75rem; color:#cbd5e1; margin:2px 0 0;">আপনি এখানে শুধু নজর রাখবেন • কর্মীরা কাজ করলেই আপনার স্ক্রিনে লাইভ কাউন্টার বাড়বে</p>
-              </div>
-            </div>
-            <div style="display:flex; align-items:center; gap:8px;">
-              <span style="display:inline-flex; align-items:center; gap:6px; background:rgba(16, 185, 129, 0.2); border:1px solid #10b981; color:#34d399; font-size:0.72rem; font-weight:800; padding:4px 10px; border-radius:20px;">
-                <span style="width:8px; height:8px; border-radius:50%; background:#10b981;"></span> লাইভ রিয়েল-টাইম সিঙ্ক সক্রিয়
-              </span>
-            </div>
-          </div>
-
-          <!-- 3 Live Work Monitors -->
-          <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:12px; margin-top:14px;">
-            
-            <!-- 1. PACKING STATION LIVE -->
-            <div style="background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.18); border-radius:16px; padding:14px; cursor:pointer;" onclick="openPackagingStation()">
-              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
-                <span style="font-size:0.82rem; font-weight:800; color:#fbbf24;"><i class="fa-solid fa-boxes-packing"></i> প্যাকিং স্টেশনের কাজ</span>
-                <span style="font-size:0.7rem; color:#38bdf8; font-weight:700;">পোর্টাল খুলুন ↗</span>
-              </div>
-              <div style="display:flex; justify-content:space-between; align-items:baseline;">
-                <div>
-                  <div style="font-size:1.45rem; font-weight:800; color:#ffffff;" id="monitorPackingPending">0 টি</div>
-                  <div style="font-size:0.7rem; color:#cbd5e1;">প্যাকিং বাকি (অপেক্ষমাণ)</div>
-                </div>
-                <div style="text-align:right;">
-                  <div style="font-size:1.15rem; font-weight:800; color:#34d399;" id="monitorPackingDone">0 টি</div>
-                  <div style="font-size:0.7rem; color:#cbd5e1;">প্যাকিং সম্পন্ন</div>
-                </div>
-              </div>
-            </div>
-
-            <!-- 2. DELIVERY RIDER LIVE -->
-            <div style="background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.18); border-radius:16px; padding:14px; cursor:pointer;" onclick="window.open('delivery.html', '_blank')">
-              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
-                <span style="font-size:0.82rem; font-weight:800; color:#38bdf8;"><i class="fa-solid fa-motorcycle"></i> ডেলিভারি রাইডারদের কাজ</span>
-                <span style="font-size:0.7rem; color:#38bdf8; font-weight:700;">পোর্টাল খুলুন ↗</span>
-              </div>
-              <div style="display:flex; justify-content:space-between; align-items:baseline;">
-                <div>
-                  <div style="font-size:1.45rem; font-weight:800; color:#ffffff;" id="monitorDeliveryOut">0 টি</div>
-                  <div style="font-size:0.7rem; color:#cbd5e1;">রাস্তায় নিয়ে বেরিয়েছে</div>
-                </div>
-                <div style="text-align:right;">
-                  <div style="font-size:1.15rem; font-weight:800; color:#34d399;" id="monitorDeliveryDone">0 টি</div>
-                  <div style="font-size:0.7rem; color:#cbd5e1;">কাস্টমারকে দেওয়া শেষ</div>
-                </div>
-              </div>
-            </div>
-
-            <!-- 3. CASH COLLECTION LIVE -->
-            <div style="background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.18); border-radius:16px; padding:14px; cursor:pointer;" onclick="switchAdminView('dashboard')">
-              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
-                <span style="font-size:0.82rem; font-weight:800; color:#34d399;"><i class="fa-solid fa-sack-dollar"></i> ছেলেদের হাতে নগদ ক্যাশ</span>
-                <span style="font-size:0.7rem; color:#cbd5e1; font-weight:700;">COD সংগ্রহ</span>
-              </div>
-              <div style="display:flex; justify-content:space-between; align-items:baseline;">
-                <div>
-                  <div style="font-size:1.45rem; font-weight:800; color:#34d399;" id="monitorCashInHand">₹0</div>
-                  <div style="font-size:0.7rem; color:#cbd5e1;">রাইডারদের ব্যাগে নগদ টাকা</div>
-                </div>
-                <div style="text-align:right;">
-                  <div style="font-size:1.15rem; font-weight:800; color:#38bdf8;" id="monitorOnlineTotal">₹0</div>
-                  <div style="font-size:0.7rem; color:#cbd5e1;">অনলাইন ইউপিআই</div>
-                </div>
-              </div>
-            </div>
-
-          </div>
-        </div>
-
-        <!-- 📱 স্মার্টফোন হোমস্ক্রিন (Android Phone Launcher Stage) -->
-        <div class="android-phone-stage">
+      <div class="pane-apps-container" style="padding:10px 0 20px;">
+<div class="android-phone-stage">
           
           <!-- Android Clock & Date Widget -->
-          <div class="android-clock-widget">
-            <div class="android-clock-time" id="androidClockTime">১:৩৬</div>
-            <div class="android-clock-date" id="androidClockDate">🌤️ বৃহস্পতিবার, ১ অক্টোবর • নিশা ক্রিয়েশনস বুটিক শোরুম</div>
-          </div>
+          
 
-          <div style="display:flex; align-items:center; justify-content:space-between; margin:10px 4px 14px; border-bottom:1px solid #e2e8f0; padding-bottom:8px;">
-            <span style="font-size:0.82rem; font-weight:800; color:#334155; display:flex; align-items:center; gap:6px;">
-              <i class="fa-solid fa-mobile-screen" style="color:#4338ca;"></i> আপনার ফোনের মতো গোল অ্যাপ আইকন
-            </span>
-            <span style="font-size:0.72rem; color:#64748b; font-weight:700;">মোট ১৫টি অ্যাপ</span>
-          </div>
-
-          <div class="all-apps-grid">
+          
+        <div class="all-apps-grid">
           <!-- 1. DASHBOARD -->
-          <div class="all-apps-tile" onclick="switchAdminView('dashboard')">
+          <div class="all-apps-tile" onclick="switchAdminView('dashboard')" title="আজকের মোট বিক্রি ও ক্যাশ">
             <div class="all-apps-bubble" style="background: linear-gradient(135deg, #059669, #10b981);">
               <i class="fa-solid fa-indian-rupee-sign"></i>
             </div>
             <div class="all-apps-title">আজকের টাকা</div>
-            
           </div>
 
           <!-- 2. ORDERS -->
-          <div class="all-apps-tile" onclick="switchAdminView('orders')">
+          <div class="all-apps-tile" onclick="switchAdminView('orders')" title="নতুন অর্ডার পার্সেল">
             <div class="all-apps-bubble" style="background: linear-gradient(135deg, #2563eb, #38bdf8);">
               <i class="fa-solid fa-boxes-packing"></i>
-              <span class="app-icon-badge" id="badgeOrdersGrid">0</span>
+              <span class="app-icon-badge" id="badgeOrdersGrid">2</span>
             </div>
             <div class="all-apps-title">অর্ডার পার্সেল</div>
-            
-          </div>
-
-          
-          <!-- PACKAGING STATION TILE -->
-          <div class="all-apps-tile" onclick="openPackagingStation()" title="বারকোড স্ক্যানার ও পার্সেল প্যাকিং স্টেশন খুলুন">
-            <div class="all-apps-bubble" style="background: linear-gradient(135deg, #d97706, #f59e0b);">
-              <i class="fa-solid fa-boxes-packing"></i>
-            </div>
-            <div class="all-apps-title">প্যাকিং স্টেশন</div>
           </div>
 
           <!-- 3. WAREHOUSE & 5-RIDERS -->
-          <div class="all-apps-tile" onclick="switchAdminView('warehouse')">
+          <div class="all-apps-tile" onclick="switchAdminView('warehouse')" title="৫ জন ডেলিভারি টিম">
             <div class="all-apps-bubble" style="background: linear-gradient(135deg, #ea580c, #f59e0b);">
               <i class="fa-solid fa-motorcycle"></i>
-              <span class="app-icon-badge" id="badgeWarehouseGrid">0</span>
+              <span class="app-icon-badge" id="badgeWarehouseGrid">2</span>
             </div>
             <div class="all-apps-title">৫ জন ডেলিভারি</div>
-            
           </div>
 
           <!-- 4. STOCK -->
-          <div class="all-apps-tile" onclick="switchAdminView('stock')">
+          <div class="all-apps-tile" onclick="switchAdminView('stock')" title="শাড়ির স্টক">
             <div class="all-apps-bubble" style="background: linear-gradient(135deg, #e11d48, #f43f5e);">
               <i class="fa-solid fa-layer-group"></i>
-              <span class="app-icon-badge" id="badgeStockGrid">0</span>
+              <span class="app-icon-badge" id="badgeStockGrid">1</span>
             </div>
             <div class="all-apps-title">শাড়ির স্টক</div>
-            
           </div>
 
           <!-- 5. HAAT STALLS & SHOPS -->
-          <div class="all-apps-tile" onclick="switchAdminView('haatShops')">
+          <div class="all-apps-tile" onclick="switchAdminView('haatShops')" title="হাটের স্টল ও শপ">
             <div class="all-apps-bubble" style="background: linear-gradient(135deg, #7c3aed, #c084fc);">
               <i class="fa-solid fa-store"></i>
-              <span class="app-icon-badge" id="badgeHaatShopsGrid">5</span>
+              <span class="app-icon-badge" id="badgeHaatShopsGrid">2</span>
             </div>
             <div class="all-apps-title">হাটের স্টল ও শপ</div>
-            
           </div>
 
           <!-- 6. ADD PRODUCT -->
-          <div class="all-apps-tile" onclick="switchAdminView('add')">
+          <div class="all-apps-tile" onclick="switchAdminView('add')" title="নতুন শাড়ি আপলোড">
             <div class="all-apps-bubble" style="background: linear-gradient(135deg, #0284c7, #06b6d4);">
               <i class="fa-solid fa-camera"></i>
             </div>
             <div class="all-apps-title">নতুন শাড়ি আপলোড</div>
-            
           </div>
 
           <!-- 7. WHOLESALE RESTOCK BAZAR MEMO -->
-          <div class="all-apps-tile" onclick="switchAdminView('restock')">
+          <div class="all-apps-tile" onclick="switchAdminView('restock')" title="বাজার ফর্দ">
             <div class="all-apps-bubble" style="background: linear-gradient(135deg, #b45309, #d97706);">
               <i class="fa-solid fa-cart-shopping"></i>
             </div>
             <div class="all-apps-title">বাজার ফর্দ</div>
-            
           </div>
 
           <!-- 8. PROPER BILL & INVOICE -->
-          <div class="all-apps-tile" onclick="switchAdminView('bill')">
+          <div class="all-apps-tile" onclick="switchAdminView('bill')" title="কাস্টমারের পাকা বিল">
             <div class="all-apps-bubble" style="background: linear-gradient(135deg, #0d9488, #2dd4bf);">
               <i class="fa-solid fa-receipt"></i>
             </div>
             <div class="all-apps-title">কাস্টমারের পাকা বিল</div>
-            
           </div>
 
           <!-- 9. BARCODE & RACK STICKERS -->
-          <div class="all-apps-tile" onclick="switchAdminView('barcode')">
+          <div class="all-apps-tile" onclick="switchAdminView('barcode')" title="বারকোড স্টিকার">
             <div class="all-apps-bubble" style="background: linear-gradient(135deg, #475569, #64748b);">
               <i class="fa-solid fa-barcode"></i>
             </div>
             <div class="all-apps-title">বারকোড স্টিকার</div>
-            
           </div>
 
           <!-- 10. CATEGORIES -->
-          <div class="all-apps-tile" onclick="switchAdminView('categories')">
+          <div class="all-apps-tile" onclick="switchAdminView('categories')" title="পোশাকের ক্যাটাগরি">
             <div class="all-apps-bubble" style="background: linear-gradient(135deg, #4338ca, #6366f1);">
               <i class="fa-solid fa-tags"></i>
               <span class="app-icon-badge" id="badgeCategoriesGrid">9</span>
             </div>
             <div class="all-apps-title">পোশাকের ক্যাটাগরি</div>
-            
           </div>
 
           <!-- 11. BANNERS -->
-          <div class="all-apps-tile" onclick="switchAdminView('banners')">
+          <div class="all-apps-tile" onclick="switchAdminView('banners')" title="দোকানের ব্যানার ছবি">
             <div class="all-apps-bubble" style="background: linear-gradient(135deg, #9333ea, #d946ef);">
               <i class="fa-solid fa-images"></i>
             </div>
             <div class="all-apps-title">দোকানের ব্যানার ছবি</div>
-            
           </div>
 
           <!-- 12. PROMOTIONS / COUPONS -->
-          <div class="all-apps-tile" onclick="switchAdminView('promotions')">
+          <div class="all-apps-tile" onclick="switchAdminView('promotions')" title="ছাড়ের কুপন ও অফার">
             <div class="all-apps-bubble" style="background: linear-gradient(135deg, #ca8a04, #eab308);">
               <i class="fa-solid fa-gift"></i>
             </div>
             <div class="all-apps-title">ছাড়ের কুপন ও অফার</div>
-            
           </div>
 
           <!-- 13. REVIEWS -->
-          <div class="all-apps-tile" onclick="switchAdminView('reviews')">
+          <div class="all-apps-tile" onclick="switchAdminView('reviews')" title="কাস্টমার রিভিউ">
             <div class="all-apps-bubble" style="background: linear-gradient(135deg, #0284c7, #38bdf8);">
               <i class="fa-solid fa-star"></i>
             </div>
             <div class="all-apps-title">কাস্টমার রিভিউ</div>
-            
           </div>
 
           <!-- 14. SECURITY & PIN -->
-          <div class="all-apps-tile" onclick="switchAdminView('security')">
+          <div class="all-apps-tile" onclick="switchAdminView('security')" title="লক ও পাসওয়ার্ড">
             <div class="all-apps-bubble" style="background: linear-gradient(135deg, #334155, #475569);">
               <i class="fa-solid fa-shield-halved"></i>
             </div>
             <div class="all-apps-title">লক ও পাসওয়ার্ড</div>
-            
           </div>
 
-          <!-- 15. RIDER PORTAL -->
-          <div class="all-apps-tile" onclick="window.open('delivery.html', '_blank')">
+          <!-- 15. PACKAGING STATION -->
+          <div class="all-apps-tile" onclick="openPackagingStation()" title="প্যাকিং স্টেশন">
+            <div class="all-apps-bubble" style="background: linear-gradient(135deg, #d97706, #f59e0b);">
+              <i class="fa-solid fa-boxes-packing"></i>
+              <span class="app-icon-badge" id="badgePackGrid" style="display:none;">0</span>
+            </div>
+            <div class="all-apps-title">প্যাকিং স্টেশন</div>
+          </div>
+
+          <!-- 16. RIDER PORTAL -->
+          <div class="all-apps-tile" onclick="window.open('delivery.html', '_blank')" title="ডেলিভারি বয়">
             <div class="all-apps-bubble" style="background: linear-gradient(135deg, #15803d, #22c55e);">
               <i class="fa-solid fa-mobile-screen"></i>
             </div>
