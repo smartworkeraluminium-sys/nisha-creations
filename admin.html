@@ -1470,6 +1470,284 @@
       font-weight: 600;
     }
 
+
+    /* Scroller Hint & Arrow Controls */
+    .scroller-wrapper {
+      position: relative;
+      margin-bottom: 18px;
+    }
+    .scroller-hint-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 4px 6px;
+      font-size: 0.76rem;
+      color: #64748b;
+      font-weight: 700;
+    }
+    .scroller-swipe-badge {
+      background: #e0e7ff;
+      color: #4338ca;
+      padding: 2px 8px;
+      border-radius: 12px;
+      font-size: 0.7rem;
+      font-weight: 800;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .btn-scroll-arrow {
+      position: absolute;
+      top: 55%;
+      transform: translateY(-50%);
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: #ffffff;
+      border: 1.5px solid #cbd5e1;
+      color: #1e293b;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.85rem;
+      z-index: 10;
+      transition: all 0.15s;
+    }
+    .btn-scroll-arrow:hover {
+      background: #4338ca;
+      color: #ffffff;
+      border-color: #4338ca;
+    }
+    .btn-scroll-arrow.left { left: -8px; }
+    .btn-scroll-arrow.right { right: -8px; }
+
+
+    /* =========================================================================
+       AUTHENTIC CIRCULAR ANDROID APP ICONS (ইউজারের দেওয়া ছবির মতো গোল আইকন)
+       ========================================================================= */
+    .app-icon-bubble, .all-apps-bubble {
+      position: relative;
+      width: 60px;
+      height: 60px;
+      border-radius: 50% !important; /* 100% PERFECT CIRCLE */
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.65rem;
+      color: #ffffff;
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.16);
+      transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+      flex-shrink: 0;
+    }
+
+    .all-apps-bubble {
+      width: 66px;
+      height: 66px;
+      font-size: 1.8rem;
+      margin-bottom: 6px;
+    }
+
+    /* Red Circular Notification Badge (ছবিতে Browser '30' বা Telegram '1'-এর মতো) */
+    .app-icon-badge {
+      position: absolute;
+      top: -2px;
+      right: -2px;
+      background: #ef4444;
+      color: #ffffff;
+      font-size: 0.68rem;
+      font-weight: 800;
+      min-width: 22px;
+      height: 22px;
+      border-radius: 50% !important; /* PERFECT ROUND BADGE */
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 4px;
+      border: 2px solid #ffffff;
+      box-shadow: 0 2px 6px rgba(239, 68, 68, 0.45);
+      z-index: 2;
+    }
+
+    .app-icon-card {
+      flex: 0 0 76px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      padding: 4px;
+      user-select: none;
+      touch-action: manipulation;
+      transition: transform 0.15s ease;
+    }
+    .app-icon-card:active {
+      transform: scale(0.9);
+    }
+    .app-icon-card.active .app-icon-bubble {
+      box-shadow: 0 0 0 3.5px #4338ca, 0 8px 22px rgba(67, 56, 202, 0.4);
+      transform: scale(1.06);
+    }
+    .app-icon-card.active .app-icon-title {
+      color: #4338ca;
+      font-weight: 800;
+    }
+
+    /* Floating Android Launcher Tiles (No box borders, pure icons on screen) */
+    .all-apps-tile {
+      background: transparent !important;
+      border: none !important;
+      border-radius: 16px;
+      padding: 8px 2px 10px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+      position: relative;
+      user-select: none;
+      touch-action: manipulation;
+    }
+    .all-apps-tile:hover .all-apps-bubble {
+      transform: translateY(-3px) scale(1.06);
+      box-shadow: 0 10px 24px rgba(0,0,0,0.22);
+    }
+    .all-apps-tile:active {
+      transform: scale(0.92);
+    }
+
+    .all-apps-title {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: #1e293b;
+      line-height: 1.15;
+      text-align: center;
+      margin-top: 4px;
+      max-width: 76px;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      word-break: break-word;
+    }
+
+    /* 5-Column Grid like Android Home Screen */
+    .all-apps-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr) !important;
+      gap: 16px 8px !important;
+      padding: 12px 4px !important;
+    }
+    @media (max-width: 580px) {
+      .all-apps-grid {
+        grid-template-columns: repeat(4, 1fr) !important;
+        gap: 14px 6px !important;
+      }
+    }
+    @media (max-width: 360px) {
+      .all-apps-grid {
+        grid-template-columns: repeat(3, 1fr) !important;
+        gap: 10px 4px !important;
+      }
+    }
+
+    /* Phone Screen Container */
+    .android-phone-stage {
+      background: #f8fafc;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 28px;
+      padding: 18px 14px;
+      margin-bottom: 22px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.04);
+      position: relative;
+    }
+
+    .android-clock-widget {
+      text-align: center;
+      padding: 6px 0 14px;
+    }
+    .android-clock-time {
+      font-size: 2.2rem;
+      font-weight: 800;
+      color: #0f172a;
+      letter-spacing: -0.5px;
+      line-height: 1;
+    }
+    .android-clock-date {
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: #64748b;
+      margin-top: 4px;
+    }
+
+    .android-pagination-dots {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 6px;
+      margin: 14px 0 10px;
+    }
+    .android-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #cbd5e1;
+      transition: all 0.2s;
+    }
+    .android-dot.active {
+      width: 18px;
+      border-radius: 10px;
+      background: #4338ca;
+    }
+
+    /* Android Bottom Dock (Phone, GPay, Flipkart, Camera) */
+    .android-bottom-dock {
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(12px);
+      border: 1.5px solid #e2e8f0;
+      border-radius: 24px;
+      padding: 10px 14px;
+      margin-top: 10px;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+    }
+    .dock-app-btn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      touch-action: manipulation;
+    }
+    .dock-app-bubble {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+      color: #ffffff;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.18);
+      transition: transform 0.15s ease;
+    }
+    .dock-app-btn:active .dock-app-bubble {
+      transform: scale(0.9);
+    }
+    .dock-app-lbl {
+      font-size: 0.68rem;
+      font-weight: 700;
+      color: #334155;
+      margin-top: 3px;
+    }
+
 </style>
   <!-- Google Firebase Cloud Firestore (Nisha Creations) -->
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
@@ -1681,7 +1959,20 @@
     
     
     <!-- ==================== 4. SMARTPHONE APP SCROLLER BAR (হাতে স্ক্রোল করার অ্যাপ আইকন) ==================== -->
-    <div class="admin-app-scroller" id="adminAppScroller">
+    
+    <div class="scroller-wrapper">
+      <div class="scroller-hint-bar">
+        <span><i class="fa-solid fa-shapes" style="color:#4338ca;"></i> <strong>অ্যাপ আইকন বার:</strong> যেকোনো অপশনে হাত দিন</span>
+        <span class="scroller-swipe-badge"><i class="fa-solid fa-arrow-left"></i> আঙুল দিয়ে ডানে-বামে টানুন <i class="fa-solid fa-arrow-right"></i></span>
+      </div>
+      <button type="button" class="btn-scroll-arrow left" onclick="scrollAppScroller(-160)" aria-label="Scroll Left" title="বামে স্ক্রোল করুন">
+        <i class="fa-solid fa-chevron-left"></i>
+      </button>
+      <button type="button" class="btn-scroll-arrow right" onclick="scrollAppScroller(160)" aria-label="Scroll Right" title="ডানে স্ক্রোল করুন">
+        <i class="fa-solid fa-chevron-right"></i>
+      </button>
+      <div class="admin-app-scroller" id="adminAppScroller">
+
       <!-- 0. ALL APPS LAUNCHER -->
       <button type="button" class="app-icon-card active" id="appCardApps" onclick="switchAdminView('apps')">
         <div class="app-icon-bubble" style="background: linear-gradient(135deg, #6366f1, #a855f7);">
@@ -1807,6 +2098,7 @@
         <span class="app-icon-title">🔒 লক ও পিন</span>
       </button>
     </div>
+    </div><!-- end .scroller-wrapper -->
 
     <!-- Hidden compatibility elements for existing legacy scripts -->
     <div style="display:none;" aria-hidden="true">
@@ -1912,22 +2204,30 @@
           </button>
         </div>
 
-        <!-- ১৫টি স্মার্টফোন অ্যাপ আইকন গ্রিড (Full Phone Launcher) -->
-        <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:12px;">
-          <h3 style="font-size:1.05rem; font-weight:800; color:#0f172a; display:flex; align-items:center; gap:8px;">
-            <i class="fa-solid fa-grip" style="color:#4338ca;"></i> আমাদের সমস্ত অ্যাপস (যে কোনোটিতে হাত দিন)
-          </h3>
-          <span style="font-size:0.75rem; color:#64748b; font-weight:700;">মোট ১৫টি অপশন</span>
-        </div>
+        <!-- 📱 স্মার্টফোন হোমস্ক্রিন (Android Phone Launcher Stage) -->
+        <div class="android-phone-stage">
+          
+          <!-- Android Clock & Date Widget -->
+          <div class="android-clock-widget">
+            <div class="android-clock-time" id="androidClockTime">১:৩৬</div>
+            <div class="android-clock-date" id="androidClockDate">🌤️ বৃহস্পতিবার, ১ অক্টোবর • নিশা ক্রিয়েশনস বুটিক শোরুম</div>
+          </div>
 
-        <div class="all-apps-grid">
+          <div style="display:flex; align-items:center; justify-content:space-between; margin:10px 4px 14px; border-bottom:1px solid #e2e8f0; padding-bottom:8px;">
+            <span style="font-size:0.82rem; font-weight:800; color:#334155; display:flex; align-items:center; gap:6px;">
+              <i class="fa-solid fa-mobile-screen" style="color:#4338ca;"></i> আপনার ফোনের মতো গোল অ্যাপ আইকন
+            </span>
+            <span style="font-size:0.72rem; color:#64748b; font-weight:700;">মোট ১৫টি অ্যাপ</span>
+          </div>
+
+          <div class="all-apps-grid">
           <!-- 1. DASHBOARD -->
           <div class="all-apps-tile" onclick="switchAdminView('dashboard')">
             <div class="all-apps-bubble" style="background: linear-gradient(135deg, #059669, #10b981);">
               <i class="fa-solid fa-indian-rupee-sign"></i>
             </div>
             <div class="all-apps-title">আজকের টাকা</div>
-            <div class="all-apps-desc">মোট বিক্রি, ক্যাশ ও অনলাইন হিসাব</div>
+            
           </div>
 
           <!-- 2. ORDERS -->
@@ -1937,7 +2237,7 @@
               <span class="app-icon-badge" id="badgeOrdersGrid">0</span>
             </div>
             <div class="all-apps-title">অর্ডার পার্সেল</div>
-            <div class="all-apps-desc">কাস্টমারদের অর্ডার ও প্যাকিং তালিকা</div>
+            
           </div>
 
           <!-- 3. WAREHOUSE & 5-RIDERS -->
@@ -1947,7 +2247,7 @@
               <span class="app-icon-badge" id="badgeWarehouseGrid">0</span>
             </div>
             <div class="all-apps-title">৫ জন ডেলিভারি</div>
-            <div class="all-apps-desc">১-ক্লিকে সমান ভাগে পার্সেল বণ্টন</div>
+            
           </div>
 
           <!-- 4. STOCK -->
@@ -1957,7 +2257,7 @@
               <span class="app-icon-badge" id="badgeStockGrid">0</span>
             </div>
             <div class="all-apps-title">শাড়ির স্টক</div>
-            <div class="all-apps-desc">কোন শাড়ি কয়টা আছে ও তাকের নম্বর</div>
+            
           </div>
 
           <!-- 5. HAAT STALLS & SHOPS -->
@@ -1967,7 +2267,7 @@
               <span class="app-icon-badge" id="badgeHaatShopsGrid">5</span>
             </div>
             <div class="all-apps-title">হাটের স্টল ও শপ</div>
-            <div class="all-apps-desc">আমতা, বাগনান ইত্যাদির দোকানের মাল</div>
+            
           </div>
 
           <!-- 6. ADD PRODUCT -->
@@ -1976,7 +2276,7 @@
               <i class="fa-solid fa-camera"></i>
             </div>
             <div class="all-apps-title">নতুন শাড়ি আপলোড</div>
-            <div class="all-apps-desc">ছবি তুলে নতুন শাড়ি ও জামা তোলা</div>
+            
           </div>
 
           <!-- 7. WHOLESALE RESTOCK BAZAR MEMO -->
@@ -1985,7 +2285,7 @@
               <i class="fa-solid fa-cart-shopping"></i>
             </div>
             <div class="all-apps-title">বাজার ফর্দ</div>
-            <div class="all-apps-desc">কম মাল থাকলে ২০ অর্ডারের ফর্দ ও মেমো</div>
+            
           </div>
 
           <!-- 8. PROPER BILL & INVOICE -->
@@ -1994,7 +2294,7 @@
               <i class="fa-solid fa-receipt"></i>
             </div>
             <div class="all-apps-title">কাস্টমারের পাকা বিল</div>
-            <div class="all-apps-desc">কাগজে পাকা রসিদ ও চালান প্রিন্ট</div>
+            
           </div>
 
           <!-- 9. BARCODE & RACK STICKERS -->
@@ -2003,7 +2303,7 @@
               <i class="fa-solid fa-barcode"></i>
             </div>
             <div class="all-apps-title">বারকোড স্টিকার</div>
-            <div class="all-apps-desc">তাক ও কাপড়ের কোড স্টিকার প্রিন্ট</div>
+            
           </div>
 
           <!-- 10. CATEGORIES -->
@@ -2013,7 +2313,7 @@
               <span class="app-icon-badge" id="badgeCategoriesGrid">9</span>
             </div>
             <div class="all-apps-title">পোশাকের ক্যাটাগরি</div>
-            <div class="all-apps-desc">শাড়ি, কুর্তি, পাঞ্জাবি তালিকা</div>
+            
           </div>
 
           <!-- 11. BANNERS -->
@@ -2022,7 +2322,7 @@
               <i class="fa-solid fa-images"></i>
             </div>
             <div class="all-apps-title">দোকানের ব্যানার ছবি</div>
-            <div class="all-apps-desc">অ্যাপের সামনের বড় অফারের ছবি বদল</div>
+            
           </div>
 
           <!-- 12. PROMOTIONS / COUPONS -->
@@ -2031,7 +2331,7 @@
               <i class="fa-solid fa-gift"></i>
             </div>
             <div class="all-apps-title">ছাড়ের কুপন ও অফার</div>
-            <div class="all-apps-desc">কাস্টমারকে ডিসকাউন্ট দেওয়ার কোড</div>
+            
           </div>
 
           <!-- 13. REVIEWS -->
@@ -2040,7 +2340,7 @@
               <i class="fa-solid fa-star"></i>
             </div>
             <div class="all-apps-title">কাস্টমার রিভিউ</div>
-            <div class="all-apps-desc">ক্রেতাদের দেওয়া স্টার ও সুন্দর প্রশংসা</div>
+            
           </div>
 
           <!-- 14. SECURITY & PIN -->
@@ -2049,18 +2349,60 @@
               <i class="fa-solid fa-shield-halved"></i>
             </div>
             <div class="all-apps-title">লক ও পাসওয়ার্ড</div>
-            <div class="all-apps-desc">পিন নম্বর ও পিনকোড এলাকা বদল</div>
+            
           </div>
 
           <!-- 15. RIDER PORTAL -->
           <div class="all-apps-tile" onclick="window.open('delivery.html', '_blank')">
-            <div class="all-apps-bubble" style="background: linear-gradient(135deg, #0369a1, #0ea5e9);">
-              <i class="fa-solid fa-arrow-up-right-from-square"></i>
+            <div class="all-apps-bubble" style="background: linear-gradient(135deg, #15803d, #22c55e);">
+              <i class="fa-solid fa-mobile-screen"></i>
             </div>
-            <div class="all-apps-title">ডেলিভারি বয় পোর্টাল</div>
-            <div class="all-apps-desc">ডেলিভারি বয়ের নিজস্ব মোবাইল পেজ</div>
+            <div class="all-apps-title">ডেলিভারি বয়</div>
           </div>
         </div>
+
+        <!-- Android Pagination Dots (ছবিতে দেখানো ৫টি পেজ ডট) -->
+        <div class="android-pagination-dots">
+          <span class="android-dot active"></span>
+          <span class="android-dot"></span>
+          <span class="android-dot"></span>
+          <span class="android-dot"></span>
+          <span class="android-dot"></span>
+        </div>
+
+        <!-- Android Bottom App Dock (ছবির মতো নিচে ৪টি প্রধান গোল আইকন) -->
+        <div class="android-bottom-dock">
+          <button type="button" class="dock-app-btn" onclick="window.open('delivery.html', '_blank')" title="ডেলিভারি বয় পেজ">
+            <div class="dock-app-bubble" style="background: linear-gradient(135deg, #15803d, #22c55e);">
+              <i class="fa-solid fa-phone"></i>
+            </div>
+            <span class="dock-app-lbl">ডেলিভারি</span>
+          </button>
+
+          <button type="button" class="dock-app-btn" onclick="switchAdminView('dashboard')" title="আজকের টাকা ও বিক্রি">
+            <div class="dock-app-bubble" style="background: linear-gradient(135deg, #059669, #10b981);">
+              <i class="fa-solid fa-indian-rupee-sign"></i>
+            </div>
+            <span class="dock-app-lbl">টাকা-পয়সা</span>
+          </button>
+
+          <button type="button" class="dock-app-btn" onclick="switchAdminView('orders')" title="নতুন অর্ডার পার্সেল">
+            <div class="dock-app-bubble" style="background: linear-gradient(135deg, #2563eb, #38bdf8); position:relative;">
+              <i class="fa-solid fa-boxes-packing"></i>
+              <span class="app-icon-badge" id="badgeDockOrders" style="top:-3px; right:-3px;">0</span>
+            </div>
+            <span class="dock-app-lbl">অর্ডার</span>
+          </button>
+
+          <button type="button" class="dock-app-btn" onclick="switchAdminView('add')" title="ক্যামেরা দিয়ে নতুন শাড়ি তোলা">
+            <div class="dock-app-bubble" style="background: linear-gradient(135deg, #0f172a, #334155); border:2px solid #38bdf8;">
+              <i class="fa-solid fa-camera"></i>
+            </div>
+            <span class="dock-app-lbl">ক্যামেরা</span>
+          </button>
+        </div>
+
+      </div><!-- end .android-phone-stage -->
 
       </div>
     </div>
@@ -5209,6 +5551,35 @@
 // =========================================================================
 
 
+
+function scrollAppScroller(offset) {
+  const scroller = document.getElementById('adminAppScroller');
+  if (scroller) {
+    scroller.scrollBy({ left: offset, behavior: 'smooth' });
+  }
+}
+
+
+// 🕒 Android Live Clock Widget (বাংলা সময়)
+function updateAndroidClock() {
+  try {
+    const now = new Date();
+    const bnDigits = ['০','১','২','৩','৪','৫','৬','৭','৮','৯'];
+    const toBn = n => String(n).split('').map(d => bnDigits[d] || d).join('');
+
+    let hours = now.getHours();
+    const minutes = String(now.getMinutes()).padStart(2, '0');
+    hours = hours % 12 || 12;
+
+    const clockEl = document.getElementById('androidClockTime');
+    if (clockEl) {
+      clockEl.textContent = `${toBn(hours)}:${toBn(minutes)}`;
+    }
+  } catch(e) {}
+}
+setInterval(updateAndroidClock, 1000);
+setTimeout(updateAndroidClock, 50);
+
 function switchAdminView(tabKey) {
   // Modal shortcuts
   if (tabKey === 'restock') {
@@ -5307,6 +5678,7 @@ function updateAllAppsHomeStats() {
     
     setElemTxt('badgeOrdersScroller', pendingOrders.length);
     setElemTxt('badgeOrdersGrid', pendingOrders.length);
+    setElemTxt('badgeDockOrders', pendingOrders.length);
     setElemTxt('homeStatOrders', `${pendingOrders.length} টি`);
 
     setElemTxt('badgeWarehouseScroller', pendingOrders.length);
